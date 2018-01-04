@@ -1,3 +1,5 @@
+<?php require_once("../includes/session.php");?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -19,7 +21,7 @@
     <h2 class="text-center">Sign Up</h2>
 
     
-   <form action="/action_page.php">
+   <form action="../includes/signup.inc.php" method="post">
 
       <div class="row">
         <div class="col-sm-4"></div>
@@ -76,9 +78,10 @@
            <div class="col-sm-4">
             <div class="form-group">
               <label for="selectUser">User Type:</label>
-              <select class="form-control" id="selectUser">
-              <option>User (Service Seeker)</option>
-              <option>Service Provider</option>
+              <select class="form-control" name="selectUser" id="selectUser">
+              <option value="Choose...">Choose...</option>
+              <option value="User">User (Service Seeker)</option>
+              <option value="Service Provider">Service Provider</option>
             </select>
             </div>
                  
@@ -92,7 +95,7 @@
       <div class="row">
         <div class="col-sm-5"></div>
         <div class="col-sm-2">
-           <button  type="submit" class="btn btn-primary btn-block">Sign up</button>
+           <button  type="submit" name="submit" class="btn btn-primary btn-block">Sign up</button>
         
         
            
