@@ -10,16 +10,17 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/styles.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
   <body id="contact">
     
 
   <?php include '../includes/layouts/header.php';?>
 
-    <div class="container">
-    <h2>Contact</h2>
-  </div>
+
+      <div class=" content container">
+         <h2>Contact</h2>
+      </div>
   
 
     <?php include '../includes/layouts/footer.php';?>

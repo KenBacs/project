@@ -10,15 +10,19 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/styles.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
   <body id="signup">
     
 
   <?php include '../includes/layouts/header.php';?>
 
+      <div class="content container">
+         <h2 class="text-center">Sign Up</h2>
+      </div>
+  
     <div class="container">
-    <h2 class="text-center">Sign Up</h2>
+    
 
     
    <form action="../includes/signup.inc.php" method="post">
@@ -87,7 +91,7 @@
                  
            </div>      
         </div>
-    </div>  
+     
     <br/>
 
 
@@ -106,6 +110,7 @@
     
    
     </form>
+    </div> 
 
 
 
