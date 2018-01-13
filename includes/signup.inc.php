@@ -1,5 +1,7 @@
+<?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
 <?php
+
 	
 	if (isset($_POST['submit'])) {
 		include_once 'db_connection.php';
@@ -15,6 +17,7 @@
 		//Error handlers
 		//Check for empty fields
 		if (empty($first) || empty($last) || empty($email) || empty($uid) || empty($pwd) || $selectUser == "Choose...") {
+			
 			redirect_to("../public/signup.php?signup=empty");
 		} else {
 			//Check if input characters are valid

@@ -88,10 +88,50 @@
          
 
         </form>
-        
 
 
     </div>
+  </div>
+
+  <div class=" container">
+    
+        <div class="row">
+          <div class="col-sm-12">
+            <ul class="media-list">
+              <li class="media">
+                 <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <h4>Shop Name</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="media-left">
+                          <img src="images/exoticpets.jpg">
+                        </div>
+
+                         <div class="media-body">
+                          <p>We offer specialized care for reptiles, rodents, birds, and other exotic pets.</p>
+                          <a class="btn btn-info" href="#" >
+                            more info
+                          </a>
+                        </div>
+                    </div>
+
+                     <div class="panel-footer">
+                      &raquo; <a href="#">Make an appointment</a>
+                    </div>
+                </div>
+              </li>
+              
+            </ul>
+           
+
+            
+          </div>
+
+        
+        </div>
+
+
   </div>
 
 

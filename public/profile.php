@@ -37,8 +37,8 @@
                     </a>
                   </li>
                    <li role="presentation">
-                    <a role="tab" data-toggle="tab" href="#myshop">
-                      My Shop
+                    <a role="tab" data-toggle="tab" href="#createshop">
+                      Create Shop
                     </a>
                   </li>
 
@@ -69,8 +69,51 @@
                       
                   </div>
 
-                   <div role="tabpanel" class="tab-pane " id="myshop">
-                    <h3>This is My Shop</h3>
+                   <div role="tabpanel" class="tab-pane " id="createshop">
+                      <form id="" action="#" method="post">
+                        <div class="form-group">
+                            <label for="fname">First name:</label>
+                            <input type="text" class="form-control" name="first" >
+                        </div>  
+
+                        <div class="form-group">
+                            <label for="lname">Last name:</label>
+                            <input type="text" class="form-control" name="last" >
+                        </div> 
+
+                         <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" class="form-control" name="email" >
+                         </div>
+
+                         <div class="form-group">
+                            <label for="uid">Username:</label>
+                            <input type="text" class="form-control" name="uid" >
+                         </div> 
+
+                         <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" class="form-control" name="pwd" >
+                         </div> 
+
+                         <div class="form-group">
+                            <label for="selectUser">User Type:</label>
+                            <select class="form-control" name="selectUser" id="selectUser" >
+                            <option value="">Choose...</option>
+                            <option value="User">User (Service Seeker)</option>
+                            <option value="Service Provider">Service Provider</option>
+                          </select>
+
+
+                          <script type="text/javascript">
+                            document.getElementById("selectUser").value = "<?php echo $_POST["selectUser"];?>";
+                          </script>
+                          </div>
+
+                          <button  type="submit" name="submit" class="btn btn-primary btn-block">Add Shop</button> 
+
+                      </form>
+  
                   </div>
 
                    <div role="tabpanel" class="tab-pane " id="schedules">
@@ -130,7 +173,8 @@
 
           
         </div>
-  
+
+
 
 
 <?php include '../includes/layouts/footer.php';?>

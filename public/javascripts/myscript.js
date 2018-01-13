@@ -7,5 +7,6 @@ $(function() {
   $("#signup a:contains('Sign Up')").parent().addClass('active');
   $("#profile a:contains('Profile')").parent().addClass('active');
   $("#browse_shops a:contains('Browse Shops')").parent().addClass('active');
+  $("#login a:contains('Login')").parent().addClass('active');
   
 });

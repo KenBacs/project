@@ -2,7 +2,31 @@
 	border: none;
 }
 
-.content{
+.content {
 	padding-top: 70px;
 }
 
+.media img {
+	width: 100px;
+}
+
+body {
+	background-color: #f8f8f8;
+}
+
+.wrap-login {
+	padding: 20px;
+	padding-bottom: 50px;
+	margin-top: 30px;
+	background-color: #fff;
+	border: solid 1px #d0d0d0;
+	-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.33);
+	-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.33);
+	box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.33);
+}
+
+.btn-login {
+	background-color: #e74c3c;
+	color: #fff;
+	margin-top: 10px;
+}

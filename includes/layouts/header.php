@@ -1,4 +1,5 @@
 
+
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
@@ -39,18 +40,20 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        
-        <li>
-          <?php
+         <?php
             if (isset($_SESSION['u_id'])) {
-              echo ' <form class="navbar-form" action="../includes/logout.inc.php" method="post">
+        
+          
+              echo ' <li class = "navbar-text">Welcome, '.$_SESSION['u_uid'] .'</li>
+              <li> 
+              <form class="navbar-form" action="../includes/logout.inc.php" method="post">
 
-            <button type="submit" name="submit" class="btn btn-primary">Logout</button>
+            <button type="submit" name="submit" class="btn btn-primary"><span class="glyphicon glyphicon-log-out"></span> Logout</button>
 
 
           </form>';
             } else {
-               echo '   <form class="navbar-form" action="../includes/login.inc.php" method="post">
+               echo '  <!-- <form class="navbar-form" action="../includes/login.inc.php" method="post">
             <div class="form-group">
               <input type="text"  name="uid" class="form-control" placeholder="Username/email">
             </div>
@@ -58,17 +61,38 @@
               <input type="password" name="pwd" class="form-control" placeholder="password">
             </div>
             <button type="submit" name="submit" class="btn btn-primary">Login</button>
-          </form>
+          </form>-->
         </li>
-
+       
         <li>
         <a href="signup.php" ><span class="glyphicon glyphicon-user"></span> Sign Up</a>
 
-        </li>';
+        </li>
+
+         <li>
+        
+        <a href="login.php"  ><span class="glyphicon glyphicon-log-in"></span> Login</a>
+
+         
+
+        </li> ';
             }
           ?>
         
       </ul>
+
+
       </div>
+
+
+
     </div>
   </nav>
+
+ 
+
+
+
+  
+
+
