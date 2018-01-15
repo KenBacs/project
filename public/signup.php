@@ -111,7 +111,7 @@
            <div class="form-group">
               <label for="selectUser">User Type:</label>
               <select class="form-control" name="selectUser" id="selectUser" >
-              <option value="">Choose...</option>
+              <option value="">Choose user type</option>
               <option value="User">User (Service Seeker)</option>
               <option value="Service Provider">Service Provider</option>
             </select>

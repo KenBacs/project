@@ -38,7 +38,7 @@
                   </li>
                    <li role="presentation">
                     <a role="tab" data-toggle="tab" href="#createshop">
-                      Create Shop
+                     <span class="glyphicon glyphicon-plus"></span> Create Shop
                     </a>
                   </li>
 
@@ -70,38 +70,79 @@
                   </div>
 
                    <div role="tabpanel" class="tab-pane " id="createshop">
-                      <form id="" action="#" method="post">
+                      <form id="" action="#" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label for="fname">First name:</label>
-                            <input type="text" class="form-control" name="first" >
-                        </div>  
-
-                        <div class="form-group">
-                            <label for="lname">Last name:</label>
-                            <input type="text" class="form-control" name="last" >
+                            <label for="shop_name">Shop name</label>
+                            <input type="text" class="form-control" name="shop_name" >
                         </div> 
 
                          <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="text" class="form-control" name="email" >
-                         </div>
+                          <label for="shop_image">Shop image</label>
+                            <input type="file" name="file">
+                        </div> 
+
+                       <div class="form-group">
+                          <label for="shop_address">Shop address</label>
+                          <input type="text" class="form-control" name="shop_address" >
+                       </div>
+
+                        <div class="form-group">
+                            <label for="shop_desc">Shop description</label>
+                            <input type="text" class="form-control" name="shop_desc" >
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="shop_contact">Contact number</label>
+                            <input type="text" class="form-control" name="shop_contact" >
+                        </div>
+
+                        <div class="form-group form-inline">
+
+                         
+                              <label for="shop_hours">Opening hours:</label>
+                            
+                              <select class="form-control" name="select_days" id="select_days" >
+                              <option value="">Choose Days</option>
+                              <option value="Monday">Monday</option>
+                              <option value="Tuesday">Tuesday</option>
+                              <option value="Wednesday">Wednesday</option>
+                              <option value="Thursday">Thursday</option>
+                              <option value="Friday">Friday</option>
+                              <option value="Saturday">Saturday</option>  
+                              <option value="Sunday">Sunday</option>
+                              </select>
+                      
+                       
+                                <label for="shop_hours">Start time:</label>
+                             <input type="text" class="form-control " name="shop_contact" >
+                              <select class="form-control" name="start_time" id="start_time" >
+                              <option value="">A.M.</option>
+                              <option value="">P.M.</option>
+                            </select>
+                   
+
+               
+
+
+                              <label for="shop_hours">End time:</label>
+                              <input type="text" class="form-control" name="shop_contact" >
+                            <select class="form-control" name="end_time" id="end_time" >
+                             <option value="">A.M.</option>
+                              <option value="">P.M.</option>
+                              
+                            </select>
+
+                  
+                        </div>
+                       
 
                          <div class="form-group">
-                            <label for="uid">Username:</label>
-                            <input type="text" class="form-control" name="uid" >
-                         </div> 
-
-                         <div class="form-group">
-                            <label for="pwd">Password:</label>
-                            <input type="password" class="form-control" name="pwd" >
-                         </div> 
-
-                         <div class="form-group">
-                            <label for="selectUser">User Type:</label>
-                            <select class="form-control" name="selectUser" id="selectUser" >
-                            <option value="">Choose...</option>
-                            <option value="User">User (Service Seeker)</option>
-                            <option value="Service Provider">Service Provider</option>
+                            <label for="selectUser">Category</label>
+                            <select class="form-control" name="selectUser" id="selectCategory" >
+                            <option value="">Choose Category</option>
+                            <option value="User">Watch repair</option>
+                            <option value="Service Provider">Computer/Laptop repair</option>
+                            <option value="Service Provider">Tailoring</option>
                           </select>
 
 
