@@ -38,7 +38,7 @@
             $_SESSION['u_uid'] = $row['user_uid'];
             $_SESSION['u_type'] = $row['user_type'];
             $_POST=array();
-            redirect_to("../public/index.php?login=success");
+            redirect_to("../public/browse_shops.php?");
 
           }
         }

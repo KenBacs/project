@@ -14,13 +14,13 @@
       </div>
       <div class="collapse navbar-collapse" id="collapsemenu">
       <ul class="nav navbar-nav">
-        <?php
-          if (isset($_SESSION['u_id'])) {
-            echo '   <li ><a href="index.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-            <li ><a href="profile.php"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-        <li><a href="about.php"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-        <li><a href="contact.php">Contact</a></li>
-         <li><a href="browse_shops.php">Browse Shops</a></li>
+        <?php if (isset($_SESSION['u_id'])) { ?>
+              
+            <li ><a href="profile.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+        <li><a href="create_shop.php"><span class="glyphicon glyphicon-plus"></span> Create Shop</a></li>
+        <li><a href="my_shops.php"><span class="glyphicon glyphicon-list"></span> My Shops</a></li>
+       
+         <li><a href="browse_shops.php"></span> Browse Shops</a></li>
         <li>
           <form class="navbar-form" action="../includes/logout.inc.php" method="post">
             <div class="form-group">
@@ -29,55 +29,36 @@
             <button type="submit" name="search_btn" class="btn btn-primary">Go</button>
 
           </form>
-        </li>';
-          } else {
-            echo ' <li ><a href="index.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+        </li>
+          <?php } else { ?>
+             <li ><a href="index.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         <li><a href="about.php"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
         <li><a href="contact.php">Contact</a></li>';
-          }
-        ?>
+          <?php } ?>
      
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-         <?php
-            if (isset($_SESSION['u_id'])) {
+         <?php if (isset($_SESSION['u_id'])) { ?>
         
           
-              echo ' <li class = "navbar-text">Welcome, '.$_SESSION['u_uid'] .'</li>
+              <li class = "navbar-text">Welcome, <?php echo $_SESSION['u_uid']; ?> </li>
               <li> 
               <form class="navbar-form" action="../includes/logout.inc.php" method="post">
 
             <button type="submit" name="submit" class="btn btn-primary"><span class="glyphicon glyphicon-log-out"></span> Logout</button>
 
 
-          </form>';
-            } else {
-               echo '  <!-- <form class="navbar-form" action="../includes/login.inc.php" method="post">
-            <div class="form-group">
-              <input type="text"  name="uid" class="form-control" placeholder="Username/email">
-            </div>
-            <div class="form-group">
-              <input type="password" name="pwd" class="form-control" placeholder="password">
-            </div>
-            <button type="submit" name="submit" class="btn btn-primary">Login</button>
-          </form>-->
+          </form>
+
+           <?php } else { ?>
+            
         </li>
        
-        <li>
-        <a href="signup.php" ><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+        <li><a href="signup.php" ><span class="glyphicon glyphicon-user"></span> Sign Up</a> </li>
 
-        </li>
-
-         <li>
-        
-        <a href="login.php"  ><span class="glyphicon glyphicon-log-in"></span> Login</a>
-
-         
-
-        </li> ';
-            }
-          ?>
+         <li><a href="login.php"  ><span class="glyphicon glyphicon-log-in"></span> Login</a> </li> 
+           <?php } ?>
         
       </ul>
 
