@@ -1,10 +1,6 @@
 <?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
-
-<?php 
-  
-
- ?>
+<?php include("../includes/crud_shop.php"); ?>
 
 
 <!doctype html>
@@ -31,7 +27,7 @@
       <div class="col-md-4 col-md-offset-4">
         <h2 class="text-center"><span class="glyphicon glyphicon-plus-sign"></span> Create shop</h2>
 
-       <form id="" action="#" method="post" enctype="multipart/form-data">
+       <form id="" action="#" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="shop_name">Shop name</label>
                             <input type="text" class="form-control" name="shop_name" >
@@ -41,11 +37,6 @@
                           <label for="shop_image">Shop image</label>
                             <input type="file" name="file">
                         </div> 
-
-                       <div class="form-group">
-                          <label for="shop_address">Shop address</label>
-                          <input type="text" class="form-control" name="shop_address" >
-                       </div>
 
                         <div class="form-group">
                             <label for="shop_desc">Shop description</label>
@@ -61,14 +52,14 @@
 
                         <div class="form-group">
                               <label for="shop_hours">Opening Opening Schedule:</label>
-                              <input type="text" class="form-control" name="shop-schedule" placeholder="Ex. M-F 10:00 am - 6:00 pm">
+                              <input type="text" class="form-control" name="shop-schedule" placeholder="Ex. Mon-Fri 10:00 am - 6:00 pm">
 
                         </div>
                        
 
                          <div class="form-group">
                             <label for="selectUser">Category</label>
-                            <select class="form-control" name="selectUser" id="selectCategory" >
+                            <select class="form-control" name="selectCategory" id="selectCategory" >
                             <option value="">Choose Category</option>
                             <option value="User">Watch repair</option>
                             <option value="Service Provider">Computer/Laptop repair</option>
