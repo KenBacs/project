@@ -1,18 +1,22 @@
-<?php require_once("../includes/functions.php");?>
+<?php require_once("session.php");?>
+<?php require_once("functions.php");?>
+
 <?php
-	$shop_name = "";
-	$file = "";
-	$shop_description = "";
-	$shop_contact = "";
-	$shop_schedule = "";
-	$shop_category = "";
+
+	include_once '../includes/db_connection.php';
+	
+	 $msg = '';
+     $msgClass = '';
 
 
 	if (isset($_POST['submit'])) {
 
-		include_once ('../includes/db_connection.php');
+		
+
+		$user_id = mysql_prep($_SESSION['u_id']);
 		$shop_name = mysql_prep($_POST['shop_name']);
-		$file = $FILES['file'];
+
+		$file = $_FILES['file'];
 
 		$fileName = $_FILES['file']['name'];
 		$fileTmpName = $_FILES['file']['tmp_name'];
@@ -30,43 +34,67 @@
 		$shop_schedule = mysql_prep($_POST['shop_schedule']);
 		$shop_category = mysql_prep($_POST['selectCategory']);
 
-		if (!empty($shop_name) && !empty($shop_description) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) {	
 
-			$sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
-          	$resultsn = mysqli_query($connection, $sql);
-          	$resultCheck = mysqli_num_rows($resultsn);
 
-          	if ($resultCheck > 0) {
-          		//Failed Shop name is already taken
+		
+		
+
+		if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) {	
+
+				$sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
+	          	$resultsn = mysqli_query($connection, $sql);
+	          	$resultCheck = mysqli_num_rows($resultsn);
+
+	          	if ($resultCheck > 0) {
+	          		$_SESSION['msg'] ="Shop name is already taken";
+					$_SESSION['msgClass'] ="alert-danger";
+					redirect_to("../public/create_shop.php");
+	          	} else {
+	          		if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
+	          			
+
+					    if (in_array($fileActualExt, $allowed)) {
+					      if ($fileError === 0) {
+					        if ($fileSize < 1000000) {
+					          $fileNameNew = uniqid('',true).".".$fileActualExt;
+					          $fileDestination = 'images/'.$fileNameNew;
+					          move_uploaded_file($fileTmpName, $fileDestination);
+					          header("Location: create_shop.php?uploadsuccess");
+					        } else {
+					         	$_SESSION['msg'] ="Image file is too big";
+								$_SESSION['msgClass'] ="alert-danger";
+								redirect_to("../public/create_shop.php");
+				        }
+					      } else {
+					        $_SESSION['msg'] ="There was an error uploading your file";
+							$_SESSION['msgClass'] ="alert-danger";
+							redirect_to("../public/create_shop.php");
+					      }
+					    } else {
+					      	$_SESSION['msg'] ="Invalid image";
+							$_SESSION['msgClass'] ="alert-danger";
+							redirect_to("../public/create_shop.php");
+
+					    }
+
+	          		} else {
+	          			$_SESSION['msg'] ="Invalid telephone number";
+						$_SESSION['msgClass'] ="alert-danger";
+						redirect_to("../public/create_shop.php");
+	          		}
+
+	          	}
+				
+
           	} else {
-          		//Passed
 
-          	}
+			$_SESSION['msg'] ="Please fill all fields";
+			$_SESSION['msgClass'] ="alert-danger";
+			redirect_to("../public/create_shop.php");
 
-		} else {
-
-			//Failed  'Please fill in all fields'
-
-		}
-		if (in_array($fileActualExt, $allowed)) {
-			if ($fileError === 0) {
-				if ($fileSize < 1000000) {
-					$fileNameNew = uniqid('',true);.".".$fileActualExt;
-					$fileDestination = 'images/'.$fileNameNew;
-					move_uploaded_file($fileTmpName, $fileDestination);
-					header("Location: index.php?uploadsucess");
-
-				} else {
-					// Failed 'Your file is too big!';
-				}
-			} else {
-				//Failed 'There was an error uploading your file!'
-			}
-		} else {
-			//Failed 'You cannot upload file of this type!'
 		}
 	}
 
-	// Retrieve records
-	$results = mysqli_query($connection, "SELECT * FROM shops");
+
+
 ?>

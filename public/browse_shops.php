@@ -1,4 +1,10 @@
 <?php require_once("../includes/session.php");?>
+<?php
+   include_once '../includes/db_connection.php';
+  
+  // Retrieve records
+  $results = mysqli_query($connection, "SELECT * FROM shops");
+?>
 
 <!doctype html>
 <html lang="en">
@@ -96,29 +102,33 @@
   <div class=" container">
     
         <div class="row">
-          <div class="col-sm-12">
+        <ul>
+          <?php while ($row = mysqli_fetch_array($results)) { ?>
+          <li>
+             <div class="col-sm-12">
             <ul class="media-list">
               <li class="media">
                  <div class="panel panel-primary">
                     <div class="panel-heading">
-                      <h4>Shop Name</h4>
+                      <h4><?php echo $row['shop_name'];?></h4>
                     </div>
                     <div class="panel-body">
                         <div class="media-left">
-                          <img src="images/exoticpets.jpg">
+                          <img src="images/<?php echo $row['shop_image'];?>">
                         </div>
 
                          <div class="media-body">
-                          <p>We offer specialized care for reptiles, rodents, birds, and other exotic pets.</p>
-                          <a class="btn btn-info" href="#" >
-                            more info
-                          </a>
+                          <p><?php echo $row['shop_description'];?></p>
+                          <p><?php echo $row['shop_category'];?></p>
+                          <p><?php echo $row['shop_hours'];?></p>
+                          
                         </div>
                     </div>
 
                      <div class="panel-footer">
-                      &raquo; <a href="#">Make an appointment</a>
+                      &raquo; <a href="#">Visit shop</a>
                     </div>
+                   
                 </div>
               </li>
               
@@ -127,6 +137,12 @@
 
             
           </div>
+
+          </li>
+          <?php }?>
+        </ul>
+        
+         
 
         
         </div>

@@ -21,7 +21,7 @@
         <ul class="nav navbar-nav">
               
         <li ><a href="profile.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-        <li><a href="create_shop.php"><span class="glyphicon glyphicon-plus"></span> Create Shop</a></li>
+        <li><a href="manage_shop.php"><span class="glyphicon glyphicon-wrench"></span> Manage Shop</a></li>
         <li><a href="my_shops.php"><span class="glyphicon glyphicon-list"></span> My Shops</a></li>
         <li><a href="browse_shops.php"></span> Browse Shops</a></li>
         <li>
