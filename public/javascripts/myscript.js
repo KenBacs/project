@@ -9,7 +9,13 @@ $(function() {
   $("#browse_shops a:contains('Browse Shops')").parent().addClass('active');
   $("#login a:contains('Login')").parent().addClass('active');
   $("#my_shops a:contains('My Shops')").parent().addClass('active');
-  $("#manage_shop a:contains('Manage Shop')").parent().addClass('active');
+  $("#p_myshop a:contains('Home')").parent().addClass('active');
+  $("#shop_schedules a:contains('Schedules')").parent().addClass('active');
+  $("#shop_services a:contains('Services')").parent().addClass('active');
+  $("#shop_locations a:contains('Locations')").parent().addClass('active');
+  $("#shop_reports a:contains('Reports')").parent().addClass('active');
+  
+
   
 
 

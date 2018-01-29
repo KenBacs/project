@@ -4,6 +4,9 @@
   
   // Retrieve records
   $results = mysqli_query($connection, "SELECT * FROM shops");
+  if (isset($_GET['view'])) {
+    # code...
+  }
 ?>
 
 <!doctype html>
@@ -102,9 +105,9 @@
   <div class=" container">
     
         <div class="row">
-        <ul>
+     
           <?php while ($row = mysqli_fetch_array($results)) { ?>
-          <li>
+        
              <div class="col-sm-12">
             <ul class="media-list">
               <li class="media">
@@ -114,7 +117,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="media-left">
-                          <img src="images/<?php echo $row['shop_image'];?>">
+                          <img src="images/<?php echo $row['shop_image'];?>" class="img-rounded">
                         </div>
 
                          <div class="media-body">
@@ -126,7 +129,7 @@
                     </div>
 
                      <div class="panel-footer">
-                      &raquo; <a href="#">Visit shop</a>
+                      &raquo; <a href="shop_profile.php?view=<?php echo $row['shop_id']?>">Visit shop</a>
                     </div>
                    
                 </div>
@@ -138,9 +141,9 @@
             
           </div>
 
-          </li>
+        
           <?php }?>
-        </ul>
+
         
          
 
