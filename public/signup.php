@@ -9,15 +9,24 @@
     if (filter_has_var(INPUT_POST, 'submit')) {
       include_once '../includes/db_connection.php';
 
+    
+
       $first = mysql_prep($_POST['first']);
       $last = mysql_prep($_POST['last']);
+
+      if (!empty($_POST['gender'])) {
+        $gender = mysql_prep($_POST['gender']);
+      }
+
+      $address = mysql_prep($_POST['address']);
       $email = mysql_prep($_POST['email']);
+      $mobilenumber = mysql_prep($_POST['mobilenumber']);
       $uid = mysql_prep($_POST['uid']);
       $pwd = mysql_prep($_POST['pwd']);
       $selectUser = mysql_prep($_POST['selectUser']);
 
       //Check Required Fields
-      if (!empty($first) && !empty($last) && !empty($email) && !empty($uid) && !empty($pwd) && !empty($selectUser) ) {
+      if (!empty($first) && !empty($last) && !empty($gender) && !empty($address) && !empty($email) && !empty($mobilenumber) && !empty($uid) && !empty($pwd) && !empty($selectUser) ) {
         // Passed
         // Check Email
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -35,13 +44,21 @@
             $msg= 'Username is already taken.';
             $msgClass='alert-danger';
           } else {
-            
-            //Insert the user into the database
-            $sql = "INSERT INTO users (user_first, user_last, user_email, user_uid, user_pwd, user_type) VALUES ('$first', '$last', '$email', '$uid', '$pwd', '$selectUser')";
+            if (preg_match('/^[0-9]{4}-[0-9]{3}-[0-9]{4}$/', $mobilenumber)) {
+
+              //Insert the user into the database
+            $sql = "INSERT INTO users (user_first, user_last, user_gender, user_address, user_email, user_mobile, user_uid, user_pwd, user_type) VALUES ('$first', '$last', '$gender', '$address', '$email', '$mobilenumber', '$uid', '$pwd', '$selectUser')";
             mysqli_query($connection,$sql);
               $msg= 'You have succesfully registered.';
               $msgClass='alert-success';
              $_POST=array();  
+            } else {
+              // Failed
+              $msg= 'Invalid mobile number.';
+              $msgClass='alert-danger';
+            }
+            
+            
           }
         }
       } else {
@@ -81,7 +98,7 @@
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
         <?php endif;?>
 
-        <form id="" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <form id="" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
           <div class="form-group">
               <label for="fname">First name:</label>
               <input type="text" class="form-control" name="first" value="<?php echo isset($_POST['first']) ? $first : '';?>">
@@ -93,20 +110,22 @@
           </div> 
           <div class="form-group">
             <table>
-              
+                
+
                 <tr><td><label>Gender:</label></td> </tr>
                 <tr>
                 <td> 
                  <label class="radio-inline">
-                <input type="radio" name="optradio">Male
+                <input type="radio" name="gender" value="Male"  <?php if(isset($_POST['gender']) && $_POST['gender']=="Male") {echo "checked"; } ?> >Male
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="optradio">Female
+                  <input type="radio" name="gender" value="Female" <?php if(isset($_POST['gender']) && $_POST['gender']=="Female") {echo "checked"; } ?> >Female
                 </label>
-               </td>
+               </td> 
 
                 </tr>
 
+           
              
             </table>
             
@@ -114,19 +133,19 @@
           </div>
 
              <div class="form-group">
-                <label for="">Complete address:</label>
-                <textarea class="form-control" rows="5" id="" name="" ></textarea>
+                <label for="">Address:</label>
+                <textarea class="form-control" rows="5"  name="address" ><?php echo isset($_POST['address']) ? $address : '';?></textarea>
                 
             </div> 
 
            <div class="form-group">
               <label for="email">Email:</label>
-              <input type="text" class="form-control" name="email" value="<?php echo isset($_POST['email']) ? $email : '';?>">
+              <input type="text" class="form-control" name="email" value="<?php echo isset($_POST['email']) ? $email : '';?>" placeholder="example@gmail.com" >
            </div>
 
             <div class="form-group">
               <label for="">Mobile number:</label>
-              <input type="text" class="form-control" name="" value="">
+              <input type="text" class="form-control" name="mobilenumber" value="<?php echo isset($_POST['mobilenumber']) ? $mobilenumber : '';?>" placeholder = "xxxx-xxx-xxxx">
            </div>
 
            <div class="form-group">

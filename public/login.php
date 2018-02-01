@@ -30,7 +30,11 @@
             $_SESSION['u_id'] = $row['user_id'];
             $_SESSION['u_first'] = $row['user_first'];
             $_SESSION['u_last'] = $row['user_last'];
+            $_SESSION['u_image'] = $row['user_image'];
+            $_SESSION['u_gender'] = $row['user_gender'];
+            $_SESSION['u_address'] = $row['user_address'];
             $_SESSION['u_email'] = $row['user_email'];
+            $_SESSION['u_mobile'] = $row['user_mobile'];
             $_SESSION['u_uid'] = $row['user_uid'];
             $_SESSION['u_type'] = $row['user_type'];
             $_POST=array();

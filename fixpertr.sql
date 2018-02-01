@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 30, 2018 at 08:50 AM
+-- Generation Time: Feb 01, 2018 at 01:16 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -104,23 +104,24 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_first` varchar(256) NOT NULL,
   `user_last` varchar(256) NOT NULL,
-  `user_gender` varchar(256) NOT NULL,
-  `user_address` varchar(256) NOT NULL,
+  `user_image` varchar(256) DEFAULT NULL,
+  `user_gender` varchar(256) DEFAULT NULL,
+  `user_address` varchar(256) DEFAULT NULL,
   `user_email` varchar(256) NOT NULL,
-  `user_mobile` int(20) NOT NULL,
+  `user_mobile` varchar(20) DEFAULT NULL,
   `user_uid` varchar(256) NOT NULL,
   `user_pwd` varchar(256) NOT NULL,
   `user_type` varchar(256) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_first`, `user_last`, `user_gender`, `user_address`, `user_email`, `user_mobile`, `user_uid`, `user_pwd`, `user_type`) VALUES
-(1, 'Kenneth', 'Bacayo', '0', '0', 'kennethbacayo@gmail.com', 0, 'ken10', '$2y$10$R4QqdsWeW0Ty1gAPT2Sc0OWcT8zPK8X4fkfx5M6tcBd9wRP6iK4o.', 'Service Provider'),
-(2, 'Giem', 'Noel', '0', '0', 'giem@gmail.com', 0, 'giem10', '$2y$10$qn0N3laRa5qJZiIPzoBu4.Q0riXxd3Y8fhR7THIkBdTwKx9k1uff2', 'User');
+INSERT INTO `users` (`user_id`, `user_first`, `user_last`, `user_image`, `user_gender`, `user_address`, `user_email`, `user_mobile`, `user_uid`, `user_pwd`, `user_type`) VALUES
+(1, 'Kenneth', 'Bacayo', '', 'Male', '1726 Villalon Drive Capitol Site, Cebu City', 'kennethbacayo@gmail.com', '0927-744-5743', 'ken10', '123', 'Service Provider'),
+(7, 'Lily', 'Collins', '5a73103f8a85c6.65764282.jpg', 'Female', 'Los Angeles, California', 'lily@gmail.com', '9999-999-9999', 'lily10', '123', 'User');
 
 --
 -- Constraints for dumped tables

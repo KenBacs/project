@@ -278,7 +278,7 @@
 
                          <div class="form-group">
                           <label for="shop_image">Shop image</label>
-                            <input type="file" name="file" value="<?php echo $fileNameNew?>">
+                            <input type="file" name="file" value="images/<?php echo $fileNameNew?>">
                         </div> 
 
                         <div class="form-group">
@@ -305,9 +305,9 @@
                             <label for="selectCategory">Category</label>
                             <select class="form-control" name="selectCategory" id="selectCategory" >
                             <option value="">Choose Category</option>
-                            <option value="Watch repair">Watch repair</option>
-                            <option value="Computer/Laptop repair">Computer/Laptop repair</option>
-                            <option value="Tailoring">Tailoring</option>
+                            <option value="Watch repair" <?php if(isset($shop_category) && $shop_category =="Watch repair") {echo "selected"; } ?>>Watch repair</option>
+                            <option value="Computer/Laptop repair" <?php if(isset($shop_category) && $shop_category =="Computer/Laptop repair") {echo "selected"; } ?>>Computer/Laptop repair</option>
+                            <option value="Tailoring" <?php if(isset($shop_category) && $shop_category =="Tailoring") {echo "selected"; } ?>>Tailoring</option>
                           </select>
 
 

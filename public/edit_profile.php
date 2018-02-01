@@ -10,23 +10,32 @@
     $id = 0;
     $first = '';
     $last = '';
+    $gender = '';
+    $address = '';
     $email = '';
+    $mobilenumber = '';
     $uid = '';
     $pwd = '';
 
 
+
     if (isset($_POST['update'])) {
       
-      $id = mysql_prep($_POST['id']);
+      $id = mysql_prep($_SESSION['u_id']);
       $first = mysql_prep($_POST['first']);
+       if (!empty($_POST['gender'])) {
+        $gender = mysql_prep($_POST['gender']);
+      }
+      $address = mysql_prep($_POST['address']);
       $last = mysql_prep($_POST['last']);
       $email = mysql_prep($_POST['email']);
+      $mobilenumber = mysql_prep($_POST['mobilenumber']);
       $uid = mysql_prep($_POST['uid']);
       $pwd = mysql_prep($_POST['pwd']);
       
 
-      //Check Required Fields
-      if (!empty($first) && !empty($last) && !empty($email) && !empty($uid) && !empty($pwd)) {
+       //Check Required Fields
+      if (!empty($first) && !empty($last) && !empty($gender) && !empty($address) && !empty($email) && !empty($mobilenumber) && !empty($uid) && !empty($pwd)) {
         // Passed
         // Check Email
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -34,26 +43,44 @@
           $msg= 'Please use a valid email.';
           $msgClass='alert-danger';
         } else {
-          
-             $query = "UPDATE users SET user_first = '$first',user_last = '$last', user_email = '$email', user_uid = '$uid', user_pwd = '$pwd' WHERE user_id= $id";
+         
+            if (preg_match('/^[0-9]{4}-[0-9]{3}-[0-9]{4}$/', $mobilenumber)) {
+
+              $query = "UPDATE users SET user_first = '$first', user_last = '$last', user_gender = '$gender', user_address = '$address', user_email = '$email', user_mobile = '$mobilenumber', user_uid = '$uid', user_pwd = '$pwd' WHERE user_id= $id";
 
                     mysqli_query($connection,$query);
 
+             
                     $_SESSION['u_first'] = $first;
                     $_SESSION['u_last'] = $last;
-                    $_SESSION['u_email'] =  $email;
+                    $_SESSION['u_gender'] = $gender;
+                    $_SESSION['u_address'] = $address;
+                    $_SESSION['u_email'] = $email;
+                    $_SESSION['u_mobile'] = $mobilenumber;
                     $_SESSION['u_uid'] = $uid;
                     $_SESSION['u_pwd'] = $pwd;
+                
                     
 
-                    $first='';
-                    $last='';
+                    $first = '';
+                    $last = '';
+                    $gender = '';
+                    $address = '';
                     $email='';
-                    $uid='';
-                    $pwd='';
+                    $mobilenumber = '';
+                    $uid = '';
+                    $pwd = '';
 
                     $msg ="Profile updated successfully";
                     $msgClass ="alert-success";
+
+            } else {
+              // Failed
+              $msg= 'Invalid mobile number.';
+              $msgClass='alert-danger';
+            }
+            
+            
           
         }
       } else {
@@ -70,7 +97,10 @@
     $id = $record['user_id'];
     $first = $record['user_first'];
     $last = $record['user_last'];
+    $gender = $record['user_gender'];
+    $address = $record['user_address'];
     $email = $record['user_email'];
+    $mobilenumber = $record['user_mobile'];
     $uid = $record['user_uid'];
     $pwd = $record['user_pwd'];
 
@@ -133,10 +163,10 @@
                 <tr>
                 <td> 
                  <label class="radio-inline">
-                <input type="radio" name="optradio">Male
+                <input type="radio" name="gender" value="Male" <?php if(isset($gender) && $gender =="Male") {echo "checked"; } ?> >Male
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="optradio">Female
+                  <input type="radio" name="gender" value="Female" <?php if(isset($gender) && $gender =="Female") {echo "checked"; } ?>>Female
                 </label>
                </td>
 
@@ -149,8 +179,8 @@
           </div>
 
              <div class="form-group">
-                <label for="">Complete address:</label>
-                <textarea class="form-control" rows="5" ></textarea>
+                <label for="">Address:</label>
+                <textarea class="form-control" rows="5" name="address" ><?php echo $address;?></textarea>
                 
             </div> 
 
@@ -161,7 +191,7 @@
 
             <div class="form-group">
               <label for="">Mobile number:</label>
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" name="mobilenumber" value="<?php echo $mobilenumber; ?>">
            </div>
 
            <div class="form-group">
