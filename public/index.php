@@ -22,11 +22,16 @@
       <div class="content container">
          <h2>Home</h2>
 
-         <?php
-            if (isset($_SESSION['u_id'])) {
-              echo "You are logged in!";
-            }
-          ?>
+        <div class="row">
+          <div class="col-sm-4">
+            <?php if (isset($_GET['accountdeletion'])) { ?>
+            <div class="alert alert-success">Your account deleted successfully.</div> 
+
+          <?php } ?>
+          </div>
+        </div>
+         
+
       </div>
 
 

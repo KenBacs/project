@@ -24,13 +24,9 @@
 
         if ($row = mysqli_fetch_assoc($result)) {
           //De-hashing the password
-          $hashedPwdCheck = password_verify($pwd, $row['user_pwd']);
-
-          if ($hashedPwdCheck == false) {
-             $msg= 'Wrong password';
-             $msgClass='alert-danger';
-          } elseif ($hashedPwdCheck == true) {
-            //Log in the user here
+          //$hashedPwdCheck = password_verify($pwd, $row['user_pwd']);
+          if ($pwd === $row['user_pwd']) {
+                 //Log in the user here
             $_SESSION['u_id'] = $row['user_id'];
             $_SESSION['u_first'] = $row['user_first'];
             $_SESSION['u_last'] = $row['user_last'];
@@ -40,7 +36,12 @@
             $_POST=array();
             redirect_to("../public/browse_shops.php?");
 
+          } else {
+             $msg= 'Wrong password';
+             $msgClass='alert-danger';
           }
+
+      
         }
 
       }

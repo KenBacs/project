@@ -1,4 +1,7 @@
 <?php require_once("../includes/session.php");?>
+<?php
+  
+?>
 
 <!doctype html>
 <html lang="en">
@@ -22,7 +25,7 @@
         <div class="content container">
            <div class="row">
                
-             <div class="col-sm-2 col-sm-offset-5" >
+             <div class="col-sm-4 col col-xs-12  col-sm-offset-4 " >
 
                 <img src="images/default.jpg" class="img-circle img-responsive" >
                       
@@ -34,6 +37,17 @@
              </div>
               
             
+           </div>
+           <div class="row">
+             <div class="col-sm-4 col-sm-offset-4 text-center">
+            
+                  <a href="edit_profile.php?edit=<?php echo $_SESSION['u_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit profile</a>
+                 
+                 
+              
+             
+                      
+             </div>
            </div>
 
           

@@ -370,7 +370,7 @@
                            
                           </div>
                           <div class="modal-footer">
-                            <a href="my_shops.php?del=<?php echo $row['shop_id']?>" class="btn btn-default" role="button"> Yes</a>
+                            <a href="my_shops.php?del=<?php echo $row['shop_id'];?>" class="btn btn-default" role="button"> Yes</a>
                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                           </div>
                         </div>

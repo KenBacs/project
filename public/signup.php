@@ -35,10 +35,9 @@
             $msg= 'Username is already taken.';
             $msgClass='alert-danger';
           } else {
-            //Hashing the password
-            $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
+            
             //Insert the user into the database
-            $sql = "INSERT INTO users (user_first, user_last, user_email, user_uid, user_pwd, user_type) VALUES ('$first', '$last', '$email', '$uid', '$hashedPwd', '$selectUser')";
+            $sql = "INSERT INTO users (user_first, user_last, user_email, user_uid, user_pwd, user_type) VALUES ('$first', '$last', '$email', '$uid', '$pwd', '$selectUser')";
             mysqli_query($connection,$sql);
               $msg= 'You have succesfully registered.';
               $msgClass='alert-success';
@@ -76,7 +75,7 @@
     
     <div class="content container">
       <div class="col-md-4 col-md-offset-4">
-        <h2 class="text-center">Sign Up</h2>
+        <h2 class="text-center"><span class="glyphicon glyphicon-user"></span> Sign Up</h2>
 
         <?php if($msg !=''): ?>
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
@@ -92,10 +91,42 @@
               <label for="lname">Last name:</label>
               <input type="text" class="form-control" name="last" value="<?php echo isset($_POST['last']) ? $last : '';?>">
           </div> 
+          <div class="form-group">
+            <table>
+              
+                <tr><td><label>Gender:</label></td> </tr>
+                <tr>
+                <td> 
+                 <label class="radio-inline">
+                <input type="radio" name="optradio">Male
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="optradio">Female
+                </label>
+               </td>
+
+                </tr>
+
+             
+            </table>
+            
+           
+          </div>
+
+             <div class="form-group">
+                <label for="">Complete address:</label>
+                <textarea class="form-control" rows="5" id="" name="" ></textarea>
+                
+            </div> 
 
            <div class="form-group">
               <label for="email">Email:</label>
               <input type="text" class="form-control" name="email" value="<?php echo isset($_POST['email']) ? $email : '';?>">
+           </div>
+
+            <div class="form-group">
+              <label for="">Mobile number:</label>
+              <input type="text" class="form-control" name="" value="">
            </div>
 
            <div class="form-group">
@@ -122,7 +153,7 @@
             </script>
             </div>
 
-            <button  type="submit" name="submit" class="btn btn-primary btn-block">Sign up</button> 
+            <button  type="submit" name="submit" style="margin-bottom: 30px" class="btn btn-primary btn-block">Sign up</button> 
 
         </form>
       </div>       
