@@ -27,7 +27,8 @@
     <div class="content container">
         <div class="row">
       <div class="col-md-6 col-md-offset-3">
-         <div class="table-responsive">  
+         <div class="table-responsive"> 
+              
              <table class="table table-bordered">  
                   <tr>  
                        <th width="70%">Service Name</th>  

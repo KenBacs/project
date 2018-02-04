@@ -75,7 +75,12 @@
   <div class="content container">
        <div class="row">
       <div class="col-md-6 col-md-offset-3">
-         <div class="table-responsive">  
+         <div class="table-responsive"> 
+              <div align="right">
+                <button type="button" name="add" id="add" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>
+              </div>
+              <br/> 
+            <div id="service_table">
              <table class="table table-bordered">  
                   <tr>  
                        <th width="70%">Service Name</th>  
@@ -92,12 +97,16 @@
                   <?php  
                   }  
                   ?>  
-             </table>  
+             </table> 
+             </div>  
           </div> 
 
       </div>
 
     </div>
+
+
+  </div>
 
 
         <div id="dataModal" class="modal fade">  
@@ -114,12 +123,79 @@
                   </div>  
              </div>  
         </div>  
+    </div>
+
+    <div id="add_data_Modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add service</h4>
+          </div>
+          <div class="modal-body">
+            <form method="POST" id="insert_form">
+              <input type="hidden" name="id" value="<?php echo $id;?>">
+              <div class="form-group">
+                <label for="service_name">Service Name:</label>
+                <input type="text" class="form-control" id="service_name" name="service_name" placeholder="Enter service" >
+              </div>
+              <div class="form-group">
+                  <label for="service_desc">Description:</label>
+                  <textarea class="form-control" rows="5" id="service_desc" name="service_desc" placeholder="Enter description"></textarea>
+                </div>
+              <div class="form-group">
+                <label for="service_cost">Cost:</label>
+                <div class="input-group">
+                  <span class="input-group-addon">P</span>
+                  <input type="text" class="form-control" id="service_cost" placeholder="Enter cost" name="service_cost">
+                </div>
+                
+              </div>
+              
+              <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>  
 
-  </div>
 
    <script>  
-     $(document).ready(function(){  
+     $(document).ready(function(){
+
+          $('#insert_form').on('submit',function(event){
+            event.preventDefault();
+            if ($('#service_name').val() == "") {
+              alert("Service name is required");
+            }
+            else if ($('textarea#service_desc').val() == "") {
+              alert("Description is required");
+            }
+            else if ($('#service_cost').val() == "") {
+              alert("Cost is required");
+            }
+            else
+            {
+                 $.ajax({  
+                url:"insert.php",  
+                method:"POST",  
+                data:$('#insert_form').serialize(),  
+                beforeSend:function(){  
+                 $('#insert').val("Inserting");  
+                },  
+                success:function(data){  
+                 $('#insert_form')[0].reset();  
+                 $('#add_data_Modal').modal('hide');  
+                 $('#service_table').html(data);  
+                }  
+               }); 
+            }
+
+          });
+
           $('.view_data').click(function(){  
                var service_id = $(this).attr("id");  
                $.ajax({  
