@@ -9,32 +9,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.c ss">
+    <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="home">
-    
-  <?php include '../includes/layouts/header.php';?>
-
+  <body id="admin">
     
 
-      <div class="content container">
-         <h2>Home</h2>
+  <?php include '../includes/layouts/admin_header.php';?>
 
-        <div class="row">
-          <div class="col-sm-4">
-            <?php if (isset($_GET['accountdeletion'])) { ?>
-            <div class="alert alert-success">Your account deleted successfully.</div> 
 
-          <?php } ?>
-          </div>
-        </div>
-         
-
+      <div class=" content container">
+        <p><?php echo $_SESSION['a_id'];?></p>
+         <p><?php echo $_SESSION['a_first'];?></p>
+          <p><?php echo $_SESSION['a_last'];?></p>
+           <p><?php echo $_SESSION['a_uid'];?></p>
+        
       </div>
-
-
-
+  
 
     <?php include '../includes/layouts/footer.php';?>

@@ -18,8 +18,39 @@
       $resultCheck = mysqli_num_rows($result);
 
       if ($resultCheck < 1) {
-           $msg= 'User doesn\'t exist';
+
+        $sql = "SELECT * FROM admins WHERE admin_uid = '$uid' ";
+        $result = mysqli_query($connection, $sql);
+        $resultCheck = mysqli_num_rows($result);
+
+        if ($resultCheck < 1) {
+          $msg= 'User doesn\'t exist';
           $msgClass='alert-danger';
+        } else {
+
+              if ($row = mysqli_fetch_assoc($result)) {
+            //De-hashing the password
+            //$hashedPwdCheck = password_verify($pwd, $row['user_pwd']);
+            if ($pwd === $row['admin_pwd']) {
+                   //Log in the user here
+              $_SESSION['a_id'] = $row['admin_id'];
+              $_SESSION['a_first'] = $row['admin_first'];
+              $_SESSION['a_last'] = $row['admin_last'];
+              $_SESSION['a_uid'] = $row['admin_uid'];
+              $_POST=array();
+              redirect_to("admin.php");
+
+            } else {
+               $msg= 'Wrong password';
+               $msgClass='alert-danger';
+            }
+
+        
+          }
+
+        }
+
+          
       } else {
 
         if ($row = mysqli_fetch_assoc($result)) {
