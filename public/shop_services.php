@@ -71,146 +71,174 @@
     
 
   <?php include '../includes/layouts/provider_header.php';?>
+ 
+    <div class="content container">
 
-  <div class="content container">
-       <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-         <div class="table-responsive"> 
-              <div align="right">
-                <button type="button" name="add" id="add" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>
-              </div>
-              <br/> 
-            <div id="service_table">
-             <table class="table table-bordered">  
-                  <tr>  
-                       <th width="70%">Service Name</th>  
-                       <th width="30%">View</th>  
-                  </tr>  
-                  <?php  
-                  while($row = mysqli_fetch_array($result))  
-                  {  
-                  ?>  
-                  <tr>  
-                       <td><?php echo $row["service_name"]; ?></td>  
-                       <td><input type="button" name="view" value="view" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs view_data" /></td>  
-                  </tr>  
-                  <?php  
-                  }  
-                  ?>  
-             </table> 
-             </div>  
-          </div> 
-
-      </div>
-
-    </div>
-
-
-  </div>
-
-
-        <div id="dataModal" class="modal fade">  
-        <div class="modal-dialog">  
-             <div class="modal-content">  
-                  <div class="modal-header">  
-                       <button type="button" class="close" data-dismiss="modal">&times;</button>  
-                       <h4 class="modal-title">Service Details</h4>  
-                  </div>  
-                  <div class="modal-body" id="service_detail">  
-                  </div>  
-                  <div class="modal-footer">  
-                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-                  </div>  
-             </div>  
-        </div>  
-    </div>
-
-    <div id="add_data_Modal" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Add service</h4>
-          </div>
-          <div class="modal-body">
-            <form method="POST" id="insert_form">
-              <input type="hidden" name="id" value="<?php echo $id;?>">
-              <div class="form-group">
-                <label for="service_name">Service Name:</label>
-                <input type="text" class="form-control" id="service_name" name="service_name" placeholder="Enter service" >
-              </div>
-              <div class="form-group">
-                  <label for="service_desc">Description:</label>
-                  <textarea class="form-control" rows="5" id="service_desc" name="service_desc" placeholder="Enter description"></textarea>
-                </div>
-              <div class="form-group">
-                <label for="service_cost">Cost:</label>
-                <div class="input-group">
-                  <span class="input-group-addon">P</span>
-                  <input type="text" class="form-control" id="service_cost" placeholder="Enter cost" name="service_cost">
-                </div>
-                
-              </div>
-              
-              <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+          <br /><br />  
+      <div class="container" style="width:700px;">  
+       <h3 align="center">Insert Data Through Bootstrap Modal by using Ajax PHP</h3>  
+       <br />  
+       <div class="table-responsive">
+        <div align="right">
+         <button type="button" name="add" id="add" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>
         </div>
+        <br />
+        <div id="service_table">
+         <table class="table table-bordered">
+          <tr>
+           <th width="70%">Service Name</th>  
+            <th width="15%">Edit</th>  
+            <th width="15%">View</th> 
+          </tr>
+          <?php
+          while($row = mysqli_fetch_array($result))
+          {
+          ?>
+          <tr>
+           <td><?php echo $row["service_name"]; ?></td>
+           <td><input type="button" name="edit" value="Edit" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs edit_data" /></td>  
+           <td><input type="button" name="view" value="view" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs view_data" /></td>
+          </tr>
+          <?php
+          }
+          ?>
+         </table>
+        </div>
+       </div>  
       </div>
+          
     </div>  
 
+    <div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+  <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">PHP Ajax Insert Data in MySQL By Using Bootstrap Modal</h4>
+   </div>
+   <div class="modal-body">
+    <form method="post" id="insert_form">
+      <input type="hidden" name="id" id="id" value="<?php echo $id;?>">
+      <input type="hidden" name="service_id" id="service_id">
+     <label>Enter Service Name</label>
+     <input type="text" name="service_name" id="service_name" class="form-control" />
+     <br />
+     <label>Enter Description</label>
+     <textarea name="service_desc" id="service_desc" rows="5" class="form-control"></textarea>
+     <br />
+     
+     <label>Enter Cost</label>
+     <div class="input-group">
+       <span class="input-group-addon">P</span>
+         <input type="text" name="service_cost" id="service_cost" class="form-control" />
+     </div>
+   
+     <br />
+     <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
 
-   <script>  
-     $(document).ready(function(){
+    </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
 
-          $('#insert_form').on('submit',function(event){
-            event.preventDefault();
-            if ($('#service_name').val() == "") {
-              alert("Service name is required");
-            }
-            else if ($('textarea#service_desc').val() == "") {
-              alert("Description is required");
-            }
-            else if ($('#service_cost').val() == "") {
-              alert("Cost is required");
-            }
-            else
-            {
-                 $.ajax({  
-                url:"insert.php",  
+<div id="dataModal" class="modal fade">
+ <div class="modal-dialog">
+  <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Service Details</h4>
+   </div>
+   <div class="modal-body" id="service_detail">
+    
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>  
+$(document).ready(function(){
+
+    $('#add').click(function(){  
+           $('#insert').val("Insert");  
+           $('#insert_form')[0].reset();  
+      }); 
+
+  $(document).on('click', '.edit_data', function(){  
+           var service_id = $(this).attr("id");  
+           $.ajax({  
+                url:"fetch.php",  
                 method:"POST",  
-                data:$('#insert_form').serialize(),  
-                beforeSend:function(){  
-                 $('#insert').val("Inserting");  
-                },  
+                data:{service_id:service_id},  
+                dataType:"json",  
                 success:function(data){  
-                 $('#insert_form')[0].reset();  
-                 $('#add_data_Modal').modal('hide');  
-                 $('#service_table').html(data);  
+                     $('#service_name').val(data.service_name);  
+                     $('#service_desc').val(data.service_description);  
+                     $('#service_cost').val(data.service_cost); 
+                      $('#service_id').val(data.service_id);    
+                     $('#insert').val("Update");  
+                     $('#add_data_Modal').modal('show');  
                 }  
-               }); 
-            }
+           });  
+      });  
 
-          });
+ $('#insert_form').on("submit", function(event){  
+  event.preventDefault();  
+  if($('#service_name').val() == "")  
+  {  
+   alert("Service name is required");  
+  }  
+  else if($('#service_desc').val() == '')  
+  {  
+   alert("Service description is required");  
+  }  
+  else if($('#service_cost').val() == '')
+  {  
+   alert("Service cost is required");  
+  }
+   
+  else  
+  {  
+   $.ajax({  
+    url:"insert.php",  
+    method:"POST",  
+    data:$('#insert_form').serialize(),  
+    beforeSend:function(){  
+     $('#insert').val("Inserting");  
+    },  
+    success:function(data){  
+     $('#insert_form')[0].reset();  
+     $('#add_data_Modal').modal('hide');  
+     $('#service_table').html(data);  
+    }  
+   });  
+  }  
+ });
 
-          $('.view_data').click(function(){  
-               var service_id = $(this).attr("id");  
-               $.ajax({  
-                    url:"select.php",  
-                    method:"post",  
-                    data:{service_id:service_id},  
-                    success:function(data){  
-                         $('#service_detail').html(data);  
-                         $('#dataModal').modal("show");  
-                    }  
-               });  
-          });  
-     });  
-     </script>
- 
-  
+
+
+
+ $(document).on('click', '.view_data', function(){
+  //$('#dataModal').modal();
+  var service_id = $(this).attr("id");
+  $.ajax({
+   url:"select.php",
+   method:"POST",
+   data:{service_id:service_id},
+   success:function(data){
+    $('#service_detail').html(data);
+    $('#dataModal').modal('show');
+   }
+  });
+ });
+});  
+ </script>
+
 
     <?php include '../includes/layouts/footer.php';?>
