@@ -112,6 +112,7 @@
                 </form>
                       
                       <h1 class="text-center"> <?php echo $_SESSION['u_uid']; ?> </h1><br/>
+                      <h5 class="text-center">ID: <?php echo $_SESSION['u_id']; ?> </h5><br/>
                       <h5 class="text-center">First Name: <?php echo $_SESSION['u_first']; ?> </h5><br/>
                       <h5 class="text-center">Last Name: <?php echo $_SESSION['u_last']; ?> </h5><br/>
                       <h5 class="text-center">Gender: <?php echo $_SESSION['u_gender']; ?> </h5><br/>

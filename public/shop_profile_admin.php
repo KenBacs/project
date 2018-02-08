@@ -15,8 +15,8 @@
     $time_end = '';
     $shop_category = '';
 
-    if (isset($_GET['view'])) {
-    $id = $_GET['view'];
+    if (isset($_GET['shop'])) {
+    $id = $_GET['shop'];
     $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
     $record = mysqli_fetch_array($rec);
     $id = $record['shop_id'];
@@ -24,9 +24,9 @@
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
     $shop_contact = $record['shop_contact'];
-    $day_start = $record['day_start'];
+    $day_start =  $record['day_start'];
     $day_end = $record['day_end'];
-    $time_start = date("g:i a", strtotime($record['time_start'])); ;
+    $time_start = date("g:i a", strtotime($record['time_start'])); 
     $time_end = date("g:i a", strtotime($record['time_end'])); 
     $shop_category = $record['shop_category'];
 
@@ -34,7 +34,7 @@
 
 
     // Retrieve services
-    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['view']."");
+    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['shop']."");
 ?>
 
 <!doctype html>
@@ -52,7 +52,7 @@
   <body id="contact">
     
 
-  <?php include '../includes/layouts/header.php';?>
+  <?php include '../includes/layouts/admin_header.php';?>
 
 
       <div class=" content container">

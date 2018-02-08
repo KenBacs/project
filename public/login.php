@@ -37,7 +37,8 @@
               $_SESSION['a_first'] = $row['admin_first'];
               $_SESSION['a_last'] = $row['admin_last'];
               $_SESSION['a_uid'] = $row['admin_uid'];
-              $_POST=array();
+              $_SESSION['a_image'] = $row['admin_image'];
+         
               redirect_to("admin.php");
 
             } else {

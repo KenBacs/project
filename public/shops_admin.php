@@ -1,9 +1,272 @@
 <?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
-<?php include_once ("../includes/db_connection.php");
-  $query = "SELECT * FROM shops";
-  $result = mysqli_query($connection, $query);
 
+<?php
+  include_once '../includes/db_connection.php';
+  
+    $msg = '';
+    $msgClass = '';
+    $id = 0;
+    $shop_id = 0;
+    $shop_name = '';
+    $fileNameNew = '';
+    $shop_description = '';
+    $shop_contact = '';
+    $day_start = '';
+    $day_end = '';
+    $time_start = '';
+    $time_end = '';
+    $shop_category = '';
+    $edit_state = false;
+  if (isset($_POST['submit'])) {
+    
+    $id = mysql_prep($_POST['id']);
+    $shop_name = mysql_prep($_POST['shop_name']);
+    $file = $_FILES['file'];
+    $fileName = $_FILES['file']['name'];
+    $fileTmpName = $_FILES['file']['tmp_name'];
+    $fileSize = $_FILES['file']['size'];
+    $fileError = $_FILES['file']['error'];
+    $fileType = $_FILES['file']['type'];
+    $fileExt = explode('.', $fileName);
+    $fileActualExt = strtolower(end($fileExt));
+    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+    $shop_description = mysql_prep($_POST['shop_desc']);
+    $shop_contact = mysql_prep($_POST['shop_contact']);
+    $day_start = mysql_prep($_POST['day_start']);
+    $day_end = mysql_prep($_POST['day_end']);
+    $time_start = mysql_prep($_POST['time_start']);
+    $time_end = mysql_prep($_POST['time_end']);
+    $shop_category = mysql_prep($_POST['selectCategory']);
+    
+    
+    if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($day_start) && !empty($day_end) && !empty($time_start) && !empty($time_end) && !empty($shop_category) ) { 
+        $sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
+              $resultsn = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($resultsn);
+              if ($resultCheck > 0) {
+                $msg="Shop name is already taken";
+          $msgClass ="alert-danger";
+          
+              } else { 
+
+              $sql = "SELECT * FROM users WHERE user_id = '$id'";
+              $result = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($result);
+              if (!$resultCheck) {
+              $msg="Invalid user";
+              $msgClass ="alert-danger";
+          
+              } else {
+                $rec = mysqli_query($connection,"SELECT * FROM users WHERE user_id = $id");
+                $row = mysqli_fetch_array($rec);
+                $type = $row['user_type'];
+                if ($type == 'Service Provider') {
+                     if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
+                  
+              if (in_array($fileActualExt, $allowed)) {
+                if ($fileError === 0) {
+                  if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('',true).".".$fileActualExt;
+                    $fileDestination = 'images/'.$fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+
+                   $query = "INSERT INTO shops (user_id, shop_name, shop_image, shop_description, shop_contact, day_start, day_end, time_start, time_end, shop_category) VALUES ($id, '$shop_name', '$fileNameNew', '$shop_description', '$shop_contact', '$day_start', '$day_end', '$time_start', '$time_end', '$shop_category')";
+           
+                    if ( mysqli_query($connection,$query)) {
+
+              
+
+                    $msg ="Shop added successfully";
+                    $msgClass ="alert-success";
+                      $id = 0;
+                      $shop_name = '';
+                      $fileNameNew = '';
+                      $shop_description = '';
+                      $shop_contact = '';
+                      $day_start = '';
+                      $day_end = '';
+                      $time_start = '';
+                      $time_end = '';
+                      $shop_category = '';
+                    
+                    } else {
+                       echo mysqli_error($connection);
+                       echo $id;
+                    }
+                   
+                   
+                    
+                  } else {
+                    $msg ="Image file is too big";
+                $msgClass ="alert-danger";
+                
+                }
+                } else {
+                  $msg ="There was an error uploading your file";
+              $msgClass ="alert-danger";
+              
+                }
+              } else {
+                  $msg ="Invalid image";
+              $msgClass ="alert-danger";
+              
+              }
+                } else {
+                  $msg ="Invalid telephone number";
+            $msgClass ="alert-danger";
+            
+                }
+                } else { 
+                    $msg="Invalid user type";
+                    $msgClass ="alert-danger";
+                }
+                   
+
+              }
+             
+              }
+        
+            } else {
+      $msg ="Please fill all fields";
+      $msgClass ="alert-danger";
+      
+    }
+  }
+  if (isset($_POST['update'])) {
+    
+    $id = mysql_prep($_POST['id']);
+    $shop_id = mysql_prep($_POST['shop_id']);
+    $shop_name = mysql_prep($_POST['shop_name']);
+    $file = $_FILES['file'];
+    $fileName = $_FILES['file']['name'];
+    $fileTmpName = $_FILES['file']['tmp_name'];
+    $fileSize = $_FILES['file']['size'];
+    $fileError = $_FILES['file']['error'];
+    $fileType = $_FILES['file']['type'];
+    $fileExt = explode('.', $fileName);
+    $fileActualExt = strtolower(end($fileExt));
+    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+    $shop_description = mysql_prep($_POST['shop_desc']);
+    $shop_contact = mysql_prep($_POST['shop_contact']);
+    $day_start = mysql_prep($_POST['day_start']);
+    $day_end = mysql_prep($_POST['day_end']);
+    $time_start = mysql_prep($_POST['time_start']);
+    $time_end = mysql_prep($_POST['time_end']);
+    $shop_category = mysql_prep($_POST['selectCategory']);
+    
+    
+    if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($day_start) && !empty($day_end) && !empty($time_start) && !empty($time_end) && !empty($shop_category) ) { 
+        
+        $sql = "SELECT * FROM users WHERE user_id = '$id'";
+              $result = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($result);
+              if (!$resultCheck) {
+              $msg="Invalid user";
+              $msgClass ="alert-danger";
+          
+              } else {
+                $rec = mysqli_query($connection,"SELECT * FROM users WHERE user_id = $id");
+                $row = mysqli_fetch_array($rec);
+                $type = $row['user_type'];
+                if ($type == 'Service Provider') {
+                     if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
+                  
+              if (in_array($fileActualExt, $allowed)) {
+                if ($fileError === 0) {
+                  if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('',true).".".$fileActualExt;
+                    $fileDestination = 'images/'.$fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+
+                   
+                    $query = "UPDATE shops SET user_id = $id, shop_name = '$shop_name', shop_image = '$fileNameNew', shop_description = '$shop_description', shop_contact = '$shop_contact', day_start = '$day_start', day_end = '$day_end', time_start = '$time_start', time_end = '$time_end', shop_category = '$shop_category' WHERE shop_id = $shop_id" ;
+           
+                    if ( mysqli_query($connection,$query)) {
+
+              
+
+                    $msg ="Shop updated successfully";
+                    $msgClass ="alert-success";
+                      $id = 0;
+                      $shop_name = '';
+                      $fileNameNew = '';
+                      $shop_description = '';
+                      $shop_contact = '';
+                      $day_start = '';
+                      $day_end = '';
+                      $time_start = '';
+                      $time_end = '';
+                      $shop_category = '';
+                    
+                    } else {
+                       echo mysqli_error($connection);
+                       echo $id;
+                    }
+                   
+                   
+                    
+                  } else {
+                    $msg ="Image file is too big";
+                $msgClass ="alert-danger";
+                
+                }
+                } else {
+                  $msg ="There was an error uploading your file";
+              $msgClass ="alert-danger";
+              
+                }
+              } else {
+                  $msg ="Invalid image";
+              $msgClass ="alert-danger";
+              
+              }
+                } else {
+                  $msg ="Invalid telephone number";
+            $msgClass ="alert-danger";
+            
+                }
+                } else { 
+                    $msg="Invalid user type";
+                    $msgClass ="alert-danger";
+                }
+                   
+
+              }
+        
+            } else {
+      $msg ="Please fill all fields";
+      $msgClass ="alert-danger";
+      
+    }
+  }
+
+  if (isset($_GET['edit'])) {
+    $shop_id = $_GET['edit'];
+    $edit_state=true;
+    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
+    $record = mysqli_fetch_array($rec);
+    $id = $record['user_id']; 
+    $shop_name = $record['shop_name'];
+    $shop_image = $record['shop_image'];
+    $shop_description = $record['shop_description'];
+    $shop_contact = $record['shop_contact'];
+    $day_start =  $record['day_start'];
+    $day_end = $record['day_end'];
+    $time_start = date("H:i", strtotime($record['time_start'])); ;
+    $time_end = date("H:i", strtotime($record['time_end'])); 
+    $shop_category = $record['shop_category'];
+  }
+
+  if (isset($_GET['del'])) {
+    $shop_id = $_GET['del'];
+    mysqli_query($connection,"DELETE FROM shops WHERE shop_id = $shop_id") or die(mysqli_error($connection)); 
+    $msg ="shop deleted successfully ";
+      $msgClass ="alert-success";
+       
+  }
+   // Retrieve records
+  $results = mysqli_query($connection, "SELECT * FROM shops");
 ?>
 
 <!doctype html>
@@ -14,80 +277,210 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-     <script src="javascripts/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="shops_admin">
-    
+  <body id="my_shops">
+
+  
 
   <?php include '../includes/layouts/admin_header.php';?>
 
+    
+    
     <div class="content container">
-        <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-         <div class="table-responsive">  
-             <table class="table table-bordered">  
-                  <tr>  
-                       <th width="70%">Shop Name</th>  
-                       <th width="30%">View</th>  
-                  </tr>  
-                  <?php  
-                  while($row = mysqli_fetch_array($result))  
-                  {  
-                  ?>  
-                  <tr>  
-                       <td><?php echo $row["shop_name"]; ?></td>  
-                       <td><input type="button" name="view" value="view" id="<?php echo $row["shop_id"]; ?>" class="btn btn-info btn-xs view_data" /></td>  
-                  </tr>  
-                  <?php  
-                  }  
-                  ?>  
-             </table>  
-          </div> 
+     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> Shops</h2>
+    <div class="row">
 
+      <div class="col-md-4">
+       
+
+          <?php if($msg !=''): ?>
+            <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
+          <?php endif;?>
+
+         
+       <form id="" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="shop_id" value="<?php echo $shop_id;?>">
+                          <div class="form-group">
+                            <label for="user_id">User ID</label>
+                            <input type="number"  class="form-control" name="id" value="<?php echo $id;?>">
+                        </div> 
+                        <div class="form-group">
+                            <label for="shop_name">Shop name</label>
+                            <input type="text" class="form-control" name="shop_name" value="<?php echo $shop_name;?>">
+                        </div> 
+
+                         <div class="form-group">
+                          <label for="shop_image">Shop image</label>
+                            <input type="file" name="file" value="<?php echo $fileNameNew?>">
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="shop_desc">Shop description</label>
+                             <textarea class="form-control" rows="5" id="comment" name="shop_desc" ><?php echo $shop_description;?></textarea>
+                            
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="shop_contact">Telephone number</label>
+                            <input type="text" class="form-control" name="shop_contact" placeholder="xxx-xxx-xxxx" value="<?php echo $shop_contact;?>">
+                        </div>
+
+            
+
+                        <div class="form-group">
+                              <label for="shop_hours">Business days</label>
+                              <table>
+                                <tr>
+                                  <td>
+                                    <select class="form-control" name="day_start" id="day_start" >
+                                    <option value="">Choose Day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                    <option value="Tailoring">Tailoring</option>
+                                  </select>
+                                </td>
+                                <td style="padding-left: 10px; padding-right: 10px;"> to </td>
+                                   <td>
+                                    <select class="form-control" name="day_end" id="day_end" >
+                                    <option value="">Choose Day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                    <option value="Tailoring">Tailoring</option>
+                                  </select>
+                                </td>
+                                </tr>
+                              </table>
+
+
+                          <script type="text/javascript">
+                            document.getElementById('day_start').value = "<?php echo $day_start;?>";
+                             </script>
+
+                          <script type="text/javascript">
+                            document.getElementById('day_end').value = "<?php echo $day_end;?>";
+                         </script>
+                        </div>
+
+                        <div class="form-group">
+                              <label for="shop_hours">Business hours</label>
+                              <table>
+                                <tr>
+                                <td><input type="time" name="time_start" value="<?php echo $time_start;?>"></td>
+
+                                <td style="padding-left: 10px; padding-right: 10px;"> to </td>
+
+                                   <td> <input type="time" name="time_end" value="<?php echo $time_end;?>"> </td>
+                                </tr> 
+                              </table>
+              
+                        </div>
+                       
+
+                         <div class="form-group">
+                            <label for="selectCategory">Category</label>
+                            <select class="form-control" name="selectCategory" id="selectCategory" >
+                            <option value="">Choose Category</option>
+                            <option value="Watch repair">Watch repair</option>
+                            <option value="Computer/Laptop repair">Computer/Laptop repair</option>
+                            <option value="Tailoring">Tailoring</option>
+                            <option value="Auto repair">Auto repair</option>
+                          </select>
+
+
+                          <script type="text/javascript">
+                            document.getElementById('selectCategory').value = "<?php echo $shop_category;?>";
+                          </script>
+                          </div>
+                          <?php if($edit_state == false): ?>
+                            <button  type="submit" name="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Create Shop</button> 
+                          <?php else: ?>
+                            <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Shop</button> 
+                          <?php endif ?>
+
+                      </form>
+      </div>  
+
+      
+        <div class="col-md-8">
+            
+          <div class="table-responsive"  >
+              <table class="table">
+
+                <tr>
+                    <th width="10%">User ID</th>
+                   <th width="10%">Shop ID</th>
+                  <th width="20%">Shop Name</th>
+                  <th width="40%">Action</th>
+                </tr>
+                 <?php while ($row = mysqli_fetch_array($results)) { ?>
+                  <tr>
+                      <td><?php echo $row['user_id']; ?></td>
+                      <td><?php echo $row['shop_id']; ?></td>
+                      <td><?php echo $row['shop_name']; ?></td>
+                      <td>
+                      <a href="shop_profile_admin.php?shop=<?php echo $row['shop_id']?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> Visit shop</a>
+                      <a href="shops_admin.php?edit=<?php echo $row['shop_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                      <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                      </td>
+
+                  </tr>
+
+                                        <!-- Modal -->
+                    <div id="myModal" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Delete shop</h4>
+                          </div>
+                          <div class="modal-body">
+                          <ul class="list-inline">
+                            <li>
+                               <h1><span class="glyphicon glyphicon-remove" style="color: red;"></span> </h1>
+                            </li>
+                            <li> <h5>Are you sure you want to delete this shop?</h5> </li>
+                          </ul>
+                           
+                           
+                          </div>
+                          <div class="modal-footer">
+                            <a href="shops_admin.php?del=<?php echo $row['shop_id']?>" class="btn btn-default" role="button"> Yes</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                       
+                  <?php } ?>
+              </table>
+            </div> 
+
+
+              
+
+        </div>
       </div>
+                  
 
-    </div>
+              
+    </div> 
 
-        <div id="dataModal" class="modal fade">  
-        <div class="modal-dialog">  
-             <div class="modal-content">  
-                  <div class="modal-header">  
-                       <button type="button" class="close" data-dismiss="modal">&times;</button>  
-                       <h4 class="modal-title">User Details</h4>  
-                  </div>  
-                  <div class="modal-body" id="shop_detail">  
-                  </div>  
-                  <div class="modal-footer">  
-                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-                  </div>  
-             </div>  
-        </div>  
-    </div>  
 
-    <script>  
-     $(document).ready(function(){  
-          $('.view_data').click(function(){  
-               var shop_id = $(this).attr("id");  
-               $.ajax({  
-                    url:"select.php",  
-                    method:"post",  
-                    data:{shop_id:shop_id},  
-                    success:function(data){  
-                         $('#shop_detail').html(data);  
-                         $('#dataModal').modal("show");  
-                    }  
-               });  
-          });  
-     });  
-     </script>
-
-    </div>
-    
-    
-  
 
     <?php include '../includes/layouts/footer.php';?>

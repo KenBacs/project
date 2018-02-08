@@ -4,9 +4,7 @@
   
   // Retrieve records
   $results = mysqli_query($connection, "SELECT * FROM shops");
-  if (isset($_GET['view'])) {
-    # code...
-  }
+
 ?>
 
 <!doctype html>
@@ -113,7 +111,7 @@
               <li class="media">
                  <div class="panel panel-primary">
                     <div class="panel-heading">
-                      <h4><?php echo $row['shop_name'];?></h4>
+                      <h4><?php echo $row['shop_name'];?> &mdash; <?php echo $row['shop_category'];?> </h4>
                     </div>
                     <div class="panel-body">
                         <div class="media-left">
@@ -123,7 +121,8 @@
                          <div class="media-body">
                           <p><?php echo $row['shop_description'];?></p>
                           <p><?php echo $row['shop_category'];?></p>
-                          <p><?php echo $row['shop_hours'];?></p>
+                          <p><?php echo $row['day_start']; ?> &mdash; <?php echo $row['day_end']; ?>  </p>
+                          <p><?php echo date("g:i a", strtotime($row['time_start'])); ?> &mdash; <?php echo date("g:i a", strtotime($row['time_end'])); ?></p>
                           
                         </div>
                     </div>

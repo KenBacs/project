@@ -2,7 +2,6 @@
 <?php require_once("../includes/functions.php");?>
 
 <?php
-
   include_once '../includes/db_connection.php';
   
     $msg = '';
@@ -15,45 +14,30 @@
     $shop_schedule = '';
     $shop_category = '';
     $edit_state = false;
-
-
-
-  if (isset($_POST['submit'])) {
-
     
-
+  if (isset($_POST['submit'])) {
+    
     $user_id = mysql_prep($_SESSION['u_id']);
     $shop_name = mysql_prep($_POST['shop_name']);
-
     $file = $_FILES['file'];
-
     $fileName = $_FILES['file']['name'];
     $fileTmpName = $_FILES['file']['tmp_name'];
     $fileSize = $_FILES['file']['size'];
     $fileError = $_FILES['file']['error'];
     $fileType = $_FILES['file']['type'];
-
     $fileExt = explode('.', $fileName);
     $fileActualExt = strtolower(end($fileExt));
-
     $allowed = array('jpg', 'jpeg', 'png', 'pdf');
-
     $shop_description = mysql_prep($_POST['shop_desc']);
     $shop_contact = mysql_prep($_POST['shop_contact']);
     $shop_schedule = mysql_prep($_POST['shop_schedule']);
     $shop_category = mysql_prep($_POST['selectCategory']);
-
-
-
     
     
-
     if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) { 
-
         $sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
               $resultsn = mysqli_query($connection, $sql);
               $resultCheck = mysqli_num_rows($resultsn);
-
               if ($resultCheck > 0) {
                 $msg="Shop name is already taken";
           $msgClass ="alert-danger";
@@ -61,7 +45,6 @@
               } else {
                 if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
                   
-
               if (in_array($fileActualExt, $allowed)) {
                 if ($fileError === 0) {
                   if ($fileSize < 1000000) {
@@ -69,21 +52,15 @@
                     $fileDestination = 'images/'.$fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
                     
-
                     $query = "INSERT INTO shops (user_id, shop_name, shop_description, shop_image, shop_contact, shop_hours, shop_category) VALUES ('$user_id', '$shop_name', '$shop_description', '$fileNameNew', '$shop_contact', '$shop_schedule', '$shop_category')";
                     mysqli_query($connection,$query);
-
-
                     $msg ="Shop added successfully";
                     $msgClass ="alert-success";
-
-
                     $shop_name='';
                     $shop_description='';
                     $shop_contact='';
                     $shop_schedule='';
                     $shop_category='';
-
                   } else {
                     $msg ="Image file is too big";
                 $msgClass ="alert-danger";
@@ -98,59 +75,43 @@
                   $msg ="Invalid image";
               $msgClass ="alert-danger";
               
-
               }
-
                 } else {
                   $msg ="Invalid telephone number";
             $msgClass ="alert-danger";
             
                 }
-
               }
         
-
             } else {
-
       $msg ="Please fill all fields";
       $msgClass ="alert-danger";
       
-
     }
   }
-
   if (isset($_POST['update'])) {
     $user_id = mysql_prep($_SESSION['u_id']);
     $shop_name = mysql_prep($_POST['shop_name']);
     $id = mysql_prep($_POST['id']);
-
     $file = $_FILES['file'];
-
     $fileName = $_FILES['file']['name'];
     $fileTmpName = $_FILES['file']['tmp_name'];
     $fileSize = $_FILES['file']['size'];
     $fileError = $_FILES['file']['error'];
     $fileType = $_FILES['file']['type'];
-
     $fileExt = explode('.', $fileName);
     $fileActualExt = strtolower(end($fileExt));
-
     $allowed = array('jpg', 'jpeg', 'png', 'pdf');
-
     $shop_description = mysql_prep($_POST['shop_desc']);
     $shop_contact = mysql_prep($_POST['shop_contact']);
     $shop_schedule = mysql_prep($_POST['shop_schedule']);
     $shop_category = mysql_prep($_POST['selectCategory']);
-
        if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) { 
-
         $sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
               $resultsn = mysqli_query($connection, $sql);
               $resultCheck = mysqli_num_rows($resultsn);
-
                 if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
                   
-
               if (in_array($fileActualExt, $allowed)) {
                 if ($fileError === 0) {
                   if ($fileSize < 1000000) {
@@ -159,18 +120,14 @@
                     move_uploaded_file($fileTmpName, $fileDestination);
                     
                     $query = "UPDATE shops SET shop_name = '$shop_name',shop_description = '$shop_description', shop_image = '$fileNameNew', shop_contact = '$shop_contact', shop_hours = '$shop_schedule',  shop_category = '$shop_category' WHERE shop_id=$id";
-
                     mysqli_query($connection,$query);
-
                     $shop_name='';
                     $shop_description='';
                     $shop_contact='';
                     $shop_schedule='';
                     $shop_category='';
-
                     $msg ="Shop updated successfully";
                     $msgClass ="alert-success";
-
                   } else {
                     $msg ="Image file is too big";
                 $msgClass ="alert-danger";
@@ -185,28 +142,20 @@
                   $msg ="Invalid image";
               $msgClass ="alert-danger";
               
-
               }
-
                 } else {
                   $msg ="Invalid telephone number";
             $msgClass ="alert-danger";
             
                 }
-
              
         
-
             } else {
-
       $msg ="Please fill all fields";
       $msgClass ="alert-danger";
       
-
     }
-
   }
-
   if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $edit_state=true;
@@ -219,22 +168,16 @@
     $shop_contact = $record['shop_contact'];
     $shop_schedule = $record['shop_hours'];
     $shop_category = $record['shop_category'];
-
   }
-
   if (isset($_GET['del'])) {
     $id = $_GET['del'];
-    mysqli_query($connection,"DELETE FROM shops WHERE shop_id = $id");
-
-       $msg ="Shop deleted successfully";
-       $msgClass ="alert-success";
+    mysqli_query($connection,"DELETE FROM shops WHERE shop_id = $id") or die(mysqli_error($connection)); 
+    $msg ="admin deleted successfully ";
+      $msgClass ="alert-succes";
+       
   }
-
    // Retrieve records
   $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
-
-
-
 ?>
 
 <!doctype html>
@@ -278,7 +221,7 @@
 
                          <div class="form-group">
                           <label for="shop_image">Shop image</label>
-                            <input type="file" name="file" value="images/<?php echo $fileNameNew?>">
+                            <input type="file" name="file" value="<?php echo $fileNameNew?>">
                         </div> 
 
                         <div class="form-group">
@@ -305,9 +248,9 @@
                             <label for="selectCategory">Category</label>
                             <select class="form-control" name="selectCategory" id="selectCategory" >
                             <option value="">Choose Category</option>
-                            <option value="Watch repair" <?php if(isset($shop_category) && $shop_category =="Watch repair") {echo "selected"; } ?>>Watch repair</option>
-                            <option value="Computer/Laptop repair" <?php if(isset($shop_category) && $shop_category =="Computer/Laptop repair") {echo "selected"; } ?>>Computer/Laptop repair</option>
-                            <option value="Tailoring" <?php if(isset($shop_category) && $shop_category =="Tailoring") {echo "selected"; } ?>>Tailoring</option>
+                            <option value="Watch repair">Watch repair</option>
+                            <option value="Computer/Laptop repair">Computer/Laptop repair</option>
+                            <option value="Tailoring">Tailoring</option>
                           </select>
 
 
@@ -370,7 +313,7 @@
                            
                           </div>
                           <div class="modal-footer">
-                            <a href="my_shops.php?del=<?php echo $row['shop_id'];?>" class="btn btn-default" role="button"> Yes</a>
+                            <a href="my_shops.php?del=<?php echo $row['shop_id']?>" class="btn btn-default" role="button"> Yes</a>
                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                           </div>
                         </div>
