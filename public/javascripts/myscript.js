@@ -14,6 +14,11 @@ $(function() {
   $("#shop_services a:contains('Services')").parent().addClass('active');
   $("#shop_locations a:contains('Locations')").parent().addClass('active');
   $("#shop_reports a:contains('Reports')").parent().addClass('active');
+  $("#admin a:contains('My Profile')").parent().addClass('active');
+  $("#admins a:contains('Admins')").parent().addClass('active');
+  $("#users_admin a:contains('Users')").parent().addClass('active');
+  $("#services_admin a:contains('Services')").parent().addClass('active');
+  $("#shops_admin a:contains('Shops')").parent().addClass('active');
   
 
   

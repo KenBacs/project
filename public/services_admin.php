@@ -24,15 +24,32 @@
      if (!empty( $shop_id ) && !empty($service_name) && !empty($service_desc) && !empty($service_cost) ) {
        if ($service_cost > 0) {
 
-          $query = "INSERT INTO services (shop_id, service_name, service_description, service_cost) VALUES ('$shop_id', '$service_name', '$service_desc', $service_cost)";
+              $sql = "SELECT * FROM shops WHERE shop_id = $shop_id";
+              $result = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($result);
+              if ($resultCheck) {
+                $query = "INSERT INTO services (shop_id, service_name, service_description, service_cost) VALUES ('$shop_id', '$service_name', '$service_desc', $service_cost)";
 
-         if (mysqli_query($connection, $query)) {
-           $msg ="service added successfully";
-           $msgClass ="alert-success";
-         } else {
-            $msg ="Failed to add service";
-            $msgClass ="alert-danger";
-         }
+               if (mysqli_query($connection, $query)) {
+                 $msg ="service added successfully";
+                 $msgClass ="alert-success";
+
+                    $shop_id = 0;
+                    $service_id = 0;
+                    $service_name = '';
+                    $service_desc = '';
+                    $service_cost = 0;
+               } else {
+                  $msg ="Failed to add service";
+                  $msgClass ="alert-danger";
+               }
+
+              } else {
+                 $msg ="Invalid shop";
+                  $msgClass ="alert-danger";
+              }
+
+          
 
        } else {
           $msg ="Invalid cost";
@@ -44,91 +61,75 @@
      }
   
   }
-  if (isset($_POST['update'])) {
-    $user_id = mysql_prep($_SESSION['u_id']);
-    $shop_name = mysql_prep($_POST['shop_name']);
-    $id = mysql_prep($_POST['id']);
-    $file = $_FILES['file'];
-    $fileName = $_FILES['file']['name'];
-    $fileTmpName = $_FILES['file']['tmp_name'];
-    $fileSize = $_FILES['file']['size'];
-    $fileError = $_FILES['file']['error'];
-    $fileType = $_FILES['file']['type'];
-    $fileExt = explode('.', $fileName);
-    $fileActualExt = strtolower(end($fileExt));
-    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
-    $shop_description = mysql_prep($_POST['shop_desc']);
-    $shop_contact = mysql_prep($_POST['shop_contact']);
-    $shop_schedule = mysql_prep($_POST['shop_schedule']);
-    $shop_category = mysql_prep($_POST['selectCategory']);
-       if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) { 
-        $sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
-              $resultsn = mysqli_query($connection, $sql);
-              $resultCheck = mysqli_num_rows($resultsn);
-                if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
-                  
-              if (in_array($fileActualExt, $allowed)) {
-                if ($fileError === 0) {
-                  if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('',true).".".$fileActualExt;
-                    $fileDestination = 'images/'.$fileNameNew;
-                    move_uploaded_file($fileTmpName, $fileDestination);
-                    
-                    $query = "UPDATE shops SET shop_name = '$shop_name',shop_description = '$shop_description', shop_image = '$fileNameNew', shop_contact = '$shop_contact', shop_hours = '$shop_schedule',  shop_category = '$shop_category' WHERE shop_id=$id";
-                    mysqli_query($connection,$query);
-                    $shop_name='';
-                    $shop_description='';
-                    $shop_contact='';
-                    $shop_schedule='';
-                    $shop_category='';
-                    $msg ="Shop updated successfully";
-                    $msgClass ="alert-success";
-                  } else {
-                    $msg ="Image file is too big";
-                $msgClass ="alert-danger";
-                
-                }
-                } else {
-                  $msg ="There was an error uploading your file";
-              $msgClass ="alert-danger";
-              
-                }
-              } else {
-                  $msg ="Invalid image";
-              $msgClass ="alert-danger";
-              
-              }
-                } else {
-                  $msg ="Invalid telephone number";
-            $msgClass ="alert-danger";
-            
-                }
-             
-        
-            } else {
-      $msg ="Please fill all fields";
-      $msgClass ="alert-danger";
-      
-    }
-  }
-  if (isset($_GET['edit'])) {
-    $id = $_GET['edit'];
-    $edit_state=true;
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
-    $record = mysqli_fetch_array($rec);
-    $id = $record['shop_id'];
-    $shop_name = $record['shop_name'];
-    $fileNameNew = $record['shop_image'];
-    $shop_description = $record['shop_description'];
-    $shop_contact = $record['shop_contact'];
-    $shop_schedule = $record['shop_hours'];
-    $shop_category = $record['shop_category'];
-  }
-  if (isset($_GET['del'])) {
-    $id = $_GET['del'];
-    mysqli_query($connection,"DELETE FROM shops WHERE shop_id = $id") or die(mysqli_error($connection)); 
-   
 
+   if (isset($_POST['update'])) {
+    
+    $shop_id = mysql_prep($_POST['shop_id']);
+     $service_id = mysql_prep($_POST['service_id']);
+     $service_name = mysql_prep($_POST['service_name']);
+     $service_desc = mysql_prep($_POST['service_desc']);
+     $service_cost = mysql_prep($_POST['service_cost']);
+
+     if (!empty( $shop_id ) && !empty($service_name) && !empty($service_desc) && !empty($service_cost) ) {
+       if ($service_cost > 0) {
+
+              $sql = "SELECT * FROM shops WHERE shop_id = $shop_id";
+              $result = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($result);
+              if ($resultCheck) {
+                $query = "UPDATE services SET shop_id = $shop_id, service_name = '$service_name', service_description = '$service_desc', service_cost = $service_cost WHERE service_id = $service_id";
+
+
+               if (mysqli_query($connection, $query)) {
+                 $msg ="service updated successfully";
+                 $msgClass ="alert-success";
+
+                  $shop_id = 0;
+                  $service_id = 0;
+                  $service_name = '';
+                  $service_desc = '';
+                  $service_cost = 0;
+               } else {
+                  $msg ="Failed to update service";
+                  $msgClass ="alert-danger";
+               }
+
+              } else {
+                 $msg ="Invalid shop";
+                  $msgClass ="alert-danger";
+              }
+
+          
+
+       } else {
+          $msg ="Invalid cost";
+         $msgClass ="alert-danger";
+       }
+     } else {
+         $msg ="Fill all fields";
+         $msgClass ="alert-danger";
+     }
+  
+  }
+  
+  if (isset($_GET['edit'])) {
+    $service_id = $_GET['edit'];
+    $edit_state=true;
+    $rec = mysqli_query($connection,"SELECT * FROM services WHERE service_id = $service_id");
+    $record = mysqli_fetch_array($rec);
+    $shop_id = $record['shop_id'];
+    $service_id = $record['service_id'];
+    $service_name = $record['service_name'];
+    $service_desc = $record['service_description'];
+    $service_cost = $record['service_cost'];
+  }
+
+  if (isset($_GET['del'])) {
+    $service_id = $_GET['del'];
+    mysqli_query($connection,"DELETE FROM services WHERE service_id = $service_id") or die(mysqli_error($connection)); 
+   
+     $msg ="service deleted successfully";
+      $msgClass ="alert-success";
     
        
   }
@@ -148,7 +149,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="#">
+  <body id="services_admin">
 
   
 
@@ -230,7 +231,7 @@
                       <td>P <?php echo $row['service_cost']; ?></td>
                       <td>
             
-                      <a href="my_shops.php?edit=<?php echo $row['shop_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                      <a href="services_admin.php?edit=<?php echo $row['service_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                       <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>
 
@@ -257,7 +258,7 @@
                            
                           </div>
                           <div class="modal-footer">
-                            <a href="my_shops.php?del=<?php echo $row['shop_id']?>" class="btn btn-default" role="button"> Yes</a>
+                            <a href="services_admin.php?del=<?php echo $row['service_id']?>" class="btn btn-default" role="button"> Yes</a>
                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                           </div>
                         </div>

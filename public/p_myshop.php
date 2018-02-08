@@ -6,24 +6,29 @@
   
     $id = 0;
     $shop_name = '';
-    $shop_image = '';
+    $fileNameNew = '';
     $shop_description = '';
     $shop_contact = '';
-    $shop_schedule = '';
+    $day_start = '';
+    $day_end = '';
+    $time_start = '';
+    $time_end = '';
     $shop_category = '';
 
     if (isset($_GET['myshop'])) {
     $id = $_GET['myshop'];
-    $edit_state=true;
     $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
     $record = mysqli_fetch_array($rec);
+    $id = $record['shop_id'];
     $shop_name = $record['shop_name'];
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
     $shop_contact = $record['shop_contact'];
-    $shop_schedule = $record['shop_hours'];
+    $day_start = $record['day_start'];
+    $day_end = $record['day_end'];
+    $time_start = date("g:i a", strtotime($record['time_start'])); ;
+    $time_end = date("g:i a", strtotime($record['time_end'])); 
     $shop_category = $record['shop_category'];
-
    
   }
 
@@ -69,7 +74,7 @@
 
             <h3>Shop information</h3>
             <p><pre><span class="glyphicon glyphicon-phone-alt"></span> <?php echo $shop_contact; ?></pre></p>
-             <p><pre>Business hours: <?php echo $shop_schedule; ?></pre></p>
+            <p><pre>Business hours: <?php echo $day_start; ?> &mdash; <?php echo $day_end; ?>  <?php echo $time_start; ?> &mdash; <?php echo $time_end; ?></pre></p>
 
 
              <h3>Services Offered</h3>

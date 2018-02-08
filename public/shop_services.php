@@ -6,38 +6,38 @@
     
     $msg = '';
     $msgClass = '';
-    $id = 0;
     $shop_id = 0;
     $service_id = 0;
     $service_name = '';
-    $service_description = '';
+    $service_desc = '';
     $service_cost = 0;
    
 
     if (isset($_GET['myshop'])) {
     $id = $_GET['myshop'];
-   
     $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
     $record = mysqli_fetch_array($rec);
+    $id = $record['shop_id'];
     $shop_name = $record['shop_name'];
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
     $shop_contact = $record['shop_contact'];
-    $shop_schedule = $record['shop_hours'];
+    $day_start = $record['day_start'];
+    $day_end = $record['day_end'];
+    $time_start = date("g:i a", strtotime($record['time_start'])); ;
+    $time_end = date("g:i a", strtotime($record['time_end'])); 
     $shop_category = $record['shop_category'];
-
-
-
+   
   }
 
 
 
   if (isset($_GET['edit'])) {
-    $id =  $_GET['edit'];
+    $service_id =  $_GET['edit'];
     $edit_state=true;
-    $rec = mysqli_query($connection,"SELECT * FROM services WHERE service_id = $id");
+    $rec = mysqli_query($connection,"SELECT * FROM services WHERE service_id = $service_id");
     $record = mysqli_fetch_array($rec);
-    $id = $record['service_id'];
+    $service_id = $record['service_id'];
     $service_name = $record['service_name'];
     $service_description = $record['service_description'];
     $service_cost = $record['service_cost'];

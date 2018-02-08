@@ -4,12 +4,16 @@
   
     include_once '../includes/db_connection.php';
   
+   
     $id = 0;
     $shop_name = '';
-    $shop_image = '';
+    $fileNameNew = '';
     $shop_description = '';
     $shop_contact = '';
-    $shop_schedule = '';
+    $day_start = '';
+    $day_end = '';
+    $time_start = '';
+    $time_end = '';
     $shop_category = '';
 
     if (isset($_GET['myshop'])) {
@@ -21,10 +25,12 @@
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
     $shop_contact = $record['shop_contact'];
-    $shop_schedule = $record['shop_hours'];
+    $day_start = $record['day_start'];
+    $day_end = $record['day_end'];
+    $time_start = date("g:i a", strtotime($record['time_start'])); ;
+    $time_end = date("g:i a", strtotime($record['time_end'])); 
     $shop_category = $record['shop_category'];
-
-
+   
   }
 ?>
 

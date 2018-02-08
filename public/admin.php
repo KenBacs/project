@@ -84,7 +84,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="#">
+  <body id="admin">
     
   <?php include '../includes/layouts/admin_header.php';?>
 
