@@ -21,9 +21,7 @@ $(function() {
   $("#shops_admin a:contains('Shops')").parent().addClass('active');
   
 
-  
-
-
+ 
 
 });
 

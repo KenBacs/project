@@ -8,14 +8,16 @@ if(!empty($_POST))
  {  
     $output = '';
     $message = ''; 
-    $shop_id = mysql_prep($_GET["del"]);  
-    $service_id = mysql_prep($_POST["service_id"]);
+    $shop_id = mysql_prep($_GET["del"]);   
+     
 
-     $query = "DELETE FROM services WHERE service_id = $service_id";  
+      if($_POST["service_id"] != '')  
+      {  
+            $query = "DELETE FROM services WHERE service_id = '".$_POST["service_id"]."'";  
 
            $message = 'Data Deleted';  
-
-    
+      }  
+       
       if(mysqli_query($connection, $query))  
       {  
             $output .= '<label class="text-success">' . $message . '</label>';
@@ -42,11 +44,8 @@ if(!empty($_POST))
                 ';  
            }  
            $output .= '</table>';  
-      } elseif($_POST['service_id'] == '') {
-            echo "empty service_id";
-            echo mysqli_error($connection) ;  
-            echo $query;
-      }
+           redirect_to('shop_services.php?myshop="'.$shop_id.'"');
+      }  
       echo $output;  
  }  
 ?>

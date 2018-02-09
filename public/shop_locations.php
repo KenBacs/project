@@ -17,10 +17,10 @@
     $shop_category = '';
 
     if (isset($_GET['myshop'])) {
-    $id = $_GET['myshop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
+    $shop_id = $_GET['myshop'];
+    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
     $record = mysqli_fetch_array($rec);
-    $id = $record['shop_id'];
+    $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];

@@ -4,6 +4,7 @@
   
     include_once '../includes/db_connection.php';
     
+   
     $msg = '';
     $msgClass = '';
     $shop_id = 0;
@@ -11,13 +12,13 @@
     $service_name = '';
     $service_desc = '';
     $service_cost = 0;
-   
+    $edit_state = false;
 
     if (isset($_GET['myshop'])) {
-    $id = $_GET['myshop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
+    $shop_id = $_GET['myshop'];
+    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
     $record = mysqli_fetch_array($rec);
-    $id = $record['shop_id'];
+    $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
@@ -30,25 +31,138 @@
    
   }
 
+  if (isset($_POST['submit'])) {
+    
+     $service_id = mysql_prep($_POST['service_id']);
+     $service_name = mysql_prep($_POST['service_name']);
+     $service_desc = mysql_prep($_POST['service_desc']);
+     $service_cost = mysql_prep($_POST['service_cost']);
+
+     if (!empty( $shop_id ) && !empty($service_name) && !empty($service_desc) && !empty($service_cost) ) {
+       if ($service_cost > 0) {
+
+              $sql = "SELECT * FROM shops WHERE shop_id = $shop_id";
+              $result = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($result);
+              if ($resultCheck) {
+                $query = "INSERT INTO services (shop_id, service_name, service_description, service_cost) VALUES ('$shop_id', '$service_name', '$service_desc', $service_cost)";
+
+               if (mysqli_query($connection, $query)) {
+                 $msg ="service added successfully";
+                 $msgClass ="alert-success";
 
 
-  if (isset($_GET['edit'])) {
-    $service_id =  $_GET['edit'];
+                    $service_id = 0;
+                    $service_name = '';
+                    $service_desc = '';
+                    $service_cost = 0;
+
+               
+               } else {
+                  $msg ="Failed to add service";
+                  $msgClass ="alert-danger";
+               }
+
+              } else {
+                 $msg ="Invalid shop";
+                  $msgClass ="alert-danger";
+              }
+
+          
+
+       } else {
+          $msg ="Invalid cost";
+         $msgClass ="alert-danger";
+       }
+     } else {
+         $msg ="Fill all fields";
+         $msgClass ="alert-danger";
+     }
+  
+  }
+
+    if (isset($_POST['update'])) {
+    
+     $service_id = mysql_prep($_POST['service_id']);
+     $service_name = mysql_prep($_POST['service_name']);
+     $service_desc = mysql_prep($_POST['service_desc']);
+     $service_cost = mysql_prep($_POST['service_cost']);
+
+     if (!empty( $shop_id ) && !empty($service_name) && !empty($service_desc) && !empty($service_cost) ) {
+       if ($service_cost > 0) {
+
+              $sql = "SELECT * FROM shops WHERE shop_id = $shop_id";
+              $result = mysqli_query($connection, $sql);
+              $resultCheck = mysqli_num_rows($result);
+              if ($resultCheck) {
+                $query = "UPDATE services SET shop_id = $shop_id, service_name = '$service_name', service_description = '$service_desc', service_cost = $service_cost WHERE service_id = $service_id";
+
+
+               if (mysqli_query($connection, $query)) {
+                 $msg ="service updated successfully";
+                 $msgClass ="alert-success";
+
+    
+                  $service_id = 0;
+                  $service_name = '';
+                  $service_desc = '';
+                  $service_cost = 0;
+               } else {
+                  $msg ="Failed to update service";
+                  $msgClass ="alert-danger";
+               }
+
+              } else {
+                 $msg ="Invalid shop";
+                  $msgClass ="alert-danger";
+              }
+
+          
+
+       } else {
+          $msg ="Invalid cost";
+         $msgClass ="alert-danger";
+       }
+     } else {
+         $msg ="Fill all fields";
+         $msgClass ="alert-danger";
+     }
+  
+  }
+
+    if (isset($_GET['edit'])) {
+    $service_id = $_GET['edit'];
     $edit_state=true;
     $rec = mysqli_query($connection,"SELECT * FROM services WHERE service_id = $service_id");
     $record = mysqli_fetch_array($rec);
+    $shop_id = $record['shop_id'];
     $service_id = $record['service_id'];
     $service_name = $record['service_name'];
-    $service_description = $record['service_description'];
+    $service_desc = $record['service_description'];
     $service_cost = $record['service_cost'];
-
   }
 
 
 
-   // Retrieve records
-  $result = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $id");
+  if (isset($_GET['del'])) {
+    $service_id = $_GET['del'];
+    mysqli_query($connection,"DELETE FROM services WHERE service_id = $service_id") or die(mysqli_error($connection)); 
+   
+     $msg ="service deleted successfully";
+      $msgClass ="alert-success";
+    
+       
+  }
 
+
+
+ 
+
+
+   // Retrieve records
+  $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+
+  
 ?>
 
 
@@ -61,279 +175,173 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="javascripts/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
   <body id="shop_services">
-    
+
+  
 
   <?php include '../includes/layouts/provider_header.php';?>
- 
+
+    
+    
     <div class="content container">
-         <div class="container" style="width:700px;">  
-                <h1 align="center"><?php echo $shop_name;?> <small>Services</small></h1>  
-                <br />  
-                <div class="table-responsive">  
-                     <div align="right">  
-                          <button type="button" name="add" id="add" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>  
-                     </div>  
-                     <br />  
-                     <div id="service_table">  
-                          <table class="table table-bordered">  
-                               <tr>  
-                                    <th width="55%">Service Name</th>  
-                                    <th width="15%">Edit</th>  
-                                    <th width="15%">View</th> 
-                                     <th width="15%">Delete</th>  
-                               </tr>  
-                               <?php  
-                               while($row = mysqli_fetch_array($result))  
-                               {  
-                               ?>  
-                               <tr>  
-                                    <td><?php echo $row["service_name"]; ?></td>  
-                                    <td><input type="button" name="edit" value="Edit" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs edit_data" /></td>  
-                                    <td><input type="button" name="view" value="view" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs view_data" /></td> 
-                                    <td><input type="button" name="delete" value="delete" id="<?php echo $row["service_id"]; ?>" class="btn btn-danger btn-xs delete_data" data-toggle="modal" data-target="#delete_data_Modal"/></td> 
-                               </tr>  
+     <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> <?php echo $shop_name;?> <small>Services</small> </h1>
+    <div class="row">
 
-                           
+      <div class="col-md-4">
+       
 
-                               
-                               <?php  
-                               }  
-                               ?>  
-                          </table>  
-                     </div>  
-                </div>  
-           </div>  
-          
-    </div>  
+          <?php if($msg !=''): ?>
+            <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
+          <?php endif;?>
 
-     <div id="dataModal" class="modal fade">  
-      <div class="modal-dialog">  
-           <div class="modal-content">  
-                <div class="modal-header">  
-                     <button type="button" class="close" data-dismiss="modal">&times;</button>  
-                     <h4 class="modal-title">Employee Details</h4>  
-                </div>  
-                <div class="modal-body" id="service_detail">  
-                </div>  
-                <div class="modal-footer">  
-                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-                </div>  
-           </div>  
-      </div>  
- </div>  
- <div id="add_data_Modal" class="modal fade">  
-      <div class="modal-dialog">  
-           <div class="modal-content">  
-                <div class="modal-header">  
-                     <button type="button" class="close" data-dismiss="modal">&times;</button>  
-                     <h4 class="modal-title">PHP Ajax Update MySQL Data Through Bootstrap Modal</h4>  
-                </div>  
-                <div class="modal-body">  
-                     <form method="post" id="insert_form">
+         
+       <form id="" action="shop_services.php?myshop=<?php echo $shop_id;?>" method="POST" >
+                  <input type="hidden" name="service_id" value="<?php echo $service_id;?>">
                        
-                        <input type="hidden" name="service_id" id="service_id">
-                       <label>Enter Service Name</label>
-                       <input type="text" name="service_name" id="service_name" class="form-control" />
-                       <br />
-                       <label>Enter Description</label>
-                       <textarea name="service_desc" id="service_desc" rows="5" class="form-control"></textarea>
-                       <br />
-                       
-                       <label>Enter Cost</label>
-                       <div class="input-group">
-                         <span class="input-group-addon">P</span>
-                           <input type="number" name="service_cost" id="service_cost" class="form-control" />
-                       </div>
-                     
-                       <br />
-                       <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+                        <div class="form-group">
+                            <label for="service_name">Service Name</label>
+                            <input type="text" class="form-control" name="service_name" value="<?php echo $service_name;?>">
+                        </div> 
+
+                         <div class="form-group">
+                            <label for="service_desc">Service description</label>
+                             <textarea class="form-control" rows="5" id="service_desc" name="service_desc" ><?php echo $service_desc;?></textarea>
+                            
+                        </div> 
+
+                          <div class="form-group">
+                            <label for="service_cost">Service Cost</label>
+                            <div class="input-group">
+                            
+                              <span class="input-group-addon">P</span>
+
+                            <input type="number" class="form-control" name="service_cost" value="<?php  echo $service_cost;?>">
+                            </div>
+                            
+                        </div>
+
+                        
+                        
+                          <?php if($edit_state == false): ?>
+                            <button  type="submit" name="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Create Service</button> 
+                          <?php else: ?>
+                            <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Service</button> 
+                          <?php endif ?>
 
                       </form>
-                </div>  
-                <div class="modal-footer">  
-                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-                </div>  
-           </div>  
       </div>  
- </div> 
+
+      
+        <div class="col-md-8">
+            
+          <div class="table-responsive"  >
+
+              <?php   $resultCheck = mysqli_num_rows($results);
+                        if ($resultCheck < 1): ?>
+                    <script type="text/javascript">
+
+                      $(function() { $("#noservice").modal('show'); });
+
+                    </script>
+
+              <?php endif ?>         
+              <table class="table">
+
+                <tr>
+                 
+
+                <th width="10%">Shop ID</th>
+                <th width="10%">Service ID</th>
+                   <th width="10%">Service</th>
+                  <th width="10%">Cost</th>
+                  <th width="30%">Action</th>
+                </tr>
+                 <?php while ($row = mysqli_fetch_array($results)) { ?>
+                  <tr>
+                      <td><?php echo $row['shop_id']; ?></td>
+                      <td><?php echo $row['service_id']; ?></td>
+                      <td><?php echo $row['service_name']; ?></td>
+                      <td>P <?php echo $row['service_cost']; ?></td>
+                      <td>
+            
+                      <a href="shop_services.php?myshop=<?php echo $shop_id;?>&edit=<?php echo $row['service_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                      <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                      </td>
+
+                  </tr>
+
+                                        <!-- Modal -->
+                    <div id="myModal" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Delete shop</h4>
+                          </div>
+                          <div class="modal-body">
+                          <ul class="list-inline">
+                            <li>
+                               <h1><span class="glyphicon glyphicon-remove" style="color: red;"></span> </h1>
+                            </li>
+                            <li> <h5>Are you sure you want to delete this shop?</h5> </li>
+                          </ul>
+                           
+                           
+                          </div>
+                          <div class="modal-footer">
+                            <a href="shop_services.php?myshop=<?php echo $shop_id;?>&del=<?php echo $row['service_id']?>" class="btn btn-default" role="button"> Yes</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                       
+                  <?php } ?>
+              </table>
+            </div> 
+
+
+              
+
+        </div>
+      </div>
+                  
+
+              
+    </div> 
 
       <!-- Modal -->
-    <div id="delete_data_Modal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Delete service</h4>
-          </div>
-          <div class="modal-body">
-
-          
-          <ul class="list-inline">
-            <li>
-               <h1><span class="glyphicon glyphicon-remove" style="color: red;"></span> </h1>
-            </li>
-            <li> <h5>Are you sure you want to delete this service?</h5> </li>
-          </ul>
-
-            <form method="POST" id="delete_form">
-                   <input type="hidden" name="service_id" id="service_id">
-
-                  <div class="pull-right">
-              
-                       <input type="submit" name="delete_confirm" value="Delete_confirm" id="delete_confirm" class="btn btn-info " />
-                    <button type="button" class="btn btn-default " data-dismiss="modal">No</button>
-
-                </div>
-            </form>
-
-           
-
-           
-           <div class="clearfix"></div>
-          </div>
-         
+  <div class="modal fade" id="noservice" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" >No services! <span class="glyphicon glyphicon-warning-sign" style="color: yellow;"></span></h4>
         </div>
-
+        <div class="modal-body">
+       
+            <div class="alert alert-info">
+        <strong>Info!</strong> service is essential, so the customers can set schedule to your shop
+         </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+        </div>
       </div>
-    </div>
-
-
-
- <script>  
- $(document).ready(function(){  
-      $('#add').click(function(){  
-           $('#insert').val("Insert");  
-           $('#insert_form')[0].reset();
-           $("#service_id").val("");
-      });  
-
- 
- 
       
-
-      $(document).on('click', '.edit_data', function(){  
-           var service_id = $(this).attr("id");  
-           $.ajax({  
-                url:"fetch.php",  
-                method:"POST",  
-                data:{service_id:service_id},  
-                dataType:"json",  
-                success:function(data){  
-                    $('#service_name').val(data.service_name);  
-                     $('#service_desc').val(data.service_description);  
-                     $('#service_cost').val(data.service_cost); 
-                      $('#service_id').val(data.service_id);   
-                     $('#insert').val("Update");  
-                     $('#add_data_Modal').modal('show');  
-                }  
-           });  
-      }); 
-
- 
-      $(document).on('click', '.delete_data', function(){  
-           var delete_id = $(this).attr("id");  
-           $.ajax({  
-                url:"delete.php",  
-                method:"POST",  
-                data:{delete_id:delete_id},
-                dataType:"json",  
-                success:function(data){  
-                    
-                      $('#service_id').val(data.service_id);   
-                     $('#delete_confirm').val("Delete "+ data.service_id);  
-                     $('#delete_data_Modal').modal('show');  
-                }  
-           });  
-      }); 
-
-       $('#delete_form').on("submit", function(event){  
-          var service_id = $('#service_id').val();  
-           event.preventDefault();  
-        
-                $.ajax({  
-                     url:"delete_confirm.php?del=<?php echo $id;?>",
-                     method:"POST",  
-                     data:{service_id:service_id},  
-                     beforeSend:function(){  
-                          $('#delete_confirm').val("Deleting");  
-                     },  
-                     success:function(data){  
-
-                          $('#delete_form')[0].reset(); 
-                          $("#service_id").val(""); 
-                          $('#delete_data_Modal').modal('hide');  
-                          $('#service_table').html(data);  
-                     }  
-                });  
-            
-      });  
-
-
-      $('#insert_form').on("submit", function(event){  
-           event.preventDefault();  
-          if($('#service_name').val() == "")  
-          {  
-           alert("Service name is required");  
-          }  
-          else if($('#service_desc').val() == '')  
-          {  
-           alert("Service description is required");  
-          }  
-          else if($('#service_cost').val() == '')
-          {  
-           alert("Service cost is required");  
-          }
-          else if($('#service_cost').val() <= 0)
-          {  
-           alert("Invalid service cost");  
-          } 
-           else  
-           {  
-                $.ajax({  
-                     url:"insert.php?insert=<?php echo $id;?>",  
-                     method:"POST",  
-                     data:$('#insert_form').serialize(),  
-                     beforeSend:function(){  
-                          $('#insert').val("Inserting");  
-                     },  
-                     success:function(data){  
-                          $('#insert_form')[0].reset();  
-                          $('#add_data_Modal').modal('hide');  
-                          $('#service_table').html(data);  
-                     }  
-                });  
-           }  
-      });  
-      $(document).on('click', '.view_data', function(){  
-           var service_id = $(this).attr("id");  
-           if(service_id != '')  
-           {  
-                $.ajax({  
-                     url:"select.php",  
-                     method:"POST",  
-                     data:{service_id:service_id},  
-                     success:function(data){  
-                          $('#service_detail').html(data);  
-                          $('#dataModal').modal('show');  
-                     }  
-                });  
-           }            
-      });  
- });  
-
-
-
-
- </script>
+    </div>
+  </div>
+  
 
   
 

@@ -20,11 +20,11 @@
         <li>
           <a  href="my_shops.php"><span class="glyphicon glyphicon-arrow-left"> </span> Back</a>
         </li>
-        <li ><a href="p_myshop.php?myshop=<?php echo $_GET['myshop'];?>"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-        <li><a href="shop_schedules.php?myshop=<?php echo $_GET['myshop'];?>"><span class="glyphicon glyphicon-calendar"></span> Schedules</a></li>
-          <li><a href="shop_services.php?myshop=<?php echo $_GET['myshop'];?>"><span class="glyphicon glyphicon-list"></span> Services</a></li>
-            <li><a href="shop_locations.php?myshop=<?php echo $_GET['myshop'];?>"><span class="glyphicon glyphicon-map-marker"></span> Locations</a></li>
-            <li><a href="shop_reports.php?myshop=<?php echo $_GET['myshop'];?>"><span class="glyphicon glyphicon-stats"></span> Reports</a></li>
+        <li ><a href="p_myshop.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+        <li><a href="shop_schedules.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-calendar"></span> Schedules</a></li>
+          <li><a href="shop_services.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-list"></span> Services</a></li>
+            <li><a href="shop_locations.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Locations</a></li>
+            <li><a href="shop_reports.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Reports</a></li>
             
        
       

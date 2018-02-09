@@ -18,6 +18,7 @@
     $time_end = '';
     $shop_category = '';
     $edit_state = false;
+   
   if (isset($_POST['submit'])) {
     
     $user_id = mysql_prep($_SESSION['u_id']);
@@ -236,6 +237,21 @@
   }
    // Retrieve records
   $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+  if (isset($_GET['check'])) {
+    // Retrive service records
+    $shop_id = $_GET['check'];
+    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+
+    $resultCheck = mysqli_num_rows($service_results);
+    if ($resultCheck < 1){
+      redirect_to('shop_services.php?myshop='.$shop_id.'');
+    } else {
+      redirect_to('p_myshop.php?myshop='.$shop_id.'');
+    }
+  }
+  
+
 ?>
 
 <!doctype html>
@@ -250,7 +266,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="shops_admin">
+  <body id="my_shops">
 
   
 
@@ -397,7 +413,9 @@
                       <td><?php echo $row['shop_id']; ?></td>
                       <td><?php echo $row['shop_name']; ?></td>
                       <td>
-                      <a href="p_myshop.php?myshop=<?php echo $row['shop_id']?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> Visit my shop</a>
+                              <a href="my_shops.php?check=<?php echo $row['shop_id']?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> Visit My Shop</a>
+                       
+                      
                       <a href="my_shops.php?edit=<?php echo $row['shop_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                       <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>

@@ -14,12 +14,13 @@
     $time_start = '';
     $time_end = '';
     $shop_category = '';
+  
 
-    if (isset($_GET['myshop'])) {
-    $id = $_GET['myshop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
+  if (isset($_GET['myshop'])) {
+    $shop_id = $_GET['myshop'];
+    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
     $record = mysqli_fetch_array($rec);
-    $id = $record['shop_id'];
+    $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
@@ -32,8 +33,11 @@
    
   }
 
-   // Retrieve services
-    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['myshop']."");
+   // Retrieve shops
+    $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['myshop']."");
+
+
+  
 ?>
 
 <!doctype html>
@@ -87,7 +91,7 @@
                   <th width="20%">Description</th>
                   <th width="20%">Cost</th>
                 </tr>
-                 <?php while ($row = mysqli_fetch_array($service_results)) { ?>
+                 <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr class="success">
                      
                       <td > <?php echo $row['service_name']; ?></td>
