@@ -7,14 +7,17 @@
     $msg = '';
     $msgClass = '';
     $id = 0;
+    $shop_id = 0;
     $shop_name = '';
     $fileNameNew = '';
     $shop_description = '';
     $shop_contact = '';
-    $shop_schedule = '';
+    $day_start = '';
+    $day_end = '';
+    $time_start = '';
+    $time_end = '';
     $shop_category = '';
     $edit_state = false;
-    
   if (isset($_POST['submit'])) {
     
     $user_id = mysql_prep($_SESSION['u_id']);
@@ -30,11 +33,14 @@
     $allowed = array('jpg', 'jpeg', 'png', 'pdf');
     $shop_description = mysql_prep($_POST['shop_desc']);
     $shop_contact = mysql_prep($_POST['shop_contact']);
-    $shop_schedule = mysql_prep($_POST['shop_schedule']);
+    $day_start = mysql_prep($_POST['day_start']);
+    $day_end = mysql_prep($_POST['day_end']);
+    $time_start = mysql_prep($_POST['time_start']);
+    $time_end = mysql_prep($_POST['time_end']);
     $shop_category = mysql_prep($_POST['selectCategory']);
     
     
-    if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) { 
+    if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($day_start) && !empty($day_end) && !empty($time_start) && !empty($time_end) && !empty($shop_category) ) { 
         $sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
               $resultsn = mysqli_query($connection, $sql);
               $resultCheck = mysqli_num_rows($resultsn);
@@ -42,8 +48,9 @@
                 $msg="Shop name is already taken";
           $msgClass ="alert-danger";
           
-              } else {
-                if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
+              } else { 
+
+                     if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
                   
               if (in_array($fileActualExt, $allowed)) {
                 if ($fileError === 0) {
@@ -51,16 +58,33 @@
                     $fileNameNew = uniqid('',true).".".$fileActualExt;
                     $fileDestination = 'images/'.$fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
-                    
-                    $query = "INSERT INTO shops (user_id, shop_name, shop_description, shop_image, shop_contact, shop_hours, shop_category) VALUES ('$user_id', '$shop_name', '$shop_description', '$fileNameNew', '$shop_contact', '$shop_schedule', '$shop_category')";
-                    mysqli_query($connection,$query);
+
+                   $query = "INSERT INTO shops (user_id, shop_name, shop_image, shop_description, shop_contact, day_start, day_end, time_start, time_end, shop_category) VALUES ($user_id, '$shop_name', '$fileNameNew', '$shop_description', '$shop_contact', '$day_start', '$day_end', '$time_start', '$time_end', '$shop_category')";
+           
+                    if ( mysqli_query($connection,$query)) {
+
+              
+
                     $msg ="Shop added successfully";
                     $msgClass ="alert-success";
-                    $shop_name='';
-                    $shop_description='';
-                    $shop_contact='';
-                    $shop_schedule='';
-                    $shop_category='';
+                      $id = 0;
+                      $shop_name = '';
+                      $fileNameNew = '';
+                      $shop_description = '';
+                      $shop_contact = '';
+                      $day_start = '';
+                      $day_end = '';
+                      $time_start = '';
+                      $time_end = '';
+                      $shop_category = '';
+                    
+                    } else {
+                       echo mysqli_error($connection);
+                       echo $id;
+                    }
+                   
+                   
+                    
                   } else {
                     $msg ="Image file is too big";
                 $msgClass ="alert-danger";
@@ -81,6 +105,11 @@
             $msgClass ="alert-danger";
             
                 }
+            
+                   
+
+              
+             
               }
         
             } else {
@@ -90,9 +119,10 @@
     }
   }
   if (isset($_POST['update'])) {
+    
     $user_id = mysql_prep($_SESSION['u_id']);
+    $shop_id = mysql_prep($_POST['shop_id']);
     $shop_name = mysql_prep($_POST['shop_name']);
-    $id = mysql_prep($_POST['id']);
     $file = $_FILES['file'];
     $fileName = $_FILES['file']['name'];
     $fileTmpName = $_FILES['file']['tmp_name'];
@@ -104,13 +134,16 @@
     $allowed = array('jpg', 'jpeg', 'png', 'pdf');
     $shop_description = mysql_prep($_POST['shop_desc']);
     $shop_contact = mysql_prep($_POST['shop_contact']);
-    $shop_schedule = mysql_prep($_POST['shop_schedule']);
+    $day_start = mysql_prep($_POST['day_start']);
+    $day_end = mysql_prep($_POST['day_end']);
+    $time_start = mysql_prep($_POST['time_start']);
+    $time_end = mysql_prep($_POST['time_end']);
     $shop_category = mysql_prep($_POST['selectCategory']);
-       if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($shop_schedule) && !empty($shop_category) ) { 
-        $sql = "SELECT * FROM shops WHERE shop_name = '$shop_name'";
-              $resultsn = mysqli_query($connection, $sql);
-              $resultCheck = mysqli_num_rows($resultsn);
-                if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
+    
+    
+    if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($day_start) && !empty($day_end) && !empty($time_start) && !empty($time_end) && !empty($shop_category) ) { 
+        
+                     if (preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', $shop_contact)) {
                   
               if (in_array($fileActualExt, $allowed)) {
                 if ($fileError === 0) {
@@ -118,16 +151,34 @@
                     $fileNameNew = uniqid('',true).".".$fileActualExt;
                     $fileDestination = 'images/'.$fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
-                    
-                    $query = "UPDATE shops SET shop_name = '$shop_name',shop_description = '$shop_description', shop_image = '$fileNameNew', shop_contact = '$shop_contact', shop_hours = '$shop_schedule',  shop_category = '$shop_category' WHERE shop_id=$id";
-                    mysqli_query($connection,$query);
-                    $shop_name='';
-                    $shop_description='';
-                    $shop_contact='';
-                    $shop_schedule='';
-                    $shop_category='';
+
+                   
+                    $query = "UPDATE shops SET user_id = $user_id, shop_name = '$shop_name', shop_image = '$fileNameNew', shop_description = '$shop_description', shop_contact = '$shop_contact', day_start = '$day_start', day_end = '$day_end', time_start = '$time_start', time_end = '$time_end', shop_category = '$shop_category' WHERE shop_id = $shop_id" ;
+           
+                    if ( mysqli_query($connection,$query)) {
+
+              
+
                     $msg ="Shop updated successfully";
                     $msgClass ="alert-success";
+                      $id = 0;
+                      $shop_name = '';
+                      $fileNameNew = '';
+                      $shop_description = '';
+                      $shop_contact = '';
+                      $day_start = '';
+                      $day_end = '';
+                      $time_start = '';
+                      $time_end = '';
+                      $shop_category = '';
+                    
+                    } else {
+                       echo mysqli_error($connection);
+                       echo $id;
+                    }
+                   
+                   
+                    
                   } else {
                     $msg ="Image file is too big";
                 $msgClass ="alert-danger";
@@ -148,7 +199,9 @@
             $msgClass ="alert-danger";
             
                 }
-             
+               
+
+              
         
             } else {
       $msg ="Please fill all fields";
@@ -156,24 +209,29 @@
       
     }
   }
+
   if (isset($_GET['edit'])) {
-    $id = $_GET['edit'];
+    $shop_id = $_GET['edit'];
     $edit_state=true;
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
+    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
     $record = mysqli_fetch_array($rec);
-    $id = $record['shop_id'];
+    $user_id = $record['user_id']; 
     $shop_name = $record['shop_name'];
-    $fileNameNew = $record['shop_image'];
+    $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
     $shop_contact = $record['shop_contact'];
-    $shop_schedule = $record['shop_hours'];
+    $day_start =  $record['day_start'];
+    $day_end = $record['day_end'];
+    $time_start = date("H:i", strtotime($record['time_start'])); ;
+    $time_end = date("H:i", strtotime($record['time_end'])); 
     $shop_category = $record['shop_category'];
   }
+
   if (isset($_GET['del'])) {
-    $id = $_GET['del'];
-    mysqli_query($connection,"DELETE FROM shops WHERE shop_id = $id") or die(mysqli_error($connection)); 
-    $msg ="admin deleted successfully ";
-      $msgClass ="alert-succes";
+    $shop_id = $_GET['del'];
+    mysqli_query($connection,"DELETE FROM shops WHERE shop_id = $shop_id") or die(mysqli_error($connection)); 
+    $msg ="shop deleted successfully ";
+      $msgClass ="alert-success";
        
   }
    // Retrieve records
@@ -192,7 +250,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="my_shops">
+  <body id="shops_admin">
 
   
 
@@ -201,7 +259,7 @@
     
     
     <div class="content container">
-     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h2>
+     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> Shops</h2>
     <div class="row">
 
       <div class="col-md-4">
@@ -213,7 +271,8 @@
 
          
        <form id="" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="<?php echo $id;?>">
+                  <input type="hidden" name="shop_id" value="<?php echo $shop_id;?>">
+                  
                         <div class="form-group">
                             <label for="shop_name">Shop name</label>
                             <input type="text" class="form-control" name="shop_name" value="<?php echo $shop_name;?>">
@@ -238,9 +297,61 @@
             
 
                         <div class="form-group">
-                              <label for="shop_hours">Business hours</label>
-                              <input type="text" class="form-control" name="shop_schedule" placeholder="Ex. Mon-Fri 10:00 am - 6:00 pm" value="<?php echo $shop_schedule ;?>">
+                              <label for="shop_hours">Business days</label>
+                              <table>
+                                <tr>
+                                  <td>
+                                    <select class="form-control" name="day_start" id="day_start" >
+                                    <option value="">Choose Day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                    <option value="Tailoring">Tailoring</option>
+                                  </select>
+                                </td>
+                                <td style="padding-left: 10px; padding-right: 10px;"> to </td>
+                                   <td>
+                                    <select class="form-control" name="day_end" id="day_end" >
+                                    <option value="">Choose Day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                    <option value="Tailoring">Tailoring</option>
+                                  </select>
+                                </td>
+                                </tr>
+                              </table>
 
+
+                          <script type="text/javascript">
+                            document.getElementById('day_start').value = "<?php echo $day_start;?>";
+                             </script>
+
+                          <script type="text/javascript">
+                            document.getElementById('day_end').value = "<?php echo $day_end;?>";
+                         </script>
+                        </div>
+
+                        <div class="form-group">
+                              <label for="shop_hours">Business hours</label>
+                              <table>
+                                <tr>
+                                <td><input type="time" name="time_start" value="<?php echo $time_start;?>"></td>
+
+                                <td style="padding-left: 10px; padding-right: 10px;"> to </td>
+
+                                   <td> <input type="time" name="time_end" value="<?php echo $time_end;?>"> </td>
+                                </tr> 
+                              </table>
+              
                         </div>
                        
 
@@ -251,11 +362,12 @@
                             <option value="Watch repair">Watch repair</option>
                             <option value="Computer/Laptop repair">Computer/Laptop repair</option>
                             <option value="Tailoring">Tailoring</option>
+                            <option value="Auto repair">Auto repair</option>
                           </select>
 
 
                           <script type="text/javascript">
-                            document.getElementById('selectCategory').value = "<?php echo $_POST['selectCategory'];?>";
+                            document.getElementById('selectCategory').value = "<?php echo $shop_category;?>";
                           </script>
                           </div>
                           <?php if($edit_state == false): ?>
@@ -263,8 +375,6 @@
                           <?php else: ?>
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Shop</button> 
                           <?php endif ?>
-
-                          
 
                       </form>
       </div>  
@@ -276,13 +386,15 @@
               <table class="table">
 
                 <tr>
-                 
+                    <th width="10%">User ID</th>
+                   <th width="10%">Shop ID</th>
                   <th width="20%">Shop Name</th>
-                  <th width="20%">Action</th>
+                  <th width="40%">Action</th>
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
-                      
+                      <td><?php echo $row['user_id']; ?></td>
+                      <td><?php echo $row['shop_id']; ?></td>
                       <td><?php echo $row['shop_name']; ?></td>
                       <td>
                       <a href="p_myshop.php?myshop=<?php echo $row['shop_id']?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> Visit my shop</a>

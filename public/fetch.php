@@ -1,4 +1,4 @@
-   <?php  
+ <?php  
  //fetch.php  
   include_once '../includes/db_connection.php';
  if(isset($_POST["service_id"]))  
@@ -8,5 +8,7 @@
       $row = mysqli_fetch_array($result);  
       echo json_encode($row);  
  }  
+
+
  ?>
  

@@ -74,7 +74,7 @@
  
     <div class="content container">
          <div class="container" style="width:700px;">  
-                <h3 align="center">PHP Ajax Update MySQL Data Through Bootstrap Modal</h3>  
+                <h1 align="center"><?php echo $shop_name;?> <small>Services</small></h1>  
                 <br />  
                 <div class="table-responsive">  
                      <div align="right">  
@@ -97,45 +97,10 @@
                                     <td><?php echo $row["service_name"]; ?></td>  
                                     <td><input type="button" name="edit" value="Edit" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs edit_data" /></td>  
                                     <td><input type="button" name="view" value="view" id="<?php echo $row["service_id"]; ?>" class="btn btn-info btn-xs view_data" /></td> 
-                                    <td><input type="button" name="delete" value="delete" id="<?php echo $row["service_id"]; ?>" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_data_Modal"/></td> 
+                                    <td><input type="button" name="delete" value="delete" id="<?php echo $row["service_id"]; ?>" class="btn btn-danger btn-xs delete_data" data-toggle="modal" data-target="#delete_data_Modal"/></td> 
                                </tr>  
 
-                                <!-- Modal -->
-                              <div id="delete_data_Modal" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-
-                                  <!-- Modal content-->
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                      <h4 class="modal-title">Delete service</h4>
-                                    </div>
-                                    <div class="modal-body">
-
-                                    
-                                    <ul class="list-inline">
-                                      <li>
-                                         <h1><span class="glyphicon glyphicon-remove" style="color: red;"></span> </h1>
-                                      </li>
-                                      <li> <h5>Are you sure you want to delete this service</h5> </li>
-                                    </ul>
-
-                                      
-
-                                         <div class="pull-right">
-                                        
-                                               <a href="delete.php?shop=<?php echo $row['shop_id'];?>&del=<?php echo $row['service_id'];?>" class="btn btn-default" role="button"> Delete</a>
-                                              <button type="button" class="btn btn-default " data-dismiss="modal">No</button>
-                                      </div>
-       
-                                     
-                                     <div class="clearfix"></div>
-                                    </div>
-                                   
-                                  </div>
-
-                                </div>
-                              </div>
+                           
 
                                
                                <?php  
@@ -184,7 +149,7 @@
                        <label>Enter Cost</label>
                        <div class="input-group">
                          <span class="input-group-addon">P</span>
-                           <input type="text" name="service_cost" id="service_cost" class="form-control" />
+                           <input type="number" name="service_cost" id="service_cost" class="form-control" />
                        </div>
                      
                        <br />
@@ -198,6 +163,48 @@
            </div>  
       </div>  
  </div> 
+
+      <!-- Modal -->
+    <div id="delete_data_Modal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Delete service</h4>
+          </div>
+          <div class="modal-body">
+
+          
+          <ul class="list-inline">
+            <li>
+               <h1><span class="glyphicon glyphicon-remove" style="color: red;"></span> </h1>
+            </li>
+            <li> <h5>Are you sure you want to delete this service?</h5> </li>
+          </ul>
+
+            <form method="POST" id="delete_form">
+                   <input type="hidden" name="service_id" id="service_id">
+
+                  <div class="pull-right">
+              
+                       <input type="submit" name="delete_confirm" value="Delete_confirm" id="delete_confirm" class="btn btn-info " />
+                    <button type="button" class="btn btn-default " data-dismiss="modal">No</button>
+
+                </div>
+            </form>
+
+           
+
+           
+           <div class="clearfix"></div>
+          </div>
+         
+        </div>
+
+      </div>
+    </div>
 
 
 
@@ -233,11 +240,11 @@
 
  
       $(document).on('click', '.delete_data', function(){  
-           var service_id = $(this).attr("id");  
+           var delete_id = $(this).attr("id");  
            $.ajax({  
-                url:"fetch.php",  
+                url:"delete.php",  
                 method:"POST",  
-                data:{service_id:service_id},  
+                data:{delete_id:delete_id},
                 dataType:"json",  
                 success:function(data){  
                     
@@ -247,6 +254,28 @@
                 }  
            });  
       }); 
+
+       $('#delete_form').on("submit", function(event){  
+          var service_id = $('#service_id').val();  
+           event.preventDefault();  
+        
+                $.ajax({  
+                     url:"delete_confirm.php?del=<?php echo $id;?>",
+                     method:"POST",  
+                     data:{service_id:service_id},  
+                     beforeSend:function(){  
+                          $('#delete_confirm').val("Deleting");  
+                     },  
+                     success:function(data){  
+
+                          $('#delete_form')[0].reset(); 
+                          $("#service_id").val(""); 
+                          $('#delete_data_Modal').modal('hide');  
+                          $('#service_table').html(data);  
+                     }  
+                });  
+            
+      });  
 
 
       $('#insert_form').on("submit", function(event){  
@@ -262,6 +291,10 @@
           else if($('#service_cost').val() == '')
           {  
            alert("Service cost is required");  
+          }
+          else if($('#service_cost').val() <= 0)
+          {  
+           alert("Invalid service cost");  
           } 
            else  
            {  
