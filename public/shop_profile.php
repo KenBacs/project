@@ -61,7 +61,7 @@
             <h1><?php echo $shop_name; ?> <small><?php echo $shop_category; ?></small></h1>
           </div>
           <div class="col-md-6">
-            <a href="#" class="btn btn-success btn-lg" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
+            <a href="set_schedule.php?set=<?php echo $id; ?>" class="btn btn-success btn-lg" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
           </div>
         </div>
         

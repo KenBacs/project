@@ -22,7 +22,7 @@
               
         <li ><a href="profile.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
         <li><a href="my_shops.php"><span class="glyphicon glyphicon-wrench"></span> My Shops</a></li>
-       
+        <li><a href="my_schedules.php"><span class="glyphicon glyphicon-calendar"></span> My Schedules</a></li>
         <li><a href="browse_shops.php"></span> Browse Shops</a></li>
         <li>
           <form class="navbar-form" action="../includes/logout.inc.php" method="post">
@@ -40,7 +40,7 @@
           <ul class="nav navbar-nav">
                 
           <li ><a href="profile.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-          <li><a href="#"> Transactions</a></li>
+           <li><a href="my_schedules.php"><span class="glyphicon glyphicon-calendar"></span> My Schedules</a></li>
           <li><a href="browse_shops.php"></span> Browse Shops</a></li>
           <li>
             <form class="navbar-form" action="../includes/logout.inc.php" method="post">

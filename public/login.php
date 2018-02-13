@@ -28,6 +28,7 @@
           $msgClass='alert-danger';
         } else {
 
+            
               if ($row = mysqli_fetch_assoc($result)) {
             //De-hashing the password
             //$hashedPwdCheck = password_verify($pwd, $row['user_pwd']);
@@ -134,8 +135,8 @@
               <input type="password" name="pwd" class="form-control" id="" placeholder="Password" value="<?php echo isset($_POST['pwd']) ? $pwd : '';?>">
             </div>
             <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Remember me</label>
+              <input type="checkbox" class="form-check-input" id="remember" name="remember">
+              <label class="form-check-label" for="remember me">Remember me</label>
             </div>
             <button type="submit" name="submit" class="btn-login btn btn-primary">Submit</button>
           </form>

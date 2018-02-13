@@ -275,7 +275,7 @@
     
     
     <div class="content container">
-     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> Shops</h2>
+     <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
     <div class="row">
 
       <div class="col-md-4">
@@ -417,7 +417,7 @@
                        
                       
                       <a href="my_shops.php?edit=<?php echo $row['shop_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                      <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                      <a href="#" h1 class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>
 
                   </tr>

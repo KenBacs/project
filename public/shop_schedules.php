@@ -32,6 +32,28 @@
     $shop_category = $record['shop_category'];
    
   }
+
+   if (isset($_GET['accept'])) {
+      $schedule_id = $_GET['accept'];
+
+      $status = 'Accepted';
+      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
+      
+    }
+
+
+   if (isset($_GET['decline'])) {
+      $schedule_id = $_GET['decline'];
+
+      $status = 'Declined';
+      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
+      
+    }
+
+
+   $results = mysqli_query($connection,"SELECT * FROM schedules, services WHERE schedules.shop_id = $shop_id AND schedules.service_id = services.service_id");
 ?>
 
 <!doctype html>
@@ -53,8 +75,46 @@
 
 
       <div class=" content container">
-      
-       <h1>Shop Schedules</h1>
+      <h1 class="text-center"><span class="glyphicon glyphicon-calendar"></span> Schedules</h1>
+       <div class="row">
+           <div class="col-sm-12">
+                <div class="table-responsive"  >
+              <table class="table">
+
+                <tr>
+              
+                    <th width="20%"> User ID</th>
+                  <th width="20%">Scheduled Date</th>
+                  <th width="20%">Service</th>
+                  <th width="20%">Status</th>
+                  <th width="20%">Action</th>
+                </tr>
+                 <?php while ($row = mysqli_fetch_array($results)) { ?>
+                  <tr>
+                          <td><?php echo $row['user_id']; ?></td>
+                      <td><?php echo $row['schedule_date']; ?></td>
+                      <td><?php echo $row['service_name']; ?></td>
+                      <td><?php echo $row['status']; ?></td>
+                      <td>
+
+                  <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined')  : ?>
+                         <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&accept=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
+
+                       <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&decline=<?php echo $row['schedule_id']?>"  class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Decline</a>
+                     
+                  <?php endif ?>
+                        </td>
+                  </tr>
+
+
+                  
+                       
+                  <?php } ?>
+              </table>
+            </div> 
+
+           </div>
+       </div>
 
       </div>
   
