@@ -7,9 +7,11 @@
 
     $msg = '';
     $msgClass = '';
-    $selected_service = '';
     $desc = '';
     $service_id = 0;
+    $schedule_date = '';
+    $schedule_time = '';
+
 
     if (isset($_GET['set'])) {
     $shop_id = $_GET['set'];
@@ -30,15 +32,16 @@
 
   if (isset($_POST['submit'])) {
     $schedule_date = mysql_prep($_POST['schedule_date']);
+    $schedule_time = mysql_prep($_POST['schedule_time']);
     $service_id = mysql_prep($_POST['service']);
     $desc = mysql_prep($_POST['repair_desc']);
 
-    if (!empty($schedule_date) && !empty($service_id)) {
+    if (!empty($schedule_date) && !empty($service_id) && !empty($schedule_time)) {
       
-      $query = "INSERT INTO schedules (user_id, service_id, shop_id, schedule_date, description) VALUES ('".$_SESSION['u_id']."', $service_id, $shop_id, '$schedule_date', '$desc')";
+      $query = "INSERT INTO schedules (user_id, service_id, shop_id, schedule_date, schedule_time, description) VALUES ('".$_SESSION['u_id']."', $service_id, $shop_id, '$schedule_date','$schedule_time', '$desc')";
 
       if (mysqli_query($connection,$query)) {
-        $msg = 'schedule sent succesfully';
+        $msg = 'Schedule request sent succesfully';
          $msgClass = 'alert-success';
       } else {
           $msg = 'schedule failed'.mysqli_error($connection);
@@ -102,17 +105,17 @@
               <form action="set_schedule.php?set=<?php echo $shop_id;?>" method="POST">
               <div class="form-group">
 
-                <label for="schedule_date">Date Schedule</label>
-                <input type="date" class="form-control" name="schedule_date" id="schedule_date">
+                <label for="schedule_date">Date schedule</label>
+                <input type="date" class="form-control" name="schedule_date" id="schedule_date" value="<?php echo $schedule_date; ?>">
               </div>
 
               <div class="form-group">
-                  <label for="repair_desc">Repair description (Optional)</label>
-                   <textarea class="form-control" rows="5" id="repair_desc" name="repair_desc" ><?php echo $desc;?></textarea>
-                  
-              </div> 
+                
+                <label for="schedule_time">Time schedule</label>
+                <input type="time" class="form-control" name="schedule_time" id="schedule_time" value="<?php echo $schedule_time; ?>">
+              </div>
 
-               <div class="form-group">
+              <div class="form-group">
               <label for="service">Service you want to render</label>
            
 
@@ -128,11 +131,19 @@
 
             </select>
 
-            <!--  <script type="text/javascript">
-              document.getElementById('service').value = "<?php echo $selected_service;?>";
-            </script> -->
+             <script type="text/javascript">
+              document.getElementById('service').value = "<?php echo $service_id;?>";
+            </script> 
             </div>
 
+
+              <div class="form-group">
+                  <label for="repair_desc">Service details (Optional)</label>
+                   <textarea class="form-control" rows="5" id="repair_desc" name="repair_desc" ><?php echo $desc;?></textarea>
+                  
+              </div> 
+
+       
              
               <button type="submit" name="submit" class="btn btn-success btn-block">Set schedule</button>
             </form>

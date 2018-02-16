@@ -1,9 +1,35 @@
 <?php require_once("../includes/session.php");?>
+<?php require_once("../includes/functions.php");?>
 <?php
    include_once '../includes/db_connection.php';
   
-  // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM shops");
+    $msg = '';
+    $msgClass = '';
+
+  if (isset($_GET['keywords']) ) {
+    $keywords = mysql_prep($_GET['keywords']);
+    $selectCategory = mysql_prep($_GET['selectCategory']);
+
+
+    if ($keywords =="" && $selectCategory == "") {
+       $query = "SELECT * FROM shops WHERE shop_name LIKE '%{$keywords}%' OR shop_category LIKE '%{$keywords}%' ";
+        $results = mysqli_query($connection,$query);
+    } else if ($keywords =="" && $selectCategory != "") {
+       $query = "SELECT * FROM shops WHERE shop_category LIKE '%{$selectCategory}%' ";
+      $results = mysqli_query($connection,$query);
+    } else if ($keywords !="" && $selectCategory == "") {
+       $query = "SELECT * FROM shops WHERE shop_name LIKE '%{$keywords}%' OR shop_category LIKE '%{$keywords}%' ";
+      $results = mysqli_query($connection,$query);
+    } else if ($keywords !="" && $selectCategory!="") {
+      $query = "SELECT * FROM shops WHERE shop_name LIKE '%{$keywords}%' AND shop_category LIKE '%{$selectCategory}%'";
+       $results = mysqli_query($connection,$query);
+    }
+    
+  }   
+  
+   else {
+     $results = mysqli_query($connection, "SELECT * FROM shops");
+  }
 
 ?>
 
@@ -29,83 +55,51 @@
 
         <div class="row">
           <div class="col-sm-2"> </div>
-          <div class="col-sm-4"><h3>Search Term</h3></div>
-
+          <div class="col-sm-4"><h3>Search Shop</h3></div>
         </div>
-
-        <form>
-          <div class="row">
-            <div class="col-sm-2"> </div>
-             <div class="col-sm-6">
-               <div class="form-group">
+        <div class="row">
+          <form action="browse_shops.php" method="GET">
+          <div class="col-sm-6 col-sm-offset-2">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="keywords" autocomplete="off" placeholder="Search Shop">
+                 
+                </div>
+              
+            <div class="form-group form-inline">
+                      <label for="selectCategory">Category:</label>
+                            <select class="form-control" name="selectCategory" id="selectCategory" >
+                            <option value="">Choose Category</option>
+                            <option value="Tailoring">Tailoring</option>
+                            <option value="Computer Repair">Computer Repair</option>
+                          </select>
+                </div>
+       
+                        
                
-                <input type="text" class="form-control" id="search_term" name="search_term">
+          </div>
+          <div class="col-sm-2">
+              <div class="form-group">
+                 <input type="submit" class="btn btn-success btn-lg" value="Search">
               </div>
-
-            </div>
-
-            <div class="col-sm-2">
-                <button type="submit" class="btn btn-success btn-lg">Search</button>
-            </div>
           </div>
-          <div class="row">
-             <div class="col-sm-2"> </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                   <label for="sel1">Rating:</label>
-                  <select class="form-control" id="sel1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
+          <div></div>
 
-               </div>
+          </form>
+        </div>
+     
 
-                 <div class="col-sm-2">
-                <div class="form-group">
-                   <label for="sel1">Categories:</label>
-                  <select class="form-control" id="sel1">
-                    <option>Shoe Repair</option>
-                    <option>Watch Repair</option>
-                    <option>Cellphone Repair</option>
-                    <option>Computer Repair</option>
-                    <option>Tailoring</option>
-                  </select>
-                </div>
-
-               </div>
-
-                <div class="col-sm-2">
-                <div class="form-group">
-                   <label for="sel1">Sort by:</label>
-                  <select class="form-control" id="sel1">
-                    <option>Rating</option>
-                    <option>Alphabetical</option>
-                  </select>
-                </div>
-
-               </div>
-               
-
-            
-          </div>
-         
-
-        </form>
+       
 
 
     </div>
   </div>
 
   <div class=" container">
-    
+        <h1><?php echo $msg;?></h1>
         <div class="row">
-     
+          
           <?php while ($row = mysqli_fetch_array($results)) { ?>
-        
+   
              <div class="col-sm-12">
             <ul class="media-list">
               <li class="media">

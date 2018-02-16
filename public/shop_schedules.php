@@ -53,7 +53,8 @@
     }
 
 
-   $results = mysqli_query($connection,"SELECT * FROM schedules, services WHERE schedules.shop_id = $shop_id AND schedules.service_id = services.service_id");
+
+   $results = mysqli_query($connection,"SELECT * FROM schedules, services WHERE schedules.shop_id = $shop_id AND schedules.service_id = services.service_id ORDER BY schedule_id DESC");
 ?>
 
 <!doctype html>
@@ -98,10 +99,11 @@
                       <td>
 
                   <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined')  : ?>
-                         <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&accept=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
+                         <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&accept=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
 
                        <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&decline=<?php echo $row['schedule_id']?>"  class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Decline</a>
-                     
+                  <?php elseif($row['status'] == 'Accepted') : ?>
+                     <a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $row['schedule_id']?>"  class="btn btn-warning" role="button">Create Bill</a>
                   <?php endif ?>
                         </td>
                   </tr>
