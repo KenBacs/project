@@ -111,6 +111,14 @@
      }
   
   }
+
+     if (isset($_POST['clear'])) {
+        $shop_id = 0;
+        $service_id = 0;
+        $service_name = '';
+        $service_desc = '';
+        $service_cost = 0;
+  }
   
   if (isset($_GET['edit'])) {
     $service_id = $_GET['edit'];
@@ -204,6 +212,9 @@
                           <?php else: ?>
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Service</button> 
                           <?php endif ?>
+
+
+                            <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear fields</button>
 
                       </form>
       </div>  

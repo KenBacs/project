@@ -5,7 +5,9 @@
 
   include_once '../includes/db_connection.php';
 
- 
+  
+
+
 
     if (isset($_GET['user'])) {
     $id = $_GET['user'];

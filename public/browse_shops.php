@@ -28,8 +28,12 @@
   }   
   
    else {
-     $results = mysqli_query($connection, "SELECT * FROM shops");
+      $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id");
+
   }
+
+  //Retrieve shop categories
+  $category_results = mysqli_query($connection, "SELECT  * FROM shop_categories");
 
 ?>
 
@@ -50,7 +54,7 @@
   <?php include '../includes/layouts/header.php';?>
 
   <div class="jumbotron">
-    <div class=" content container">
+    <div class="content container">
 
 
         <div class="row">
@@ -68,9 +72,14 @@
             <div class="form-group form-inline">
                       <label for="selectCategory">Category:</label>
                             <select class="form-control" name="selectCategory" id="selectCategory" >
+                            
                             <option value="">Choose Category</option>
-                            <option value="Tailoring">Tailoring</option>
-                            <option value="Computer Repair">Computer Repair</option>
+                            <?php while ($row = mysqli_fetch_array($category_results)) { ?>
+                            
+                           <option value="<?php echo $row['shop_cat_id'];?>"><?php echo $row['shop_category'];?></option>
+
+                           <?php } ?>
+                            
                           </select>
                 </div>
        

@@ -11,11 +11,12 @@
     $service_id = 0;
     $schedule_date = '';
     $schedule_time = '';
-
+    //date_default_timezone_set('Asia/Hong_Kong');
+    date_default_timezone_get();
 
     if (isset($_GET['set'])) {
     $shop_id = $_GET['set'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
+    $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
     $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];
@@ -36,24 +37,44 @@
     $service_id = mysql_prep($_POST['service']);
     $desc = mysql_prep($_POST['repair_desc']);
 
-    if (!empty($schedule_date) && !empty($service_id) && !empty($schedule_time)) {
-      
-      $query = "INSERT INTO schedules (user_id, service_id, shop_id, schedule_date, schedule_time, description) VALUES ('".$_SESSION['u_id']."', $service_id, $shop_id, '$schedule_date','$schedule_time', '$desc')";
+    $date_now = date("m/d/Y",strtotime('now')); 
 
-      if (mysqli_query($connection,$query)) {
-        $msg = 'Schedule request sent succesfully';
-         $msgClass = 'alert-success';
-      } else {
-          $msg = 'schedule failed'.mysqli_error($connection);
-         $msgClass = 'alert-success';
-      }
+    if (!empty($schedule_date) && !empty($service_id) && !empty($schedule_time)) {
+      if ($schedule_date > $date_now) {
+
+          $query = "INSERT INTO schedules (user_id, service_id, shop_id, schedule_date, schedule_time, description) VALUES ('".$_SESSION['u_id']."', $service_id, $shop_id, '$schedule_date','$schedule_time', '$desc')";
+
+            if (mysqli_query($connection,$query)) {
+              $msg = 'Schedule request sent succesfully';
+               $msgClass = 'alert-success';
+               $schedule_date = '';
+               $schedule_time = '';
+               $service_id = 0;
+               $desc = '';
+            } else {
+                $msg = 'schedule failed'.mysqli_error($connection);
+               $msgClass = 'alert-danger';
+            }
       
+       
+      } else {
+        $msg = 'Invalid schedule date';
+         $msgClass = 'alert-danger';
+      }
+    
 
     } else {
          $msg = 'Fill all fields';
          $msgClass = 'alert-danger';
     }
     
+  }
+
+  if (isset($_POST['clear'])) {
+       $schedule_date = '';
+       $schedule_time = '';
+       $service_id = 0;
+       $desc = '';
   }
 
   // Retrieve records
@@ -146,6 +167,8 @@
        
              
               <button type="submit" name="submit" class="btn btn-success btn-block">Set schedule</button>
+
+              <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear fields</button>
             </form>
           </div>
             

@@ -16,13 +16,14 @@
     $day_end = '';
     $time_start = '';
     $time_end = '';
-    $shop_category = '';
+    $shop_category = 0;
     $edit_state = false;
    
   if (isset($_POST['submit'])) {
     
     $user_id = mysql_prep($_SESSION['u_id']);
     $shop_name = mysql_prep($_POST['shop_name']);
+    $shop_category = mysql_prep($_POST['selectCategory']);
     $file = $_FILES['file'];
     $fileName = $_FILES['file']['name'];
     $fileTmpName = $_FILES['file']['tmp_name'];
@@ -38,7 +39,7 @@
     $day_end = mysql_prep($_POST['day_end']);
     $time_start = mysql_prep($_POST['time_start']);
     $time_end = mysql_prep($_POST['time_end']);
-    $shop_category = mysql_prep($_POST['selectCategory']);
+
     
     
     if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($day_start) && !empty($day_end) && !empty($time_start) && !empty($time_end) && !empty($shop_category) ) { 
@@ -60,7 +61,8 @@
                     $fileDestination = 'images/'.$fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
 
-                   $query = "INSERT INTO shops (user_id, shop_name, shop_image, shop_description, shop_contact, day_start, day_end, time_start, time_end, shop_category) VALUES ($user_id, '$shop_name', '$fileNameNew', '$shop_description', '$shop_contact', '$day_start', '$day_end', '$time_start', '$time_end', '$shop_category')";
+                  $query = "INSERT INTO shops (user_id, shop_cat_id, shop_name, shop_image, shop_description, shop_contact, day_start, day_end, time_start, time_end) VALUES ($user_id, $shop_category, '$shop_name', '$fileNameNew', '$shop_description', '$shop_contact', '$day_start', '$day_end', '$time_start', '$time_end')";
+              
            
                     if ( mysqli_query($connection,$query)) {
 
@@ -77,11 +79,11 @@
                       $day_end = '';
                       $time_start = '';
                       $time_end = '';
-                      $shop_category = '';
+                      $shop_category = 0;
                     
                     } else {
                        echo mysqli_error($connection);
-                       echo $id;
+                   
                     }
                    
                    
@@ -123,6 +125,7 @@
     
     $user_id = mysql_prep($_SESSION['u_id']);
     $shop_id = mysql_prep($_POST['shop_id']);
+    $shop_category = mysql_prep($_POST['selectCategory']);
     $shop_name = mysql_prep($_POST['shop_name']);
     $file = $_FILES['file'];
     $fileName = $_FILES['file']['name'];
@@ -139,7 +142,7 @@
     $day_end = mysql_prep($_POST['day_end']);
     $time_start = mysql_prep($_POST['time_start']);
     $time_end = mysql_prep($_POST['time_end']);
-    $shop_category = mysql_prep($_POST['selectCategory']);
+    
     
     
     if (!empty($shop_name) && !empty($shop_description) && !empty($file) && !empty($shop_contact) && !empty($day_start) && !empty($day_end) && !empty($time_start) && !empty($time_end) && !empty($shop_category) ) { 
@@ -154,7 +157,7 @@
                     move_uploaded_file($fileTmpName, $fileDestination);
 
                    
-                    $query = "UPDATE shops SET user_id = $user_id, shop_name = '$shop_name', shop_image = '$fileNameNew', shop_description = '$shop_description', shop_contact = '$shop_contact', day_start = '$day_start', day_end = '$day_end', time_start = '$time_start', time_end = '$time_end', shop_category = '$shop_category' WHERE shop_id = $shop_id" ;
+                    $query = "UPDATE shops SET user_id = $user_id, shop_cat_id = $shop_category, shop_name = '$shop_name', shop_image = '$fileNameNew', shop_description = '$shop_description', shop_contact = '$shop_contact', day_start = '$day_start', day_end = '$day_end', time_start = '$time_start', time_end = '$time_end' WHERE shop_id = $shop_id" ;
            
                     if ( mysqli_query($connection,$query)) {
 
@@ -171,7 +174,7 @@
                       $day_end = '';
                       $time_start = '';
                       $time_end = '';
-                      $shop_category = '';
+                      $shop_category = 0;
                     
                     } else {
                        echo mysqli_error($connection);
@@ -211,6 +214,19 @@
     }
   }
 
+  if (isset($_POST['clear'])) {
+      $id = 0;
+      $shop_name = '';
+      $fileNameNew = '';
+      $shop_description = '';
+      $shop_contact = '';
+      $day_start = '';
+      $day_end = '';
+      $time_start = '';
+      $time_end = '';
+      $shop_category = 0;
+  }
+
   if (isset($_GET['edit'])) {
     $shop_id = $_GET['edit'];
     $edit_state=true;
@@ -225,7 +241,7 @@
     $day_end = $record['day_end'];
     $time_start = date("H:i", strtotime($record['time_start'])); ;
     $time_end = date("H:i", strtotime($record['time_end'])); 
-    $shop_category = $record['shop_category'];
+    $shop_category = $record['shop_cat_id'];
   }
 
   if (isset($_GET['del'])) {
@@ -250,6 +266,10 @@
       redirect_to('p_myshop.php?myshop='.$shop_id.'');
     }
   }
+
+  // Retrieve categories
+
+  $category_results = mysqli_query($connection, "SELECT * FROM shop_categories");
   
 
 ?>
@@ -374,11 +394,10 @@
                          <div class="form-group">
                             <label for="selectCategory">Category</label>
                             <select class="form-control" name="selectCategory" id="selectCategory" >
-                            <option value="">Choose Category</option>
-                            <option value="Watch repair">Watch repair</option>
-                            <option value="Computer/Laptop repair">Computer/Laptop repair</option>
-                            <option value="Tailoring">Tailoring</option>
-                            <option value="Auto repair">Auto repair</option>
+                            <option value = 0 >Choose Category</option>
+                            <?php while ($row= mysqli_fetch_array($category_results)) { ?>
+                            <option value="<?php echo $row['shop_cat_id']; ?>"><?php echo $row['shop_category']?></option>
+                            <?php }?>
                           </select>
 
 
@@ -386,11 +405,14 @@
                             document.getElementById('selectCategory').value = "<?php echo $shop_category;?>";
                           </script>
                           </div>
+
                           <?php if($edit_state == false): ?>
                             <button  type="submit" name="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Create Shop</button> 
                           <?php else: ?>
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Shop</button> 
                           <?php endif ?>
+
+                          <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear fields</button>
 
                       </form>
       </div>  

@@ -17,7 +17,7 @@
 
     if (isset($_GET['shop'])) {
     $id = $_GET['shop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $id");
+    $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
     $id = $record['shop_id'];
     $shop_name = $record['shop_name'];
@@ -49,7 +49,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="contact">
+  <body id="shop_profile_admin">
     
 
   <?php include '../includes/layouts/admin_header.php';?>
@@ -60,12 +60,10 @@
           <div class="col-md-6">
             <h1><?php echo $shop_name; ?> <small><?php echo $shop_category; ?></small></h1>
           </div>
-          <div class="col-md-6">
-            <a href="#" class="btn btn-success btn-lg" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
-          </div>
-        </div>
+           </div>
+  
         
-        <div class="row" style="margin-top: 20px;">
+        <div class="row" >
 
           <div class="col-sm-4">
             
@@ -107,13 +105,93 @@
           </div>
         </div>
 
-           <div class="row">
+        <div class="row">
           <div class="col-md-12">
-            <h3><span class="glyphicon glyphicon-map-marker"></span>Shop Location</h3>
+            <h3><span class="glyphicon glyphicon-map-marker"></span>Shop Locations</h3>
+
+            <div id="map" ></div>
+
+
+            <script>
+      var customLabel = {
+        restaurant: {
+          label: 'R'
+        },
+        bar: {
+          label: 'B'
+        }
+      };
+
+        function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: new google.maps.LatLng(-33.863276, 151.207977),
+          zoom: 12
+        });
+        var infoWindow = new google.maps.InfoWindow;
+
+          // Change this depending on the name of your PHP or XML file
+          downloadUrl('https://storage.googleapis.com/mapsdevsite/json/mapmarkers2.xml', function(data) {
+            var xml = data.responseXML;
+            var markers = xml.documentElement.getElementsByTagName('marker');
+            Array.prototype.forEach.call(markers, function(markerElem) {
+              var id = markerElem.getAttribute('id');
+              var name = markerElem.getAttribute('name');
+              var address = markerElem.getAttribute('address');
+              var type = markerElem.getAttribute('type');
+              var point = new google.maps.LatLng(
+                  parseFloat(markerElem.getAttribute('lat')),
+                  parseFloat(markerElem.getAttribute('lng')));
+
+              var infowincontent = document.createElement('div');
+              var strong = document.createElement('strong');
+              strong.textContent = name
+              infowincontent.appendChild(strong);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var text = document.createElement('text');
+              text.textContent = address
+              infowincontent.appendChild(text);
+              var icon = customLabel[type] || {};
+              var marker = new google.maps.Marker({
+                map: map,
+                position: point,
+                label: icon.label
+              });
+              marker.addListener('click', function() {
+                infoWindow.setContent(infowincontent);
+                infoWindow.open(map, marker);
+              });
+            });
+          });
+        }
+
+
+
+      function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+          if (request.readyState == 4) {
+            request.onreadystatechange = doNothing;
+            callback(request, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+      }
+
+      function doNothing() {}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHqHUCFSjE6G0i9mX5hQTR1kJprdDSDnk&callback=initMap">
+    </script>
           </div>
         </div>
         
-      </div>
-  
+    </div>    
+     
 
     <?php include '../includes/layouts/footer.php';?>

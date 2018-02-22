@@ -18,7 +18,7 @@
 
       if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
+    $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
     $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];

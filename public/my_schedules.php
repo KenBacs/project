@@ -24,6 +24,8 @@
   $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']."");
 
  
+  // Total bill
+    $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
 
 ?>
 
@@ -64,6 +66,7 @@
                   <th width="20%">Service</th>
                   <th width="20%">Status</th>
                   <th width="20%">Action</th>
+                
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
@@ -71,11 +74,25 @@
                       <td><?php echo $row['schedule_date']; ?></td>
                       <td><?php echo $row['service_name']; ?></td>
                       <td><?php echo $row['status']; ?></td>
-                      <td>
+                    
 
-                  <?php if($row['status'] != 'Cancelled' && $row['status'] != 'Accepted' && $row['status'] != 'Declined'): ?>
+                  <?php if($row['status'] != 'Cancelled' && $row['status'] != 'Accepted' && $row['status'] != 'Declined' && $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed'):  ?>
+                      <td >
                       <a href="my_schedules.php?cancel=<?php echo $row['schedule_id']; ?>"  class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Cancel Schedule</a>
                       </td>
+                  <?php elseif ($row['status'] == 'Done'):  ?>
+          
+                      <td>
+                            <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button">Pay Bill</a>
+                      </td>
+
+                  <?php elseif ($row['status'] == 'Ready to Claim' || $row['status'] == 'Claimed' ) :  ?>
+          
+                      <td>
+                            <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>&view=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span>  View Invoice</a>
+                      </td>
+
+                      
                   <?php endif ?>
 
                   </tr>

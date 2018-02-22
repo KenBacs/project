@@ -16,7 +16,7 @@
 
     if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
+    $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
     $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];
@@ -154,6 +154,12 @@
        
   }
 
+  if (isset($_POST['clear'])) {
+    $service_name = '';
+    $service_desc = '';
+    $service_cost = 0;
+  }
+
 
 
  
@@ -232,6 +238,8 @@
                           <?php else: ?>
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Service</button> 
                           <?php endif ?>
+
+                          <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> Clear fields</button> 
 
                       </form>
       </div>  

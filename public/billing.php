@@ -15,12 +15,13 @@
     $selectedService = 0;
     $job_order_id = 0;
     $edit_state = false;
+    $grand_total = 0;
 
 
 
     if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
-    $rec = mysqli_query($connection,"SELECT * FROM shops WHERE shop_id = $shop_id");
+    $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
     $shop_id = $record['shop_id'];
     $shop_name = $record['shop_name'];
@@ -135,6 +136,16 @@
        
   }
 
+     if (isset($_GET['done'])) {
+      $schedule_id = $_GET['done'];
+
+      $status = 'Done';
+      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+      redirect_to('shop_schedules.php?myshop='.$shop_id);  
+      
+    }
+
 
   // Retrieve job orders of a particular schedule
    $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
@@ -165,11 +176,14 @@
 
    
     <div class="content container">
+      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>
      <h1 class="text-center" style="margin-bottom: 20px;"><?php echo $shop_name; ?><small> Billing</small></h1>
 
     <div class="row">
 
       <div class="col-md-4">
+
+          <h2 class="text-center bg-info"><span class="glyphicon glyphicon-plus"></span> Add Service Rendered</h2>
        
 
           <?php if($msg !=''): ?>
@@ -222,13 +236,28 @@
 
       
         <div class="col-md-8">
-            <pre class="text-info">Username: <?php echo $user_uid; ?><br>Schedule Date: <?php echo $schedule_date;?><br>Schedule time: <?php echo $schedule_time;?></pre>
-           <?php $total = mysqli_fetch_array($total_results); ?>
-           <ul class="list-inline">
-             <li>   <h2>Total cost :  </h2> </li>
-            <li><h2 class="bg-info">P <?php echo $total['total'];?></h2></li>
+            <pre class="text-info">Information:<br/>Username: <?php echo $user_uid; ?><br>Schedule Date: <?php echo $schedule_date;?><br>Schedule time: <?php echo $schedule_time;?></pre>
+           <?php $total = mysqli_fetch_array($total_results); 
+            $grand_total = $total['total'];
+           ?>
+
+           <table>
+             <tr>  
+                  <th width="20%"><h2>Total cost :  </h2> </th>
+                   <th width="30%"><h2 >P <?php if (isset($total['total'])) { echo $total['total'];} else { echo "0.00";} ?></h2></th>
+                   <form action="billing.php?myshop=<?php echo $shop_id;?>&bill=<?php echo $schedule_id;?>" method="POST">
+                      <input type="hidden" name="grand_total" value="<?php echo $grand_total;?>">
+                      <th width="25%" style="padding-right: 10px;">
+                       <h1><a href="bill_summary.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>" class="btn btn-info btn-lg btn-block" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Bill</a></h1>
+                        </th>
+                      <th width="25%">
+                         <h1><a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>"  class="btn btn-success btn-lg btn-block" role="button"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
+                      </th>
+                  </form>
+              </tr>
+           
              
-           </ul>
+           </table>
     
       
            <div class="clearfix"></div> 
@@ -249,8 +278,8 @@
                       <td>P <?php echo $row['service_cost']; ?></td>
                        <td>P <?php echo $row['sub_total']; ?></td>
                       <td>             
-                      <a href="billing.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>&edit=<?php echo $row['job_order_id'];?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                      <a href="billing.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>&del=<?php echo $row['job_order_id'];?>" h1 class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                      <a href="billing.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>&edit=<?php echo $row['job_order_id'];?>" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                      <a href="billing.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>&del=<?php echo $row['job_order_id'];?>" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>
 
                   </tr>

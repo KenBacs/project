@@ -1,5 +1,3 @@
-
-
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
@@ -25,6 +23,7 @@
         <li><a href="users_admin.php"><span class="glyphicon glyphicon-list"></span> Users</a></li>
         <li><a href="shops_admin.php"><span class="glyphicon glyphicon-list"></span> Shops</a></li>
         <li><a href="services_admin.php"><span class="glyphicon glyphicon-list"></span> Services</a></li>
+        <li><a href="shop_categories_admin.php"><span class="glyphicon glyphicon-list"></span> Shop Categories</a></li>
 
         </ul>
       

@@ -143,6 +143,16 @@
       
     }
   }
+
+    if (isset($_POST['clear'])) {
+    $id = 0;
+    $first = '';
+    $last = '';
+    $uid = '';
+    $pwd = '';
+    $fileNameNew = '';
+  }
+
   if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $edit_state=true;
@@ -236,6 +246,9 @@
                           <?php else: ?>
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Admin</button> 
                           <?php endif ?>
+
+
+     <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear fields</button>
 
         </form>
                         

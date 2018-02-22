@@ -19,7 +19,8 @@ $(function() {
   $("#users_admin a:contains('Users')").parent().addClass('active');
   $("#services_admin a:contains('Services')").parent().addClass('active');
   $("#shops_admin a:contains('Shops')").parent().addClass('active');
-   $("#my_schedules a:contains('My Schedules')").parent().addClass('active');
+  $("#my_schedules a:contains('My Schedules')").parent().addClass('active');
+  $("#shop_categories_admin a:contains('Shop Categories')").parent().addClass('active');
   
 
  
