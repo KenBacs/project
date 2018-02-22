@@ -70,6 +70,7 @@
             $_SESSION['u_mobile'] = $row['user_mobile'];
             $_SESSION['u_uid'] = $row['user_uid'];
             $_SESSION['u_type'] = $row['user_type'];
+            $_SESSION['u_timestamp'] = $row['user_timestamp'];
             $_POST=array();
             redirect_to("../public/browse_shops.php?");
 

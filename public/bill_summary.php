@@ -239,8 +239,7 @@
                   <th width="5%">Cost</th>
                   <th width="5%">Sub-total</th>
               
-                </tr>
-                 <?php while ($row = mysqli_fetch_array($results)) { ?>
+                </tr                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
                       <td><?php echo $row['quantity']; ?></td>
                       <td><?php echo $row['service_name']; ?></td>

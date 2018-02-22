@@ -10,7 +10,7 @@
 	require 'app/start.php';
 	include_once '../includes/db_connection.php';
 
-	if (!isset($_GET['success'] , $_GET['sid'], $_GET['paymentId'], $_GET['PayerID'])) {
+	if (!isset($_GET['success'] , $_GET['user_id'], $_GET['type'], $_GET['paymentId'], $_GET['PayerID'])) {
 		die();
 
 	}
@@ -38,26 +38,29 @@
 		die();
 	}
 
-	$schedule_id = $_GET['sid'];
+	$sub_type_id = $_GET['type'];
+	$user_id = $_GET['user_id'];
 	date_default_timezone_set('Asia/Manila');
 	$date = date('Y-m-d H:i:s');
 	$method = 'PayPal';
-	$amount_change = 0.00;
 
-	 // Total amount
-   $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
 
-   $record = mysqli_fetch_array($total_results);
-   $total_amount = $record['total'];
+	// Retrive subscription cost
+	$rec = mysqli_query($connection,"SELECT * FROM subscription_types WHERE sub_type_id = $sub_type_id");
+    $record = mysqli_fetch_array($rec);
+    $sub_type_id = $record['sub_type_id']; 
+	$sub_cost =  $record['sub_cost'];;
 
-	$status = 'Ready to Claim';
-	$query = "UPDATE schedules SET status = '$status',payment_status = 1 WHERE schedule_id = $schedule_id ";
+	$query = "INSERT INTO subscriptions (user_id, sub_type_id, method, subscribe_date, subscribe_time) VALUES ($user_id, $sub_type_id,'$method', '$date', NOW() )";
+	 mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+	
+	
+	$query = "UPDATE users SET user_timestamp = '$date' WHERE user_id = $user_id";
 	mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
 
-	$query = "INSERT INTO payments (schedule_id, cash_given, amount_paid, amount_change, method, payment_date, payment_time) VALUES ($schedule_id, $total_amount, $total_amount, $amount_change,'$method', '$date', NOW() )";
-	 mysqli_query($connection, $query) or die(mysqli_error($connection)); 
-	
+	$_SESSION['u_timestamp'] = $date;
+
 	$msg = 'Payment made. Thanks!';
 	$msgClass = 'alert-success';
 
@@ -89,7 +92,7 @@
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
           <?php endif;?>
 
-    <a href="my_schedules.php" class="btn btn-info" role="button"><span class="glyphicon glyphicon-backward"></span> Back to My Schedule</a>
+    <a href="my_shops.php?stamp=<?php echo $date;?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-backward"></span> Back to My Shops</a>
 
 
   	</div>

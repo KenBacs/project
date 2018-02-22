@@ -267,10 +267,20 @@
     }
   }
 
+    if (isset($_GET['stamp'])) {
+    $_SESSION['u_timestamp'] = $_GET['stamp'];
+  }
+
   // Retrieve categories
 
   $category_results = mysqli_query($connection, "SELECT * FROM shop_categories");
-  
+
+  // Retrieve subcription
+  $sub_results = mysqli_query($connection,"SELECT * FROM subscriptions,subscription_types WHERE user_id = {$_SESSION['u_id']} AND subscriptions.sub_type_id = subscription_types.sub_type_id ") or die(mysqli_error($connection));
+  $rec = mysqli_fetch_array($sub_results);
+  $duration = $rec['sub_duration'];
+
+
 
 ?>
 
@@ -292,8 +302,16 @@
 
   <?php include '../includes/layouts/header.php';?>
 
+    <?php 
+
+      $UsersRegDate = $_SESSION['u_timestamp'];
+      $MembershipEnds =  date("Y-m-d",strtotime(date("Y-m-d",strtotime($UsersRegDate))." + {$duration} day"));
+
+    ?>
     
-    
+
+   <?php if(date("Y-m-d") < $MembershipEnds) : ?>
+
     <div class="content container">
      <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
     <div class="row">
@@ -394,7 +412,7 @@
                          <div class="form-group">
                             <label for="selectCategory">Category</label>
                             <select class="form-control" name="selectCategory" id="selectCategory" >
-                            <option value = 0 >Choose Category</option>
+                            <option value=0 >Choose Category</option>
                             <?php while ($row= mysqli_fetch_array($category_results)) { ?>
                             <option value="<?php echo $row['shop_cat_id']; ?>"><?php echo $row['shop_category']?></option>
                             <?php }?>
@@ -486,6 +504,18 @@
 
               
     </div> 
+
+    <?php else: ?>
+        <div class="content container">
+          <div class="row">
+            <h1 class="text-center">Subcription has expired!</h1>
+
+            <div class="col-sm-4 col-sm-offset-4">
+              <a href="renew_subcription.php" class="btn btn-success btn-block btn-lg" role="button">RENEW SUBSCRIPTION</a>
+            </div>
+          </div>
+        </div>
+    <?php endif ?>  
 
 
 

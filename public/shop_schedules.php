@@ -55,9 +55,10 @@
 
       if (isset($_GET['claim'])) {
       $schedule_id = $_GET['claim'];
+      $date = date('Y-m-d H:i:s');
 
       $status = 'Claimed';
-      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $query = "UPDATE schedules SET status = '$status', claim_date = '$date', claim_time = NOW() WHERE schedule_id = $schedule_id ";
       $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
       
     }
