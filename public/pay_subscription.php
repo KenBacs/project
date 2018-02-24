@@ -1,4 +1,4 @@
-
+<?php require_once("../includes/session.php");?>
 <?php
 	
 	use PayPal\Api\Payment;
@@ -49,13 +49,15 @@
 	$rec = mysqli_query($connection,"SELECT * FROM subscription_types WHERE sub_type_id = $sub_type_id");
     $record = mysqli_fetch_array($rec);
     $sub_type_id = $record['sub_type_id']; 
-	$sub_cost =  $record['sub_cost'];;
+	$sub_cost =  $record['sub_cost'];
+	 $sub_status = 1;
 
 	$query = "INSERT INTO subscriptions (user_id, sub_type_id, method, subscribe_date, subscribe_time) VALUES ($user_id, $sub_type_id,'$method', '$date', NOW() )";
 	 mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 	
-	
-	$query = "UPDATE users SET user_timestamp = '$date' WHERE user_id = $user_id";
+     
+
+	$query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
 	mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
 
@@ -92,7 +94,7 @@
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
           <?php endif;?>
 
-    <a href="my_shops.php?stamp=<?php echo $date;?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-backward"></span> Back to My Shops</a>
+    <a href="my_shops.php" class="btn btn-info" role="button"><span class="glyphicon glyphicon-backward"></span> Back to My Shops</a>
 
 
   	</div>

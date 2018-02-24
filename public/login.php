@@ -71,6 +71,7 @@
             $_SESSION['u_uid'] = $row['user_uid'];
             $_SESSION['u_type'] = $row['user_type'];
             $_SESSION['u_timestamp'] = $row['user_timestamp'];
+            $_SESSION['u_substatus']= $row['sub_status'];
             $_POST=array();
             redirect_to("../public/browse_shops.php?");
 

@@ -24,7 +24,15 @@
         <li><a href="shop_schedules.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-calendar"></span> Schedules</a></li>
           <li><a href="shop_services.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-list"></span> Services</a></li>
             <li><a href="shop_locations.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Locations</a></li>
-            <li><a href="shop_reports.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Reports</a></li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-stats"></span> Reports
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="shop_schedule_report.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Schedule Report</a></li>
+                  <li><a href="shop_profit_report.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Profit Report</a></li>
+              
+                </ul>
+            </li>
             
        
       

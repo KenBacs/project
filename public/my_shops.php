@@ -267,9 +267,7 @@
     }
   }
 
-    if (isset($_GET['stamp'])) {
-    $_SESSION['u_timestamp'] = $_GET['stamp'];
-  }
+
 
   // Retrieve categories
 
@@ -310,7 +308,9 @@
     ?>
     
 
-   <?php if(date("Y-m-d") < $MembershipEnds) : ?>
+   <?php if(date("Y-m-d") < $MembershipEnds) :
+     
+   ?>
 
     <div class="content container">
      <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
@@ -507,6 +507,11 @@
 
     <?php else: ?>
         <div class="content container">
+        <?php  
+            $sub_status = 0;
+            $query = "UPDATE users SET sub_status = $sub_status WHERE user_id = ".$_SESSION['u_id']." " ;
+            mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+            $_SESSION['u_substatus'] = $sub_status;?>
           <div class="row">
             <h1 class="text-center">Subcription has expired!</h1>
 

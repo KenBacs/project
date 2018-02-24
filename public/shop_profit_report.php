@@ -54,7 +54,7 @@
 
       <div class=" content container">
       
-       <h1>Shop Reports</h1>
+       <h1><?php echo $shop_name; ?> <small>Profit Report</small></h1>
 
       </div>
   

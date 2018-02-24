@@ -100,7 +100,7 @@
 
 
       <div class=" content container">
-      <h1 class="text-center"><span class="glyphicon glyphicon-calendar"></span> Schedules</h1>
+      <h1 class="text-center"><span class="glyphicon glyphicon-calendar"></span> <?php echo $shop_name;?> <small>Schedules</small> </h1>
        <div class="row">
            <div class="col-sm-12">
                 <div class="table-responsive"  >

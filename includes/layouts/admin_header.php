@@ -17,13 +17,35 @@
           
 
         <ul class="nav navbar-nav">
-              
+        
+        
         <li ><a href="admin.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-        <li><a href="admins.php"><span class="glyphicon glyphicon-list"></span> Admins</a></li>
-        <li><a href="users_admin.php"><span class="glyphicon glyphicon-list"></span> Users</a></li>
-        <li><a href="shops_admin.php"><span class="glyphicon glyphicon-list"></span> Shops</a></li>
-        <li><a href="services_admin.php"><span class="glyphicon glyphicon-list"></span> Services</a></li>
-        <li><a href="shop_categories_admin.php"><span class="glyphicon glyphicon-list"></span> Shop Categories</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-wrench"></span> Manage
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="admins.php"><span class="glyphicon glyphicon-wrench"></span> Admins</a></li>
+                    <li><a href="users_admin.php"><span class="glyphicon glyphicon-wrench"></span> Users</a></li>
+                    <li><a href="shops_admin.php"><span class="glyphicon glyphicon-wrench"></span> Shops</a></li>
+                    <li><a href="services_admin.php"><span class="glyphicon glyphicon-wrench"></span> Services</a></li>
+                    <li><a href="shop_categories_admin.php"><span class="glyphicon glyphicon-wrench"></span> Shop Categories</a></li>
+
+                </ul>
+        </li>
+
+           <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-stats"></span> Reports
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Admins</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Users</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Shops</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Services</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Shop Categories</a></li>
+
+                </ul>
+        </li>
+
 
         </ul>
       
