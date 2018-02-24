@@ -28,8 +28,8 @@
               <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-stats"></span> Reports
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="shop_schedule_report.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Schedule Report</a></li>
-                  <li><a href="shop_profit_report.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Profit Report</a></li>
+                  <li><a href="shop_schedules_report.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Schedules Report</a></li>
+                  <li><a href="shop_sales_report.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-stats"></span> Sales Report</a></li>
               
                 </ul>
             </li>

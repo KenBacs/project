@@ -29,6 +29,7 @@
                     <li><a href="shops_admin.php"><span class="glyphicon glyphicon-wrench"></span> Shops</a></li>
                     <li><a href="services_admin.php"><span class="glyphicon glyphicon-wrench"></span> Services</a></li>
                     <li><a href="shop_categories_admin.php"><span class="glyphicon glyphicon-wrench"></span> Shop Categories</a></li>
+                    <li><a href="subscriptions_admin.php"><span class="glyphicon glyphicon-wrench"></span> Subscriptions</a></li>
 
                 </ul>
         </li>
@@ -37,11 +38,11 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-stats"></span> Reports
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Admins</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Users</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Shops</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Services</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Shop Categories</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Admin Report</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> User Report</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Shop Report</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Service Report</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Subscription Report</a></li>
 
                 </ul>
         </li>

@@ -66,8 +66,12 @@
      if (isset($_GET['unclaim'])) {
       $schedule_id = $_GET['unclaim'];
 
+
+      
       $status = 'Ready to Claim';
-      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+  
+      $claim_time  = '00:00:00';
+      $query = "UPDATE schedules SET status = '$status', claim_date = NULL, claim_time = '$claim_time'  WHERE schedule_id = $schedule_id ";
       $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
       
     }
