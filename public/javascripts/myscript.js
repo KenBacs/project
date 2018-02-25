@@ -21,9 +21,13 @@ $(function() {
   $("#shops_admin a:contains('Shops')").parent().addClass('active');
   $("#my_schedules a:contains('My Schedules')").parent().addClass('active');
   $("#shop_categories_admin a:contains('Shop Categories')").parent().addClass('active');
-  
-
- 
+  $("#subscriptions_admin a:contains('Subscriptions')").parent().addClass('active');
+  $("#shop_sales_report a:contains('Sales Report')").parent().addClass('active');
+  $("#shop_schedules_report a:contains('Schedule Report')").parent().addClass('active');
+  $("#admin_report a:contains('Admin Report')").parent().addClass('active');
+  $("#user_report a:contains('User Report')").parent().addClass('active');
+  $("#shop_report a:contains('Shop Report')").parent().addClass('active');
+  $("#subscription_report a:contains('Subscription Report')").parent().addClass('active');
 
 });
 

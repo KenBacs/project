@@ -31,6 +31,8 @@
     $fileExt = explode('.', $fileName);
     $fileActualExt = strtolower(end($fileExt));
     $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+    date_default_timezone_set('Asia/Manila');
+    $date = date('Y-m-d H:i:s');
     
     
     if (!empty($first) && !empty($last) && !empty($uid) && !empty($pwd)) { 
@@ -49,7 +51,7 @@
                     $fileDestination = 'images/'.$fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
                     
-                    $query = "INSERT INTO admins (admin_first, admin_last, admin_uid, admin_pwd, admin_image) VALUES ('$first', '$last', '$uid', '$pwd', '$fileNameNew')";
+                    $query = "INSERT INTO admins (admin_first, admin_last, admin_uid, admin_pwd, admin_image, date_registered) VALUES ('$first', '$last', '$uid', '$pwd', '$fileNameNew', '$date')";
 
                     mysqli_query($connection,$query);
                     $msg ="Shop added successfully";

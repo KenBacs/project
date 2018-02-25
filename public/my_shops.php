@@ -302,18 +302,26 @@
 
     <?php 
 
-      $UsersRegDate = $_SESSION['u_timestamp'];
-      $MembershipEnds =  date("Y-m-d",strtotime(date("Y-m-d",strtotime($UsersRegDate))." + {$duration} day"));
+    /* $resultCheck = mysqli_num_rows($sub_results);
+     if ($resultCheck < 1){
+         $UsersRegDate = $_SESSION['u_timestamp'];
+         $MembershipEnds =  date("Y-m-d",strtotime(date("Y-m-d",strtotime($UsersRegDate))." + 7 day"));
+ */
 
-    ?>
+        $UsersRegDate = $_SESSION['u_timestamp'];
+       $MembershipEnds =  date("Y-m-d",strtotime(date("Y-m-d",strtotime($UsersRegDate))." + {$duration} day"));
+
+         ?>
     
 
-   <?php if(date("Y-m-d") < $MembershipEnds) :
-     
-   ?>
+   <?php if(date("Y-m-d") < $MembershipEnds) :  ?>
 
     <div class="content container">
      <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
+
+
+             
+    
     <div class="row">
 
       <div class="col-md-4">
@@ -516,7 +524,7 @@
             <h1 class="text-center">Subcription has expired!</h1>
 
             <div class="col-sm-4 col-sm-offset-4">
-              <a href="renew_subcription.php" class="btn btn-success btn-block btn-lg" role="button">RENEW SUBSCRIPTION</a>
+              <a href="renew_subcription.php" class="btn btn-success btn-block btn-lg" role="button">SUBSCRIBE NOW!</a>
             </div>
           </div>
         </div>

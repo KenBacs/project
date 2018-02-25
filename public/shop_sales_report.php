@@ -18,6 +18,8 @@
     $date_start = '';
     $date_end = '';
 
+ 
+
    
 
       if (isset($_GET['myshop'])) {
@@ -36,7 +38,7 @@
     $shop_category = $record['shop_category'];
    
   }
-        $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
+         $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
 
         $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
   
@@ -49,70 +51,119 @@
           $total_sales = $record2['total'];
 
                // Retrieve for chart
-          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales FROM payments,schedules WHERE schedules.shop_id = $shop_id AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
+          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales, COUNT(*) as count FROM payments,schedules WHERE schedules.shop_id = $shop_id AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
           $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
-            $chart_data .= "{ date:'".$row["payment_date"]."', daily_sales:".$row["daily_sales"]."}, ";
+            $chart_data .= "{ date:'".$row["payment_date"]."', count:".$row["count"].", daily_sales:".$row["daily_sales"]."}, ";
           }
+
 
 
      if (isset($_POST['submit'])) {
 
             $date_start = $_POST['date_start'];
             $date_end = $_POST['date_end'];
+            $method_type = $_POST['method_type'];
        
-         $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
+       $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
 
-        $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
+        $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
   
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
-        $total_results = mysqli_query($connection,"SELECT SUM(payments.amount_paid) as total FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
+        $total_results = mysqli_query($connection,"SELECT SUM(payments.amount_paid) as total FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
 
           $record2 = mysqli_fetch_array($total_results);
           $total_sales = $record2['total'];
 
-          
                // Retrieve for chart
-          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales FROM payments,schedules WHERE schedules.shop_id = $shop_id AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
+          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales, COUNT(*) as count FROM payments,schedules WHERE schedules.shop_id = $shop_id AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
           $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
-            $chart_data .= "{ date:'".$row["payment_date"]."', daily_sales:".$row["daily_sales"]."}, ";
+            $chart_data .= "{ date:'".$row["payment_date"]."', count:".$row["count"].", daily_sales:".$row["daily_sales"]."}, ";
           }
 
 
-         if (!empty($date_start) && !empty($date_end)) {
 
 
-            $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' ORDER BY payments.payment_date") or die(mysqli_error($connection));
+  if (!empty($method_type)) {
 
-        $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' ") or die(mysqli_error($connection));
+
+
+             $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.method = '$method_type' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
+
+        $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.method = '$method_type' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
   
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
-        $total_results = mysqli_query($connection,"SELECT SUM(payments.amount_paid) as total FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' ") or die(mysqli_error($connection));
+        $total_results = mysqli_query($connection,"SELECT SUM(payments.amount_paid) as total FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.method = '$method_type' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
 
           $record2 = mysqli_fetch_array($total_results);
           $total_sales = $record2['total'];
 
-
                // Retrieve for chart
-          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales FROM payments,schedules WHERE schedules.shop_id = $shop_id AND schedules.schedule_id = payments.schedule_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' GROUP BY payment_date";
+          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales, COUNT(*) AS count FROM payments,schedules WHERE schedules.shop_id = $shop_id AND payments.method = '$method_type' AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
           $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
-            $chart_data .= "{ date:'".$row["payment_date"]."', daily_sales:".$row["daily_sales"]."}, ";
+           $chart_data .= "{ date:'".$row["payment_date"]."', count:".$row["count"].", daily_sales:".$row["daily_sales"]."}, ";
           }
-        
-         }
-      
+  }
+
+  if (!empty($date_start) && !empty($date_end)) {
+    
+             $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
+
+        $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
+  
+         $record = mysqli_fetch_array($count_results);
+         $count = $record['count'];
+
+        $total_results = mysqli_query($connection,"SELECT SUM(payments.amount_paid) as total FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
+
+          $record2 = mysqli_fetch_array($total_results);
+          $total_sales = $record2['total'];
+
+               // Retrieve for chart
+          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales, COUNT(*) AS count FROM payments,schedules WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
+          $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
+
+          $chart_data = '';
+          while ($row = mysqli_fetch_array($chart_results)) {
+           $chart_data .= "{ date:'".$row["payment_date"]."', count:".$row["count"].", daily_sales:".$row["daily_sales"]."}, ";
+          }
+  }
+
+  if (!empty($date_start) && !empty($date_end) && !empty($method_type)) {
+         $results = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND payments.method = '$method_type' AND '$date_end' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  ORDER BY payments.payment_date") or die(mysqli_error($connection));
+
+        $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND payments.method = '$method_type' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
+  
+         $record = mysqli_fetch_array($count_results);
+         $count = $record['count'];
+
+        $total_results = mysqli_query($connection,"SELECT SUM(payments.amount_paid) as total FROM payments,schedules,users WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND payments.method = '$method_type' AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id  AND users.user_id = schedules.user_id AND payments.schedule_id = schedules.schedule_id ") or die(mysqli_error($connection));
+
+          $record2 = mysqli_fetch_array($total_results);
+          $total_sales = $record2['total'];
+
+               // Retrieve for chart
+          $query = "SELECT payments.payment_date as payment_date, SUM(payments.amount_paid) AS daily_sales, COUNT(*) AS count FROM payments,schedules WHERE schedules.shop_id = $shop_id AND payments.payment_date BETWEEN '$date_start' AND '$date_end' AND payments.method = '$method_type' AND schedules.schedule_id = payments.schedule_id GROUP BY payment_date";
+          $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
+
+          $chart_data = '';
+          while ($row = mysqli_fetch_array($chart_results)) {
+           $chart_data .= "{ date:'".$row["payment_date"]."', count:".$row["count"].", daily_sales:".$row["daily_sales"]."}, ";
+          }
+  }
+
 
 
 
@@ -121,7 +172,7 @@
     if (isset($_POST['reset'])) {
       $date_start = '';
        $date_end = '';
-       $status = '';
+       $method_type = '';
     }
 
 
@@ -146,7 +197,7 @@
      <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
      <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
   </head>
-  <body id="shop_schedule_report">
+  <body id="shop_sales_report">
     
 
   <?php include '../includes/layouts/provider_header.php';?>
@@ -155,6 +206,7 @@
       <div class=" content container">
       
        <h1><?php echo $shop_name; ?> <small>Sales Report</small></h1>
+       <blockquote class="text-center">Daily Sales Chart</blockquote>
 
          <div class="row">
         <div class="col-sm-12">
@@ -170,7 +222,7 @@
          <form action="shop_sales_report.php?myshop=<?php echo $shop_id;?>" class="form-inline" method="POST">
 
 
-         <div class="col-sm-8">
+         <div class="col-sm-9">
 
           <div class="form-group">
         
@@ -181,8 +233,18 @@
 
              <input type="date" name="date_end" class="form-control" style="margin: 10px;" value="<?php echo $date_end;?>">  
              
+                 <select name="method_type" id="method_type" class="form-control" style="margin:10px;">
 
-                
+                <option value="">Choose Payment Type</option>
+                <option value="Cash">Cash</option>
+                <option value="PayPal">PayPal</option>
+               
+                </select>
+
+               <script type="text/javascript">
+                    document.getElementById('method_type').value = "<?php echo $method_type;?>";
+                  </script>
+
 
                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
                 <button type="submit" name="reset" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
@@ -199,7 +261,7 @@
          <div class="col-sm-12">
              
               <h4><strong>Users: <?php echo $count; ?></strong></h4>
-              <h4><strong>Total Sales: P <?php echo $total_sales; ?></strong></h4>
+              <h4><strong>Total Sales: P <?php if(!empty($total_sales)){echo $total_sales;} else { echo '0.00';} ?></strong></h4>
               <div class="table-responsive">
               <table class="table">
 
@@ -208,6 +270,7 @@
                     <th width="20%"> User</th>
                   <th width="20%">Schedule Date</th>
                   <th width="20%">Payment Date</th>
+                  <th width="20%">Payment Type</th>
                   <th width="20%">Amount Paid</th>
                   
                 </tr>
@@ -216,6 +279,7 @@
                           <td><?php echo $row['user_uid']; ?></td>
                       <td><?php echo $row['schedule_date']; ?></td>
                       <td><?php echo $row['payment_date']; ?></td>
+                      <td><?php echo $row['method']; ?></td>
                       <td>P <?php echo $row['amount_paid']; ?></td>
               
                  
@@ -251,9 +315,9 @@
 
           xkey: 'date',
 
-          ykeys: ['daily_sales'],
+          ykeys: ['count','daily_sales'],
 
-          labels: ['Daily sales'],
+          labels: ['User','Daily sales'],
 
           resize: true,
 

@@ -6,135 +6,128 @@
   
     $msg = '';
     $msgClass = '';
-    $shop_id = 0;
-    $service_id = 0;
-    $service_name = '';
-    $service_desc = '';
-    $service_cost = 0;
+    $user_id = 0;
+    $select_sub = 0;
+    $subscription_id = 0;
+    $select_method = '';
     $edit_state = false;
 
   if (isset($_POST['submit'])) {
-    
-    $shop_id = mysql_prep($_POST['shop_id']);
-     $service_id = mysql_prep($_POST['service_id']);
-     $service_name = mysql_prep($_POST['service_name']);
-     $service_desc = mysql_prep($_POST['service_desc']);
-     $service_cost = mysql_prep($_POST['service_cost']);
 
-     if (!empty( $shop_id ) && !empty($service_name) && !empty($service_desc) && !empty($service_cost) ) {
-       if ($service_cost > 0) {
+    $user_id = mysql_prep($_POST['user_id']);
+    $select_sub = mysql_prep($_POST['select_sub']);
+    $select_method = mysql_prep($_POST['select_method']);
+    date_default_timezone_set('Asia/Manila');
+    $date = date('Y-m-d H:i:s');
+    $sub_status = 1;
 
-              $sql = "SELECT * FROM shops WHERE shop_id = $shop_id";
-              $result = mysqli_query($connection, $sql);
-              $resultCheck = mysqli_num_rows($result);
-              if ($resultCheck) {
-                $query = "INSERT INTO services (shop_id, service_name, service_description, service_cost) VALUES ('$shop_id', '$service_name', '$service_desc', $service_cost)";
+    if (!empty($user_id) && !empty($select_sub) && !empty($select_method)) {
+      $query = "SELECT * FROM users WHERE user_id = $user_id";
+      $result = mysqli_query($connection, $query);
+      $resultCheck = mysqli_num_rows($result);
 
-               if (mysqli_query($connection, $query)) {
-                 $msg ="service added successfully";
-                 $msgClass ="alert-success";
-
-                    $shop_id = 0;
-                    $service_id = 0;
-                    $service_name = '';
-                    $service_desc = '';
-                    $service_cost = 0;
-               } else {
-                  $msg ="Failed to add service";
-                  $msgClass ="alert-danger";
-               }
-
-              } else {
-                 $msg ="Invalid shop";
-                  $msgClass ="alert-danger";
-              }
-
+      if ($resultCheck > 0) {
+          $query = "INSERT INTO subscriptions (user_id, sub_type_id, method, subscribe_date, subscribe_time) VALUES ($user_id, '$select_sub','$select_method', '$date', NOW() )";
+          mysqli_query($connection, $query) or die(mysqli_error($connection)); 
           
+           $query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
+          mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
-       } else {
-          $msg ="Invalid cost";
-         $msgClass ="alert-danger";
-       }
-     } else {
-         $msg ="Fill all fields";
-         $msgClass ="alert-danger";
-     }
+          $user_id = 0;
+          $select_sub = 0;
+          $subscription_id = 0;
+          $select_method = '';
+
+          $msg = 'Subscription added successfully';
+          $msgClass = 'alert-success';
+
+      } else {
+        $msg = 'Invalid user ID';
+        $msgClass = 'alert-danger';
+      }
+
+             
+    } else {
+      $msg = 'Fill all fields';
+      $msgClass = 'alert-danger';
+    }
+    
   
   }
 
    if (isset($_POST['update'])) {
-    
-    $shop_id = mysql_prep($_POST['shop_id']);
-     $service_id = mysql_prep($_POST['service_id']);
-     $service_name = mysql_prep($_POST['service_name']);
-     $service_desc = mysql_prep($_POST['service_desc']);
-     $service_cost = mysql_prep($_POST['service_cost']);
+    $subscription_id = mysql_prep($_POST['subscription_id']);
+    $user_id = mysql_prep($_POST['user_id']);
+    $select_sub = mysql_prep($_POST['select_sub']);
+    $select_method = mysql_prep($_POST['select_method']);
+    date_default_timezone_set('Asia/Manila');
+    $date = date('Y-m-d H:i:s');
+    if ($select_sub == 5 ) {
+      $sub_status = 0;
+    } else {
+       $sub_status = 1;
+    }
+   
 
-     if (!empty( $shop_id ) && !empty($service_name) && !empty($service_desc) && !empty($service_cost) ) {
-       if ($service_cost > 0) {
+    if (!empty($user_id) && !empty($select_sub) && !empty($select_method)) {
+      $query = "SELECT * FROM users WHERE user_id = $user_id";
+      $result = mysqli_query($connection, $query);
+      $resultCheck = mysqli_num_rows($result);
 
-              $sql = "SELECT * FROM shops WHERE shop_id = $shop_id";
-              $result = mysqli_query($connection, $sql);
-              $resultCheck = mysqli_num_rows($result);
-              if ($resultCheck) {
-                $query = "UPDATE services SET shop_id = $shop_id, service_name = '$service_name', service_description = '$service_desc', service_cost = $service_cost WHERE service_id = $service_id";
+      if ($resultCheck > 0) {
 
 
-               if (mysqli_query($connection, $query)) {
-                 $msg ="service updated successfully";
-                 $msgClass ="alert-success";
-
-                  $shop_id = 0;
-                  $service_id = 0;
-                  $service_name = '';
-                  $service_desc = '';
-                  $service_cost = 0;
-               } else {
-                  $msg ="Failed to update service";
-                  $msgClass ="alert-danger";
-               }
-
-              } else {
-                 $msg ="Invalid shop";
-                  $msgClass ="alert-danger";
-              }
+          $query = "UPDATE subscriptions SET user_id = $user_id, sub_type_id = $select_sub, method = '$select_method', subscribe_date = '$date', subscribe_time = NOW() WHERE subscription_id = $subscription_id";
+          mysqli_query($connection, $query) or die(mysqli_error($connection));
 
           
+           $query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
+          mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
-       } else {
-          $msg ="Invalid cost";
-         $msgClass ="alert-danger";
-       }
-     } else {
-         $msg ="Fill all fields";
-         $msgClass ="alert-danger";
-     }
+          $user_id = 0;
+          $select_sub = 0;
+          $subscription_id = 0;
+          $select_method = '';
+
+          $msg = 'Subscription updated successfully';
+          $msgClass = 'alert-success';
+
+      } else {
+        $msg = 'Invalid user ID';
+        $msgClass = 'alert-danger';
+      }
+
+             
+    } else {
+      $msg = 'Fill all fields';
+      $msgClass = 'alert-danger';
+    }
+
   
   }
 
      if (isset($_POST['clear'])) {
-        $shop_id = 0;
-        $service_id = 0;
-        $service_name = '';
-        $service_desc = '';
-        $service_cost = 0;
+          $user_id = 0;
+          $select_sub = 0;
+          $subscription_id = 0;
+          $select_method = '';
   }
   
   if (isset($_GET['edit'])) {
-    $service_id = $_GET['edit'];
+    $subscription_id = $_GET['edit'];
     $edit_state=true;
-    $rec = mysqli_query($connection,"SELECT * FROM services WHERE service_id = $service_id");
+    $rec = mysqli_query($connection,"SELECT * FROM subscriptions WHERE subscription_id = $subscription_id");
     $record = mysqli_fetch_array($rec);
-    $shop_id = $record['shop_id'];
-    $service_id = $record['service_id'];
-    $service_name = $record['service_name'];
-    $service_desc = $record['service_description'];
-    $service_cost = $record['service_cost'];
+    $subscription_id = $record['subscription_id'];
+    $user_id = $record['user_id'];
+    $select_sub = $record ['sub_type_id'];
+    $select_method = $record ['method'];
+
   }
 
   if (isset($_GET['del'])) {
-    $service_id = $_GET['del'];
-    mysqli_query($connection,"DELETE FROM services WHERE service_id = $service_id") or die(mysqli_error($connection)); 
+    $subscription_id = $_GET['del'];
+    mysqli_query($connection,"DELETE FROM subscriptions WHERE subscription_id = $subscription_id") or die(mysqli_error($connection)); 
    
      $msg ="service deleted successfully";
       $msgClass ="alert-success";
@@ -142,7 +135,10 @@
        
   }
    // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM services");
+  $results = mysqli_query($connection, "SELECT * FROM users, subscriptions, subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND users.user_id = subscriptions.user_id");
+
+  // Retrieve subscription plan
+  $sub_results = mysqli_query($connection, "SELECT * FROM subscription_types");
 ?>
 
 <!doctype html>
@@ -157,7 +153,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
   </head>
-  <body id="services_admin">
+  <body id="subscriptions_admin">
 
   
 
@@ -166,7 +162,7 @@
     
     
     <div class="content container">
-     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> Services</h2>
+     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> Subscriptions</h2>
     <div class="row">
 
       <div class="col-md-4">
@@ -178,39 +174,47 @@
 
          
        <form id="" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" >
-                  <input type="hidden" name="service_id" value="<?php echo $service_id;?>">
+                  <input type="hidden" name="subscription_id" value="<?php echo $subscription_id;?>">
                           <div class="form-group">
-                            <label for="user_id">Shop ID</label>
-                            <input type="number"  class="form-control" name="shop_id" value="<?php echo $shop_id;?>">
+                            <label for="user_id">User ID</label>
+                            <input type="number"  class="form-control" name="user_id" value="<?php echo $user_id;?>">
                         </div> 
+
+
                         <div class="form-group">
-                            <label for="service_name">Service Name</label>
-                            <input type="text" class="form-control" name="service_name" value="<?php echo $service_name;?>">
-                        </div> 
+                            <label for="select_sub">Subscription plan</label>
+                            <select name="select_sub" id="select_sub" class="form-control">
+                              <option value="0">Choose subscription plan</option>
+                              <?php while ($row = mysqli_fetch_array($sub_results)) { ?>
 
-                         <div class="form-group">
-                            <label for="service_desc">Service description</label>
-                             <textarea class="form-control" rows="5" id="service_desc" name="service_desc" ><?php echo $service_desc;?></textarea>
-                            
-                        </div> 
+                                   <option value="<?php echo $row['sub_type_id']; ?>"> <?php echo $row['sub_type'];?> </option>
 
-                          <div class="form-group">
-                            <label for="service_cost">Service Cost</label>
-                            <div class="input-group">
-                            
-                              <span class="input-group-addon">P</span>
+                              <?php } ?>
+                             
+                            </select>
 
-                            <input type="number" class="form-control" name="service_cost" value="<?php  echo $service_cost;?>">
-                            </div>
-                            
+                          <script type="text/javascript">
+                            document.getElementById('select_sub').value = "<?php echo $select_sub;?>";
+                             </script>
                         </div>
 
+                           <div class="form-group">
+                            <label for="select_method">Payment method</label>
+                            <select name="select_method" id="select_method" class="form-control">
+                              <option value="">Choose payment method</option>
+                              <option value="Cash">Cash</option>
+                               <option value="PayPal">PayPal</option>
+                            </select>
+                                 <script type="text/javascript">
+                            document.getElementById('select_method').value = "<?php echo $select_method;?>";
+                             </script>
+                        </div>  
                         
                         
                           <?php if($edit_state == false): ?>
-                            <button  type="submit" name="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Create Service</button> 
+                            <button  type="submit" name="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Submit</button> 
                           <?php else: ?>
-                            <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Service</button> 
+                            <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update </button> 
                           <?php endif ?>
 
 
@@ -228,21 +232,23 @@
                 <tr>
                  
 
-                <th width="10%">Shop ID</th>
-                <th width="10%">Service ID</th>
-                   <th width="10%">Service</th>
-                  <th width="10%">Cost</th>
-                  <th width="30%">Action</th>
+                <th width="10%">User ID</th>
+                <th width="10%">Subscription Plan</th>
+                   <th width="10%">Payment Method</th>
+                  <th width="10%">Subcription Date</th>
+                  <th width="10%">Subcription Status</th>
+                  <th width="20%">Action</th>
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
-                      <td><?php echo $row['shop_id']; ?></td>
-                      <td><?php echo $row['service_id']; ?></td>
-                      <td><?php echo $row['service_name']; ?></td>
-                      <td>P <?php echo $row['service_cost']; ?></td>
+                      <td><?php echo $row['user_id']; ?></td>
+                      <td><?php echo $row['sub_type']; ?></td>
+                      <td><?php echo $row['method']; ?></td>
+                      <td><?php echo $row['subscribe_date']; ?></td>
+                       <td><?php echo $row['sub_status']; ?></td>
                       <td>
             
-                      <a href="services_admin.php?edit=<?php echo $row['service_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                      <a href="subscriptions_admin.php?edit=<?php echo $row['subscription_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                       <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>
 
@@ -269,7 +275,7 @@
                            
                           </div>
                           <div class="modal-footer">
-                            <a href="services_admin.php?del=<?php echo $row['service_id']?>" class="btn btn-default" role="button"> Yes</a>
+                            <a href="subscriptions_admin.php?del=<?php echo $row['subscription_id']?>" class="btn btn-default" role="button"> Yes</a>
                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                           </div>
                         </div>
@@ -293,4 +299,4 @@
 
 
 
-    <?php include '../includes/layouts/footer.php';?>
+    <?php include '../includes/layouts/footer.php';?> 

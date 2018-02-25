@@ -187,7 +187,7 @@
      <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
   </head>
-  <body id="shop_schedule_report">
+  <body id="shop_schedules_report">
     
 
   <?php include '../includes/layouts/provider_header.php';?>
@@ -196,6 +196,7 @@
       <div class=" content container">
       
        <h1><?php echo $shop_name; ?> <small>Schedules Report</small></h1>
+      <blockquote class="text-center">Daily Users Chart</blockquote>
 
       <div class="row">
         <div class="col-sm-12">

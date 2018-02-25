@@ -24,6 +24,8 @@
       $uid = mysql_prep($_POST['uid']);
       $pwd = mysql_prep($_POST['pwd']);
       $selectUser = mysql_prep($_POST['selectUser']);
+      date_default_timezone_set('Asia/Manila');
+      $date = date('Y-m-d H:i:s');
 
       //Check Required Fields
       if (!empty($first) && !empty($last) && !empty($gender) && !empty($address) && !empty($email) && !empty($mobilenumber) && !empty($uid) && !empty($pwd) && !empty($selectUser) ) {
@@ -47,8 +49,8 @@
             if (preg_match('/^[0-9]{4}-[0-9]{3}-[0-9]{4}$/', $mobilenumber)) {
 
               //Insert the user into the database
-            $sql = "INSERT INTO users (user_first, user_last, user_gender, user_address, user_email, user_mobile, user_uid, user_pwd, user_type) VALUES ('$first', '$last', '$gender', '$address', '$email', '$mobilenumber', '$uid', '$pwd', '$selectUser')";
-            mysqli_query($connection,$sql);
+            $sql = "INSERT INTO users (user_first, user_last, user_gender, user_address, user_email, user_mobile, user_uid, user_pwd, user_type, date_registered) VALUES ('$first', '$last', '$gender', '$address', '$email', '$mobilenumber', '$uid', '$pwd', '$selectUser','$date')";
+            mysqli_query($connection,$sql) or die(mysqli_error($connection));
               $msg= 'You have succesfully registered.';
               $msgClass='alert-success';
              $_POST=array();  

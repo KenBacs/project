@@ -38,11 +38,10 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-stats"></span> Reports
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Admin Report</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> User Report</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Shop Report</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Service Report</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-stats"></span> Subscription Report</a></li>
+                    <li><a href="admin_report.php"><span class="glyphicon glyphicon-stats"></span> Admin Report</a></li>
+                    <li><a href="user_report.php"><span class="glyphicon glyphicon-stats"></span> User Report</a></li>
+                    <li><a href="shop_report.php"><span class="glyphicon glyphicon-stats"></span> Shop Report</a></li>
+                    <li><a href="subscription_report.php"><span class="glyphicon glyphicon-stats"></span> Subscription Report</a></li>
 
                 </ul>
         </li>

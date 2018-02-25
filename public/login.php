@@ -73,7 +73,10 @@
             $_SESSION['u_timestamp'] = $row['user_timestamp'];
             $_SESSION['u_substatus']= $row['sub_status'];
             $_POST=array();
-            redirect_to("../public/browse_shops.php?");
+          
+              redirect_to("../public/profile.php");
+            
+            
 
           } else {
              $msg= 'Wrong password';
