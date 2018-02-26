@@ -5,35 +5,41 @@
   
     $msg = '';
     $msgClass = '';
+   $keywords = '';
+    $selectCategory = 0;
 
-  if (isset($_GET['keywords']) ) {
-    $keywords = mysql_prep($_GET['keywords']);
-    $selectCategory = mysql_prep($_GET['selectCategory']);
+    // Retrieve records
+     $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id") or die(mysqli_error($connection));
+
+    // Retrive records if button is clicked
+  if (isset($_POST['search']) ) {
+    $keywords = mysql_prep($_POST['keywords']);
+    $selectCategory = mysql_prep($_POST['selectCategory']);
+
+       $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id") or die(mysqli_error($connection));
 
 
-    if ($keywords =="" && $selectCategory == "") {
-       $query = "SELECT * FROM shops WHERE shop_name LIKE '%{$keywords}%' OR shop_category LIKE '%{$keywords}%' ";
-        $results = mysqli_query($connection,$query);
-    } else if ($keywords =="" && $selectCategory != "") {
-       $query = "SELECT * FROM shops WHERE shop_category LIKE '%{$selectCategory}%' ";
-      $results = mysqli_query($connection,$query);
-    } else if ($keywords !="" && $selectCategory == "") {
-       $query = "SELECT * FROM shops WHERE shop_name LIKE '%{$keywords}%' OR shop_category LIKE '%{$keywords}%' ";
-      $results = mysqli_query($connection,$query);
-    } else if ($keywords !="" && $selectCategory!="") {
-      $query = "SELECT * FROM shops WHERE shop_name LIKE '%{$keywords}%' AND shop_category LIKE '%{$selectCategory}%'";
-       $results = mysqli_query($connection,$query);
-    }
+      if (!empty($keywords)) {
+          $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%'   AND shops.shop_cat_id = shop_categories.shop_cat_id ";
+           $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
+      }  elseif (!empty($selectCategory)) {
+         $query = "SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id ";
+          $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
+      } elseif (!empty($keywords) && !empty($selectCategory)) {
+        $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%' AND shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id ";
+          $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
+      }
     
-  }   
-  
-   else {
-      $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id");
-
+    
+  } 
+  if (isset($_POST['refresh'])) {
+     $keywords = '';
+      $selectCategory = 0;
   }
 
+
   //Retrieve shop categories
-  $category_results = mysqli_query($connection, "SELECT  * FROM shop_categories");
+  $category_results = mysqli_query($connection, "SELECT * FROM shop_categories") or die(mysqli_error($connection));
 
 ?>
 
@@ -62,18 +68,20 @@
           <div class="col-sm-4"><h3>Search Shop</h3></div>
         </div>
         <div class="row">
-          <form action="browse_shops.php" method="GET">
-          <div class="col-sm-6 col-sm-offset-2">
+          <form action="browse_shops.php" method="POST">
+          <div class="col-sm-4 col-sm-offset-2">
                 <div class="form-group">
-                  <input type="text" class="form-control" name="keywords" autocomplete="off" placeholder="Search Shop">
-                 
+                  <input type="text" class="form-control" name="keywords" autocomplete="off" placeholder="Search Shop" value="<?php echo $keywords;?>">
+
                 </div>
-              
-            <div class="form-group form-inline">
-                      <label for="selectCategory">Category:</label>
+                <div class="row">
+                   <div class="col-sm-6 col-sm-offset-6">
+                    
+                        <div class="form-group ">
+                  
                             <select class="form-control" name="selectCategory" id="selectCategory" >
                             
-                            <option value="">Choose Category</option>
+                            <option value="0">Choose Category</option>
                             <?php while ($row = mysqli_fetch_array($category_results)) { ?>
                             
                            <option value="<?php echo $row['shop_cat_id'];?>"><?php echo $row['shop_category'];?></option>
@@ -81,15 +89,35 @@
                            <?php } ?>
                             
                           </select>
+
+                          <script type="text/javascript">
+                            document.getElementById('selectCategory').value = "<?php echo $selectCategory;?>";
+                          </script>
+                          
                 </div>
-       
+
+                </div>
+               
+
+                </div>
+
+            
+              
+
                         
                
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm-4">
               <div class="form-group">
-                 <input type="submit" class="btn btn-success btn-lg" value="Search">
+                 <button type="submit" name="search" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-search"></span> Search</button>
+                  <button type="submit" name="refresh" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
               </div>
+
+              <!-- <div class="row">
+                <div class="col-sm-2">
+                
+                </div>
+              </div> -->
           </div>
           <div></div>
 
@@ -104,7 +132,12 @@
   </div>
 
   <div class=" container">
-        <h1><?php echo $msg;?></h1>
+        <!-- <h1><?php echo $msg;?></h1> -->
+        <div style="margin-bottom: 10px;">
+              <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>
+        </div>
+   
+
         <div class="row">
           
           <?php while ($row = mysqli_fetch_array($results)) { ?>

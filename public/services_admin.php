@@ -181,7 +181,7 @@
                   <input type="hidden" name="service_id" value="<?php echo $service_id;?>">
                           <div class="form-group">
                             <label for="user_id">Shop ID</label>
-                            <input type="number"  class="form-control" name="shop_id" value="<?php echo $shop_id;?>">
+                            <input type="number"  class="form-control" name="shop_id" value="<?php echo $shop_id;?>" autofocus>
                         </div> 
                         <div class="form-group">
                             <label for="service_name">Service Name</label>
@@ -221,7 +221,7 @@
 
       
         <div class="col-md-8">
-            
+          <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>
           <div class="table-responsive"  >
               <table class="table">
 

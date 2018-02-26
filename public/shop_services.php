@@ -181,10 +181,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-      <script src="javascripts/jquery-3.2.1.min.js"></script>
+      
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+    <!-- JQUERY -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
   <body id="shop_services">
 
@@ -211,7 +213,7 @@
                        
                         <div class="form-group">
                             <label for="service_name">Service Name</label>
-                            <input type="text" class="form-control" name="service_name" value="<?php echo $service_name;?>">
+                            <input type="text" class="form-control" name="service_name" id="service_name" value="<?php echo $service_name;?>" autofocus>
                         </div> 
 
                          <div class="form-group">
@@ -246,7 +248,7 @@
 
       
         <div class="col-md-8">
-            
+           <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>    
           <div class="table-responsive"  >
 
               <?php   $resultCheck = mysqli_num_rows($results);
@@ -326,6 +328,15 @@
               
     </div> 
 
+        <script type="text/javascript">
+      $(document).ready(function(){
+          $("#OK").click(function(){
+              $("#service_name").focus();
+          });  
+       
+    });
+    </script>
+
       <!-- Modal -->
   <div class="modal fade" id="noservice" role="dialog">
     <div class="modal-dialog">
@@ -334,16 +345,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" >No services! <span class="glyphicon glyphicon-warning-sign" style="color: yellow;"></span></h4>
+          <h4 class="modal-title" ><span class="glyphicon glyphicon-floppy-remove"></span></span> Oops! You don't have any services yet!</span></h4>
         </div>
         <div class="modal-body">
        
             <div class="alert alert-info">
-        <strong>Info!</strong> service is essential, so the customers can set schedule to your shop
+        <strong>Info!</strong> service is essential, so the customers can set schedule to your shop.
          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          <button type="button" id="OK" class="btn btn-primary" data-dismiss="modal">OK</button>
         </div>
       </div>
       

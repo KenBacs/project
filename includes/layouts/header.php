@@ -32,7 +32,7 @@
           ?>
           <form class="navbar-form" action="shop_profile.php" method="GET">
             <div class="form-group">
-              <input type="text"  name="search" class="form-control" placeholder="Search Shop">
+            <input type="text"  name="search" class="form-control" placeholder="Search Shop">
             </div>
             <button type="submit" name="search_btn" class="btn btn-primary">Go</button>
 

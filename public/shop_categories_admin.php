@@ -135,7 +135,7 @@
                         <input type="hidden" name="category_id" value="<?php echo $category_id;?>">
                         <div class="form-group">
                             <label for="category">Shop Category</label>
-                            <input type="text" class="form-control" name="category" value="<?php echo $category;?>">
+                            <input type="text" class="form-control" name="category" value="<?php echo $category;?>" autofocus>
                         </div>  
 
                         <div class="form-group">
@@ -159,7 +159,7 @@
 
       
         <div class="col-md-8">
-            
+            <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>
           <div class="table-responsive"  >
               <table class="table">
 

@@ -251,8 +251,7 @@
       $msgClass ="alert-success";
        
   }
-   // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+  
 
   if (isset($_GET['check'])) {
     // Retrive service records
@@ -267,7 +266,8 @@
     }
   }
 
-
+ // Retrieve records
+  $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
 
   // Retrieve categories
 
@@ -293,6 +293,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+       <!-- JQUERY -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+
   </head>
   <body id="my_shops">
 
@@ -320,7 +324,17 @@
      <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
 
 
-             
+              <?php   $resultCheck = mysqli_num_rows($results);
+                        if ($resultCheck < 1): ?>
+                    <script type="text/javascript">
+
+                      $(function() { $("#noshops").modal('show'); });
+
+                    </script>
+
+              <?php endif ?>  
+
+
     
     <div class="row">
 
@@ -337,7 +351,7 @@
                   
                         <div class="form-group">
                             <label for="shop_name">Shop name</label>
-                            <input type="text" class="form-control" name="shop_name" value="<?php echo $shop_name;?>">
+                            <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php echo $shop_name;?>" autofocus>
                         </div> 
 
                          <div class="form-group">
@@ -445,7 +459,8 @@
 
       
         <div class="col-md-8">
-            
+
+          <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>    
           <div class="table-responsive"  >
               <table class="table">
 
@@ -529,6 +544,39 @@
           </div>
         </div>
     <?php endif ?>  
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $("#OK").click(function(){
+              $("#shop_name").focus();
+          });  
+       
+    });
+    </script>
+
+     <!-- Modal -->
+  <div class="modal fade" id="noshops" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" ><span class="glyphicon glyphicon-floppy-remove"></span></span> Oops! You don't have any shops yet! </h4>
+        </div>
+        <div class="modal-body">
+       
+            <div class="alert alert-info">
+        <strong>Info!</strong> Create a shop now!
+         </div>
+        </div>
+        <div class="modal-footer">
+          <button id="OK" class="btn btn-primary" data-dismiss="modal" >OK</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 
 

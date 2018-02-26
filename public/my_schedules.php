@@ -53,6 +53,7 @@
       <h1 class="text-center"><span class="glyphicon glyphicon-calendar"></span> My Schedules</h1>
       <div class="row">
         <div class="col-sm-12">
+        <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong> 
          <?php if($msg !=''): ?>
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
           <?php endif;?>

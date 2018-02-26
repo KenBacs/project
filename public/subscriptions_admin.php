@@ -177,7 +177,7 @@
                   <input type="hidden" name="subscription_id" value="<?php echo $subscription_id;?>">
                           <div class="form-group">
                             <label for="user_id">User ID</label>
-                            <input type="number"  class="form-control" name="user_id" value="<?php echo $user_id;?>">
+                            <input type="number"  class="form-control" name="user_id" value="<?php echo $user_id;?>" autofocus>
                         </div> 
 
 
@@ -225,7 +225,7 @@
 
       
         <div class="col-md-8">
-            
+          <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>
           <div class="table-responsive"  >
               <table class="table">
 
