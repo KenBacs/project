@@ -146,8 +146,9 @@
 
 
   if (isset($_GET['del'])) {
-    $service_id = $_GET['del'];
-    mysqli_query($connection,"DELETE FROM services WHERE service_id = $service_id") or die(mysqli_error($connection)); 
+    $service_id = mysql_prep($_GET['del']);
+    $service_status = 0;
+    mysqli_query($connection,"UPDATE services SET service_status = $service_status WHERE shop_id = $shop_id AND service_id = $service_id") or die(mysqli_error($connection)); 
    
      $msg ="service deleted successfully";
       $msgClass ="alert-success";
@@ -165,17 +166,20 @@
     $keywords = '';
   }
 
+    //Retrieve for search service
+    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_status = 1");
+
 
    // Retrieve records
-   $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+   $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_status = 1");
 
   if (isset($_POST['search'])) {
       $keywords = $_POST['keywords'];
 
-      $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id") or die(mysqli_error($connection));
+      $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_status = 1") or die(mysqli_error($connection));
 
       if (!empty($keywords)) {
-        $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_name LIKE '%{$keywords}%' ") or die(mysqli_error($connection));
+        $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_name LIKE '%{$keywords}%' AND service_status = 1 ") or die(mysqli_error($connection));
       }
   }
 
@@ -269,11 +273,19 @@
           <div class="col-sm-12">
             <form action="shop_services.php?myshop=<?php echo $shop_id;?>" method="POST" class="form-inline  pull-right">
               <div class="form-group">
-                <input type="text" name="keywords" class="form-control" placeholder="Search service" style="margin:10px;" value="<?php echo $keywords;?>">
+                <input type="text" name="keywords" class="form-control" placeholder="Search Service" style="margin:10px;" value="<?php echo $keywords;?>" autocomplete="off" list = "datalist1">
+                <datalist id="datalist1">
+
+                  <?php while ($row = mysqli_fetch_array($service_results)) { ?>
+                        <option value="<?php echo $row['service_name'];?>">
+                  <?php } ?>
+ 
+              
+                </datalist>
 
                  <button type="submit" class="btn btn-primary" name="search">Search</button>
-                 <button type="submit" class="btn btn-primary" name="reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 
+                  <button type="submit" class="btn btn-primary" name="reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 
               </div>
             </form>
@@ -313,39 +325,11 @@
                       <td>
             
                       <a href="shop_services.php?myshop=<?php echo $shop_id;?>&edit=<?php echo $row['service_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                      <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                      <a href="shop_services.php?myshop=<?php echo $shop_id;?>&del=<?php echo $row['service_id']?>"  class="btn btn-danger" role="button" onclick="return confirm('Are you sure you want to delete this service?');" ><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>
 
                   </tr>
 
-                                        <!-- Modal -->
-                    <div id="myModal" class="modal fade" role="dialog">
-                      <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Delete shop</h4>
-                          </div>
-                          <div class="modal-body">
-                          <ul class="list-inline">
-                            <li>
-                               <h1><span class="glyphicon glyphicon-remove" style="color: red;"></span> </h1>
-                            </li>
-                            <li> <h5>Are you sure you want to delete this shop?</h5> </li>
-                          </ul>
-                           
-                           
-                          </div>
-                          <div class="modal-footer">
-                            <a href="shop_services.php?myshop=<?php echo $shop_id;?>&del=<?php echo $row['service_id']?>" class="btn btn-default" role="button"> Yes</a>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
                        
                   <?php } ?>
               </table>

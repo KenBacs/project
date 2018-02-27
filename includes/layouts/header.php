@@ -29,7 +29,7 @@
               if (isset($_POST['search_btn'])) {
                   $shop_keywords = $_POST['shop_keywords'];
              
-                    $search_results = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name = '$shop_keywords' ");
+                    $search_results = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name = '$shop_keywords' AND shop_status = 1 ");
                       $record2 = mysqli_fetch_array($search_results);       
                       $resultCheck=mysqli_num_rows($search_results);
                       if (!$resultCheck < 1) {
@@ -93,7 +93,7 @@
               if (isset($_POST['search_btn'])) {
                   $shop_keywords = $_POST['shop_keywords'];
              
-                    $search_results = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name = '$shop_keywords' ");
+                    $search_results = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name = '$shop_keywords' AND shop_status = 1 ");
                       $record2 = mysqli_fetch_array($search_results);       
                       $resultCheck=mysqli_num_rows($search_results);
                       if (!$resultCheck < 1) {

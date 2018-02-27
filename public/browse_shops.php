@@ -12,26 +12,26 @@
        $shop_keywords = '';
 
     // Retrieve records
-     $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id") or die(mysqli_error($connection));
+     $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id AND shop_status = 1 ") or die(mysqli_error($connection));
 
     // Retrive records if button is clicked
   if (isset($_POST['search']) ) {
     $keywords = mysql_prep($_POST['keywords']);
     $selectCategory = mysql_prep($_POST['selectCategory']);
 
-       $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id") or die(mysqli_error($connection));
+       $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id AND shop_status = 1") or die(mysqli_error($connection));
 
 
       if (!empty($keywords)) {
-          $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%'   AND shops.shop_cat_id = shop_categories.shop_cat_id ";
+          $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%'   AND shops.shop_cat_id = shop_categories.shop_cat_id AND shop_status = 1";
            $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
       } 
       if (!empty($selectCategory)) {
-         $query = "SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id ";
+         $query = "SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id AND shop_status = 1";
           $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
       } 
       if (!empty($keywords) && !empty($selectCategory)) {
-        $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%' AND shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id ";
+        $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%' AND shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id AND shop_status = 1";
           $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
       }
     
@@ -52,11 +52,11 @@
   $shops_results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
 
   // Retrieve all shops
-  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops WHERE shop_status = 1");
 
 
   // Retrieve all shops
-  $shop_all2 = mysqli_query($connection, "SELECT * FROM shops ");
+  $shop_all2 = mysqli_query($connection, "SELECT * FROM shops WHERE shop_status = 1");
 
 
 ?>

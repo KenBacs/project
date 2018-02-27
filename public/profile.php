@@ -70,13 +70,9 @@
   }
 
 
- // Retrieve shops for search
-
-  $shops_results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
-
   
   // Retrieve all shops
-  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops WHERE shop_status = 1 ");
 ?>
 
 <!doctype html>

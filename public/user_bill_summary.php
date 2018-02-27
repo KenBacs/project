@@ -78,7 +78,7 @@
   $total_amount = $total['total'];
 
     // Retrieve all shops
-  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops WHERE shop_status = 1");
           
 ?>
 
