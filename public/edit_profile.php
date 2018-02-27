@@ -16,6 +16,9 @@
     $mobilenumber = '';
     $uid = '';
     $pwd = '';
+    
+    //Quick search variable
+       $shop_keywords = '';
 
 
 
@@ -114,6 +117,10 @@
 
        redirect_to("index.php?accountdeletion=success");
   }
+
+  
+  // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
  ?>
 
 

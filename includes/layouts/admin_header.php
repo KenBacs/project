@@ -42,6 +42,7 @@
                     <li><a href="user_report.php"><span class="glyphicon glyphicon-stats"></span> User Report</a></li>
                     <li><a href="shop_report.php"><span class="glyphicon glyphicon-stats"></span> Shop Report</a></li>
                     <li><a href="subscription_report.php"><span class="glyphicon glyphicon-stats"></span> Subscription Report</a></li>
+                     <li><a href="schedules_report.php"><span class="glyphicon glyphicon-stats"></span> Schedule Report</a></li>
 
                 </ul>
         </li>

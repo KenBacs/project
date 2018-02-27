@@ -6,6 +6,8 @@
   include_once '../includes/db_connection.php';
 
  
+    //Quick search variable
+       $shop_keywords = '';
 
   if (isset($_POST['upload'])) {
 
@@ -66,6 +68,15 @@
 
  
   }
+
+
+ // Retrieve shops for search
+
+  $shops_results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+  
+  // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
 ?>
 
 <!doctype html>

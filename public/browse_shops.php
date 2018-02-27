@@ -8,6 +8,9 @@
    $keywords = '';
     $selectCategory = 0;
 
+    //Quick search variable
+       $shop_keywords = '';
+
     // Retrieve records
      $results = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = shop_categories.shop_cat_id") or die(mysqli_error($connection));
 
@@ -22,10 +25,12 @@
       if (!empty($keywords)) {
           $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%'   AND shops.shop_cat_id = shop_categories.shop_cat_id ";
            $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
-      }  elseif (!empty($selectCategory)) {
+      } 
+      if (!empty($selectCategory)) {
          $query = "SELECT * FROM shops,shop_categories WHERE shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id ";
           $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
-      } elseif (!empty($keywords) && !empty($selectCategory)) {
+      } 
+      if (!empty($keywords) && !empty($selectCategory)) {
         $query = "SELECT * FROM shops,shop_categories WHERE shop_name LIKE '%{$keywords}%' AND shops.shop_cat_id = $selectCategory AND shops.shop_cat_id = shop_categories.shop_cat_id ";
           $results = mysqli_query($connection,$query) or die(mysqli_error($connection));
       }
@@ -41,6 +46,19 @@
   //Retrieve shop categories
   $category_results = mysqli_query($connection, "SELECT * FROM shop_categories") or die(mysqli_error($connection));
 
+
+ // Retrieve shops for search
+
+  $shops_results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+  // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
+
+
+  // Retrieve all shops
+  $shop_all2 = mysqli_query($connection, "SELECT * FROM shops ");
+
+
 ?>
 
 <!doctype html>
@@ -54,6 +72,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+    <!-- jquery -->
+     <script src="javascripts/jquery-3.2.1.min.js"></script>
+
   </head>
   <body id="browse_shops">
     
@@ -71,9 +93,19 @@
           <form action="browse_shops.php" method="POST">
           <div class="col-sm-4 col-sm-offset-2">
                 <div class="form-group">
-                  <input type="text" class="form-control" name="keywords" autocomplete="off" placeholder="Search Shop" value="<?php echo $keywords;?>">
+                   <input type="text" name="keywords" class="form-control" placeholder="Search shop" style="margin:10px;" value="<?php echo $keywords;?>" autocomplete="off" list = "datalist1">
+                <datalist id="datalist1">
+
+                  <?php while ($row = mysqli_fetch_array($shop_all2)) { ?>
+                        <option value="<?php echo $row['shop_name'];?>">
+                  <?php } ?>
+ 
+              
+                </datalist>
+
 
                 </div>
+
                 <div class="row">
                    <div class="col-sm-6 col-sm-offset-6">
                     
@@ -109,7 +141,9 @@
           </div>
           <div class="col-sm-4">
               <div class="form-group">
-                 <button type="submit" name="search" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-search"></span> Search</button>
+                 <button type="submit" name="search" class="btn btn-success btn-lg" ><span class="glyphicon glyphicon-search"></span> Search</button>
+
+          
                   <button type="submit" name="refresh" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
               </div>
 

@@ -16,6 +16,8 @@
     $time_end = '';
     $shop_category = 0;
     $edit_state = false;
+    $date_start = '';
+    $date_end = '';
 
     if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
@@ -82,6 +84,45 @@
 
    $results = mysqli_query($connection,"SELECT * FROM users,schedules, services WHERE schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
 
+   if (isset($_POST['submit'])) {
+        $date_start = $_POST['date_start'];
+        $date_end =$_POST['date_end'];
+        $status = $_POST['status'];
+        $service = $_POST['service'];
+
+        $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+
+        if (!empty($status)) {
+          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.status = '$status' AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        }
+        if (!empty($service)) {
+          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE services.service_id = $service AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        }
+         if (!empty($status) && !empty($service)) {
+          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.status = '$status' AND services.service_id = $service AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        }
+        if (!empty($date_start) && !empty($date_end)) {
+          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        } 
+        if (!empty($date_start) && !empty($date_end) && !empty($status)) {
+
+           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$status'  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        }
+          if (!empty($date_start) && !empty($date_end) && !empty($service)) {
+
+           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND services.service_id = $service  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        }
+           if (!empty($date_start) && !empty($date_end) && !empty($status) && !empty($service)) {
+
+           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$status' AND services.service_id = $service  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        }
+
+   }
+
+   //Retrieve services
+
+   $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+
 
 ?>
 
@@ -104,10 +145,61 @@
 
 
       <div class=" content container">
-      <h1 class="text-center"><span class="glyphicon glyphicon-calendar"></span> <?php echo $shop_name;?> <small>Schedules</small> </h1>
+      <h1 class="text-center"><span class="glyphicon glyphicon-calendar"></span> <?php echo $shop_name;?> <small>Schedules</small> </h1><br/>
+           <div class="row">
+        <div class="col-sm-12">
+          <form action="shop_schedules.php?myshop=<?php echo $shop_id; ?>" class="form-inline" method="POST" >
+            <div class="form-group">
+               <input type="date" class="form-control" name="date_start" id="date_start" value="<?php echo $date_start;?>">
+               <label> <p>to</p> </label>
+               <input type="date" class="form-control" name="date_end" id="date_end" value="<?php echo $date_end;?>">
+
+                <select name="status" id="status" class="form-control">
+
+                <option value="">Select Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Declined">Declined</option>
+                <option value="Done">Done</option>
+                <option value="Ready to Claim">Ready to Claim</option>
+                 <option value="Claimed">Claimed</option>
+
+                </select>
+
+                <script type="text/javascript">
+                    document.getElementById('status').value = "<?php echo $status;?>";
+                  </script>
+
+               <select name="service" id="service" class="form-control">
+
+                <option value="">Select Service</option>
+                <?php while ($row = mysqli_fetch_array($service_results)) { ?>
+                   <option value="<?php echo $row['service_id'];?>"><?php echo $row['service_name'];?></option>
+                <?php } ?>
+               
+              
+
+                </select>
+
+                <script type="text/javascript">
+                    document.getElementById('service').value = "<?php echo $service;?>";
+                  </script>
+
+               <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" name="reset" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+            </div>
+          
+          </form>
+        </div>
+      </div>
+      <br/>
+
        <div class="row">
            <div class="col-sm-12">
-            <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>    
+           <div>
+             <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong> 
+           </div>
+               <br/>
                 <div class="table-responsive"  >
               <table class="table">
 

@@ -13,6 +13,7 @@
     $service_desc = '';
     $service_cost = 0;
     $edit_state = false;
+    $keywords = ''; 
 
     if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
@@ -160,13 +161,28 @@
     $service_cost = 0;
   }
 
+    if (isset($_POST['reset'])) {
+    $keywords = '';
+  }
+
+
+   // Retrieve records
+   $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+
+  if (isset($_POST['search'])) {
+      $keywords = $_POST['keywords'];
+
+      $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id") or die(mysqli_error($connection));
+
+      if (!empty($keywords)) {
+        $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_name LIKE '%{$keywords}%' ") or die(mysqli_error($connection));
+      }
+  }
 
 
  
 
 
-   // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
 
   
 ?>
@@ -241,25 +257,42 @@
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Service</button> 
                           <?php endif ?>
 
-                          <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> Clear fields</button> 
+                          <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> Clear Fields</button> 
 
                       </form>
       </div>  
 
       
         <div class="col-md-8">
+
+        <div class="row">
+          <div class="col-sm-12">
+            <form action="shop_services.php?myshop=<?php echo $shop_id;?>" method="POST" class="form-inline  pull-right">
+              <div class="form-group">
+                <input type="text" name="keywords" class="form-control" placeholder="Search service" style="margin:10px;" value="<?php echo $keywords;?>">
+
+                 <button type="submit" class="btn btn-primary" name="search">Search</button>
+                 <button type="submit" class="btn btn-primary" name="reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+
+
+              </div>
+            </form>
+            
+          </div>
+        </div>
            <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>    
           <div class="table-responsive"  >
+              <?php if(!isset($_POST['search'])) :?>
+                <?php   $resultCheck = mysqli_num_rows($results);
+                          if ($resultCheck < 1): ?>
+                      <script type="text/javascript">
 
-              <?php   $resultCheck = mysqli_num_rows($results);
-                        if ($resultCheck < 1): ?>
-                    <script type="text/javascript">
+                        $(function() { $("#noservice").modal('show'); });
 
-                      $(function() { $("#noservice").modal('show'); });
+                      </script>
 
-                    </script>
-
-              <?php endif ?>         
+                <?php endif ?> 
+              <?php endif ?>        
               <table class="table">
 
                 <tr>

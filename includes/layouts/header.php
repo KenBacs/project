@@ -1,6 +1,4 @@
-
-
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsemenu" aria-expanded="false">
@@ -25,18 +23,59 @@
         <li><a href="my_schedules.php"><span class="glyphicon glyphicon-calendar"></span> My Schedules</a></li>
         <li><a href="browse_shops.php"></span> Browse Shops</a></li>
         <li>
-          <?php 
-            if (isset($_GET['search'])) {
-              
-            }
+              <?php
+
+
+              if (isset($_POST['search_btn'])) {
+                  $shop_keywords = $_POST['shop_keywords'];
+             
+                    $search_results = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name = '$shop_keywords' ");
+                      $record2 = mysqli_fetch_array($search_results);       
+                      $resultCheck=mysqli_num_rows($search_results);
+                      if (!$resultCheck < 1) {
+                         $shop_id = $record2['shop_id'];
+                        redirect_to("shop_profile?view=".$shop_id);
+                      } 
+                  
+              }
+
+        /*    if (isset($_POST['search_btn'])) {
+                   $keywords = $_POST['shop_keywords'];
+
+              if (!empty($keywords)) {
+                $search = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name LIKE '%{$shop_keywords}%' ") or die(mysqli_error($connection));
+                $record = mysqli_fetch_array($search);
+                $resultCheck=mysqli_num_rows($results);
+                if (!$resultCheck < 1) {
+                  $shop_id = $record['shop_id'];
+                  redirect_to("shop_profile?view=".$shop_id);
+                } 
+               }
+            }*/
           ?>
-          <form class="navbar-form" action="shop_profile.php" method="GET">
+         
+          <form class="navbar-form" action="#" method="POST">
             <div class="form-group">
-            <input type="text"  name="search" class="form-control" placeholder="Search Shop">
+
+         
+              <input type="text"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3">
+
+
+                  <datalist id="datalist3">
+
+                  <?php while ($row = mysqli_fetch_array($shop_all)) { ?>
+                       <!-- <img src="images/<?php echo $row['shop_image'];?>" class="img-rounded"> -->
+                   <option  value="<?php echo $row['shop_name'];?>">
+                  <?php } ?>
+  
+              
+                </datalist>
+              
             </div>
-            <button type="submit" name="search_btn" class="btn btn-primary">Go</button>
+           <button type="submit" name="search_btn" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> </button>
 
           </form>
+    
         </li>
 
         </ul>
@@ -48,13 +87,58 @@
            <li><a href="my_schedules.php"><span class="glyphicon glyphicon-calendar"></span> My Schedules</a></li>
           <li><a href="browse_shops.php"></span> Browse Shops</a></li>
           <li>
-            <form class="navbar-form" action="../includes/logout.inc.php" method="post">
-              <div class="form-group">
-                <input type="text"  name="search_shop" class="form-control" placeholder="Search Shop">
-              </div>
-              <button type="submit" name="search_btn" class="btn btn-primary">Go</button>
+           <?php
 
-            </form>
+
+              if (isset($_POST['search_btn'])) {
+                  $shop_keywords = $_POST['shop_keywords'];
+             
+                    $search_results = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name = '$shop_keywords' ");
+                      $record2 = mysqli_fetch_array($search_results);       
+                      $resultCheck=mysqli_num_rows($search_results);
+                      if (!$resultCheck < 1) {
+                         $shop_id = $record2['shop_id'];
+                        redirect_to("shop_profile?view=".$shop_id);
+                      } 
+                  
+              }
+
+        /*    if (isset($_POST['search_btn'])) {
+                   $keywords = $_POST['shop_keywords'];
+
+              if (!empty($keywords)) {
+                $search = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name LIKE '%{$shop_keywords}%' ") or die(mysqli_error($connection));
+                $record = mysqli_fetch_array($search);
+                $resultCheck=mysqli_num_rows($results);
+                if (!$resultCheck < 1) {
+                  $shop_id = $record['shop_id'];
+                  redirect_to("shop_profile?view=".$shop_id);
+                } 
+               }
+            }*/
+          ?>
+              <form class="navbar-form" action="#" method="POST">
+            <div class="form-group">
+
+         
+              <input type="text"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3">
+
+
+                  <datalist id="datalist3">
+
+                  <?php while ($row = mysqli_fetch_array($shop_all)) { ?>
+                       <!-- <img src="images/<?php echo $row['shop_image'];?>" class="img-rounded"> -->
+                   <option  value="<?php echo $row['shop_name'];?>">
+                  <?php } ?>
+  
+              
+                </datalist>
+              
+            </div>
+           <button type="submit" name="search_btn" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> </button>
+
+          </form>
+         
           </li>
 
           </ul>
@@ -95,6 +179,8 @@
 
     </div>
   </nav>
+
+ 
 
  
 

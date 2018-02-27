@@ -18,7 +18,10 @@
 
         <ul class="nav navbar-nav"> 
         <li>
-          <a  href="my_shops.php"><span class="glyphicon glyphicon-backward"> </span> Back to My Shop</a>
+        <form class="navbar-form">
+           <a  href="my_shops.php" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-backward"> </span> Back to My Shop</a>
+        </form>
+         
         </li>
         <li ><a href="p_myshop.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         <li><a href="shop_schedules.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-calendar"></span> Schedules</a></li>

@@ -14,6 +14,10 @@
     //date_default_timezone_set('Asia/Hong_Kong');
     date_default_timezone_get();
 
+    
+    //Quick search variable
+       $shop_keywords = '';
+
     if (isset($_GET['set'])) {
     $shop_id = $_GET['set'];
     $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
@@ -80,7 +84,9 @@
   // Retrieve records
   $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
 
-
+  
+  // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
 
 ?>
 

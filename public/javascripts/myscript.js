@@ -28,6 +28,7 @@ $(function() {
   $("#user_report a:contains('User Report')").parent().addClass('active');
   $("#shop_report a:contains('Shop Report')").parent().addClass('active');
   $("#subscription_report a:contains('Subscription Report')").parent().addClass('active');
+  $("#schedules_report a:contains('Schedule Report')").parent().addClass('active');
 
 });
 

@@ -15,6 +15,10 @@
     $time_end = '';
     $shop_category = 0;
 
+    
+    //Quick search variable
+       $shop_keywords = '';
+
     if (isset($_GET['view'])) {
     $id = $_GET['view'];
     $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $id AND shops.shop_cat_id = shop_categories.shop_cat_id");
@@ -35,6 +39,13 @@
 
     // Retrieve services
     $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['view']."");
+
+     // Retrieve shops for search
+   $shops_results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+   
+  // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
 ?>
 
 <!doctype html>

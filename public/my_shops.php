@@ -18,6 +18,10 @@
     $time_end = '';
     $shop_category = 0;
     $edit_state = false;
+    $keywords = '';
+    
+    //Quick search variable
+       $shop_keywords = '';
    
   if (isset($_POST['submit'])) {
     
@@ -39,6 +43,8 @@
     $day_end = mysql_prep($_POST['day_end']);
     $time_start = mysql_prep($_POST['time_start']);
     $time_end = mysql_prep($_POST['time_end']);
+    date_default_timezone_set('Asia/Manila');
+    $date = date('Y-m-d H:i:s');
 
     
     
@@ -61,7 +67,7 @@
                     $fileDestination = 'images/'.$fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
 
-                  $query = "INSERT INTO shops (user_id, shop_cat_id, shop_name, shop_image, shop_description, shop_contact, day_start, day_end, time_start, time_end) VALUES ($user_id, $shop_category, '$shop_name', '$fileNameNew', '$shop_description', '$shop_contact', '$day_start', '$day_end', '$time_start', '$time_end')";
+                  $query = "INSERT INTO shops (user_id, shop_cat_id, shop_name, shop_image, shop_description, shop_contact, day_start, day_end, time_start, time_end, date_created) VALUES ($user_id, $shop_category, '$shop_name', '$fileNameNew', '$shop_description', '$shop_contact', '$day_start', '$day_end', '$time_start', '$time_end', '$date')";
               
            
                     if ( mysqli_query($connection,$query)) {
@@ -142,6 +148,7 @@
     $day_end = mysql_prep($_POST['day_end']);
     $time_start = mysql_prep($_POST['time_start']);
     $time_end = mysql_prep($_POST['time_end']);
+   
     
     
     
@@ -266,8 +273,51 @@
     }
   }
 
+  if (isset($_GET['trial'])) {
+    $sub_type_id = 6;
+    $user_id = $_GET['trial'];
+    date_default_timezone_set('Asia/Manila');
+    $date = date('Y-m-d H:i:s');
+    $method = 'Trial';
+
+
+  // Retrive subscription cost
+  $rec = mysqli_query($connection,"SELECT * FROM subscription_types WHERE sub_type_id = $sub_type_id");
+    $record = mysqli_fetch_array($rec);
+    $sub_type_id = $record['sub_type_id']; 
+  $sub_cost =  $record['sub_cost'];
+   $sub_status = 1;
+
+  $query = "INSERT INTO subscriptions (user_id, sub_type_id, method, subscribe_date, subscribe_time) VALUES ($user_id, $sub_type_id,'$method', '$date', NOW() )";
+   mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+  
+     
+
+  $query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
+  mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+
+
+  $_SESSION['u_timestamp'] = $date;
+  }
+
+
  // Retrieve records
   $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+
+  if (isset($_POST['search'])) {
+      $keywords = $_POST['keywords'];
+
+      $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+      if (!empty($keywords)) {
+        $results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']." AND shop_name LIKE '%{$keywords}%' ");
+      }
+  }
+
+  if (isset($_POST['reset'])) {
+    $keywords = '';
+  }
 
   // Retrieve categories
 
@@ -278,6 +328,15 @@
   $rec = mysqli_fetch_array($sub_results);
   $duration = $rec['sub_duration'];
 
+  $sub_count = mysqli_num_rows($sub_results);
+
+
+
+ // Retrieve shops for search
+  $shops_results = mysqli_query($connection, "SELECT * FROM shops WHERE user_id = ".$_SESSION['u_id']."");
+
+  // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
 
 
 ?>
@@ -323,7 +382,7 @@
     <div class="content container">
      <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
 
-
+            <?php if(!isset($_POST['search'])):?>
               <?php   $resultCheck = mysqli_num_rows($results);
                         if ($resultCheck < 1): ?>
                     <script type="text/javascript">
@@ -333,7 +392,7 @@
                     </script>
 
               <?php endif ?>  
-
+             <?php endif ?>  
 
     
     <div class="row">
@@ -452,7 +511,7 @@
                             <button  type="submit" name="update" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-refresh"></span> Update Shop</button> 
                           <?php endif ?>
 
-                          <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear fields</button>
+                          <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear Fields</button>
 
                       </form>
       </div>  
@@ -460,7 +519,36 @@
       
         <div class="col-md-8">
 
-          <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong>    
+        <div class="row">
+          <div class="col-sm-12">
+            <form action="my_shops.php" method="POST" class="form-inline  pull-right">
+              <div class="form-group">
+                <input type="text" name="keywords" class="form-control" placeholder="Search shop" style="margin:10px;" value="<?php echo $keywords;?>" autocomplete="off" list = "datalist1">
+                <datalist id="datalist1">
+
+                  <?php while ($row = mysqli_fetch_array($shops_results)) { ?>
+                        <option value="<?php echo $row['shop_name'];?>">
+                  <?php } ?>
+ 
+              
+                </datalist>
+
+                 <button type="submit" class="btn btn-primary" name="search">Search</button>
+
+                  <button type="submit" class="btn btn-primary" name="reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+
+              </div>
+            </form>
+            
+          </div>
+        </div>
+          <div class="row">
+            <div class="col-sm-4">
+            <strong>Results: <?php $shop_count = mysqli_num_rows($results); echo $shop_count;?> </strong> 
+            </div>
+
+          </div>
+           <br/>
           <div class="table-responsive"  >
               <table class="table">
 
@@ -480,7 +568,7 @@
                        
                       
                       <a href="my_shops.php?edit=<?php echo $row['shop_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                      <a href="#" h1 class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                      <a href="#" h1 class="btn btn-danger" role="button" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-remove"></span> Delete</a>
                       </td>
 
                   </tr>
@@ -527,6 +615,14 @@
 
               
     </div> 
+    <?php elseif ($sub_count < 1) : ?>
+        <div class="content container">
+          <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+              <a href="my_shops.php?trial=<?php echo $_SESSION['u_id']; ?>" class="btn btn-success btn-block btn-lg" role="button">Click Here! You Have 7 Days Free Trial!</a>
+            </div>
+          </div>
+        </div>
 
     <?php else: ?>
         <div class="content container">
@@ -539,7 +635,7 @@
             <h1 class="text-center">Subcription has expired!</h1>
 
             <div class="col-sm-4 col-sm-offset-4">
-              <a href="renew_subcription.php" class="btn btn-success btn-block btn-lg" role="button">SUBSCRIBE NOW!</a>
+              <a href="renew_subcription.php" class="btn btn-success btn-block btn-lg" role="button">RENEW SUBSCRIBE NOW!</a>
             </div>
           </div>
         </div>

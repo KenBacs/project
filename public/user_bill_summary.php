@@ -16,6 +16,9 @@
     $job_order_id = 0;
     $edit_state = false;
 
+    //Quick search variable
+       $shop_keywords = '';
+
 
 
     if (isset($_GET['myshop'])) {
@@ -73,6 +76,9 @@
 
   $total = mysqli_fetch_array($total_results); 
   $total_amount = $total['total'];
+
+    // Retrieve all shops
+  $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
           
 ?>
 
