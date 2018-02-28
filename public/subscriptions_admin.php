@@ -157,8 +157,9 @@
 
       if (!empty($keywords)) {
          // Retrieve records
-       $results = mysqli_query($connection, "SELECT * FROM subscriptions, subscription_types, users WHERE subscriptions.user_id = users.user_id AND subscriptions.sub_type_id = subscription_types.sub_type_id AND users.user_uid LIKE '%{$keywords}%' AND subscription_status = 1 ") or die(mysqli_error($connection));
+       $results = mysqli_query($connection, "SELECT * FROM subscriptions, subscription_types, users WHERE subscriptions.user_id = users.user_id AND subscriptions.sub_type_id = subscription_types.sub_type_id AND (users.user_uid LIKE '%{$keywords}%' OR subscription_types.sub_type LIKE '%{$keywords}%' OR subscriptions.method LIKE '%{$keywords}%' OR users.sub_status LIKE '%{$keywords}%' ) AND subscription_status = 1 ") or die(mysqli_error($connection));
       }
+
   }
 
 
@@ -258,7 +259,16 @@
                   <?php while ($row = mysqli_fetch_array($search_sub)) { ?>
 
                         <option value="<?php echo $row['user_uid'];?>">
+                        <option value="<?php echo $row['sub_type'];?>">
+                        <option value="<?php echo $row['method'];?>">
+                        <option value="<?php echo $row['sub_status'];?>">
+    
+                
                         
+                         <td><?php echo $row['sub_type']; ?></td>
+                      <td><?php echo $row['method']; ?></td>
+                      <td><?php echo $row['subscribe_date']; ?></td>
+                       <td><?php echo $row['sub_status']; ?></td>
                   <?php } ?>
  
               

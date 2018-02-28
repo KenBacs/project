@@ -12,7 +12,7 @@
     $schedule_date = '';
     $schedule_time = '';
     $quantity = 0;
-    $selectedService = 0;
+
     $job_order_id = 0;
     $edit_state = false;
     $grand_total = 0;
@@ -151,10 +151,16 @@
    $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
 
    //Retrive service of a particular shop
-   $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id ");
+   $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id  AND service_status = 1") or die(mysqli_error($connection));
 
    // Total bill
    $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
+
+     if (mysqli_num_rows($results) < 1) {
+        $query = "UPDATE schedules SET status = 'Accepted' WHERE schedule_id
+         = $schedule_id ";
+         mysqli_query($connection,$query) or die(mysqli_error($connection));
+     } 
 ?>
 
 <!doctype html>
@@ -168,6 +174,11 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+    <!-- JQuery -->
+
+     <script src="javascripts/jquery-3.2.1.min.js"></script>
+
   </head>
   <body id="billing">
     
@@ -245,16 +256,60 @@
              <tr>  
                   <th width="20%"><h2>Total cost :  </h2> </th>
                    <th width="30%"><h2 >P <?php if (isset($total['total'])) { echo $total['total'];} else { echo "0.00";} ?></h2></th>
+                    <?php if (mysqli_num_rows($results) > 0) :?>
                    <form action="billing.php?myshop=<?php echo $shop_id;?>&bill=<?php echo $schedule_id;?>" method="POST">
                       <input type="hidden" name="grand_total" value="<?php echo $grand_total;?>">
                       <th width="25%" style="padding-right: 10px;">
-                       <h1><a href="bill_summary.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>" class="btn btn-info btn-lg btn-block" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Bill</a></h1>
+                       <h1><a href="bill_summary.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>" class="btn btn-info btn-lg btn-block  " role="button" ><span class="glyphicon glyphicon-eye-open"></span> View Bill</a></h1>
                         </th>
                       <th width="25%">
-                         <h1><a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>"  class="btn btn-success btn-lg btn-block" role="button"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
+                                           
+                            <h1><a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>" data-toggle="tooltip" class="btn btn-success btn-lg btn-block " role="button" title="Add Service Rendered"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
+                   
+                        
                       </th>
+
+                     
                   </form>
+
+                   <?php else : ?>
+
+                    <form action="billing.php?myshop=<?php echo $shop_id;?>&bill=<?php echo $schedule_id;?>" method="POST">
+                      <input type="hidden" name="grand_total" value="<?php echo $grand_total;?>">
+                      <th width="25%" style="padding-right: 10px;">
+                       <h1><a href="bill_summary.php?myshop=<?php echo $shop_id; ?>&bill=<?php echo $schedule_id?>" class="btn btn-info btn-lg btn-block disabled" role="button" ><span class="glyphicon glyphicon-eye-open"></span> View Bill</a></h1>
+                        </th>
+                      <th width="25%">
+                                           
+                            <h1><a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>" data-toggle="tooltip" class="btn btn-success btn-lg btn-block disabled" role="button" title="Add Service Rendered"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
+                   
+                        
+                      </th>
+
+                     
+                  </form>
+                <?php endif ?>
+
               </tr>
+<!-- 
+              <script>
+              $(document).ready(function(){
+                  $('[data-toggle="tooltip"]').tooltip();   
+              });
+              $('body').tooltip({
+                  selector: '[rel="tooltip"]'
+              });
+
+
+              $(".btn").click(function(e) {
+                  if (! $(this).hasClass("disabled"))
+                  {
+                      $(".disabled").removeClass("disabled").attr("rel", null);
+
+                      $(this).addClass("disabled").attr("rel", "tooltip");
+                  }
+              });
+              </script> -->
            
              
            </table>

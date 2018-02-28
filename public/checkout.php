@@ -85,7 +85,7 @@
 	$transaction = new Transaction();
 	$transaction->setAmount($amount)
 		->setItemList($item_list)
-		->setDescription('PayForSomething Payment')
+		->setDescription('Repair/Alteration Service Payment')
 		->setInvoiceNumber(uniqid());
 
 	$redirectUrls = new RedirectUrls();

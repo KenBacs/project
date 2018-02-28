@@ -81,8 +81,8 @@
        $desc = '';
   }
 
-  // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+  // Retrieve service offered
+  $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id  AND service_status = 1") or die(mysqli_error($connection));
 
   
   // Retrieve all shops
