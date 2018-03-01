@@ -13,18 +13,18 @@
 
   
     if (!empty($uid) && !empty($pwd)) {
-      $sql = "SELECT * FROM users WHERE user_uid = '$uid' OR user_email='$uid'";
-      $result = mysqli_query($connection, $sql);
+      $sql = "SELECT * FROM users WHERE (user_uid = '$uid' OR user_email='$uid') AND user_status = 1";
+      $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
       $resultCheck = mysqli_num_rows($result);
 
       if ($resultCheck < 1) {
 
-        $sql = "SELECT * FROM admins WHERE admin_uid = '$uid' ";
+        $sql = "SELECT * FROM admins WHERE admin_uid = '$uid' AND admin_status = 1 ";
         $result = mysqli_query($connection, $sql);
         $resultCheck = mysqli_num_rows($result);
 
         if ($resultCheck < 1) {
-          $msg= 'User doesn\'t exist';
+          $msg= 'Invalid username or password';
           $msgClass='alert-danger';
         } else {
 
@@ -43,7 +43,7 @@
               redirect_to("admin.php");
 
             } else {
-               $msg= 'Wrong password';
+               $msg= 'Invalid username or password';
                $msgClass='alert-danger';
             }
 
@@ -75,11 +75,11 @@
             $_POST=array();
           
               redirect_to("../public/profile.php");
-            
+              
             
 
           } else {
-             $msg= 'Wrong password';
+             $msg= 'Invalid username or password';
              $msgClass='alert-danger';
           }
 

@@ -1,7 +1,13 @@
 <?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
 <?php
-  
+    
+    require __DIR__ . '/twilio-php-master/Twilio/autoload.php';
+    use Twilio\Rest\Client;
+
+    $sid = 'AC7e9dd4e18f3c03b53abf72d6339c995a';
+    $token = '7162e668c2944c38c08da560b6b287a0';
+
     include_once '../includes/db_connection.php';
   
     
@@ -36,14 +42,15 @@
    
   }
 
-   if (isset($_GET['accept'])) {
+/*   if (isset($_GET['accept'])) {
       $schedule_id = $_GET['accept'];
 
       $status = 'Accepted';
       $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
-      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
-      
-    }
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+
+      redirect_to('')  
+    }*/
 
 
    if (isset($_GET['decline'])) {
@@ -220,7 +227,7 @@
                       <td>
 
                   <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined'&& $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed')  : ?>
-                         <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&accept=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
+                         <a href="send_message.php?myshop=<?php echo $shop_id?>&accept=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
 
                        <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&decline=<?php echo $row['schedule_id']?>"  class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Decline</a>
                   <?php elseif($row['status'] == 'Accepted') : ?>

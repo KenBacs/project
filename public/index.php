@@ -1,5 +1,9 @@
 <?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
+<?php
+      //Quick search variable
+       $shop_keywords = '';
+?>
 
 <!doctype html>
 <html lang="en">

@@ -6,6 +6,20 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit371fe442ac35b0db41782d301d7f1874
 {
+    public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Twilio\\' => 7,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/Twilio',
+        ),
+    );
+
     public static $prefixesPsr0 = array (
         'P' => 
         array (
@@ -19,6 +33,8 @@ class ComposerStaticInit371fe442ac35b0db41782d301d7f1874
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit371fe442ac35b0db41782d301d7f1874::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit371fe442ac35b0db41782d301d7f1874::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit371fe442ac35b0db41782d301d7f1874::$prefixesPsr0;
 
         }, null, ClassLoader::class);

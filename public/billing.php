@@ -1,6 +1,6 @@
 <?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
-<?php
+<?php      
   
     include_once '../includes/db_connection.php';
   
@@ -136,16 +136,19 @@
        
   }
 
-     if (isset($_GET['done'])) {
+  /*   if (isset($_GET['done'])) {
       $schedule_id = $_GET['done'];
 
       $status = 'Done';
       $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
       $rec = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
-      redirect_to('shop_schedules.php?myshop='.$shop_id);  
+      redirect_to('shop_schedules.php?myshop='.$shop_id); 
+
+
+
       
     }
-
+*/
 
   // Retrieve job orders of a particular schedule
    $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
@@ -264,7 +267,7 @@
                         </th>
                       <th width="25%">
                                            
-                            <h1><a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>" data-toggle="tooltip" class="btn btn-success btn-lg btn-block " role="button" title="Add Service Rendered"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
+                            <h1><a href="send_message.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>" data-toggle="tooltip" class="btn btn-success btn-lg btn-block " role="button" title="Add Service Rendered"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
                    
                         
                       </th>

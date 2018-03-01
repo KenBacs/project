@@ -111,7 +111,8 @@
 
   if (isset($_GET['del'])) {
     $id = $_GET['del'];
-    mysqli_query($connection,"DELETE FROM users WHERE user_id = $id");
+    $user_status = 0;
+    mysqli_query($connection,"UPDATE users SET user_status = $user_status  WHERE user_id = $id");
         session_unset();
         session_destroy();
 
