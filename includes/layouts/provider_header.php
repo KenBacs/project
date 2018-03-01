@@ -26,7 +26,17 @@
         <li ><a href="p_myshop.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         <li><a href="shop_schedules.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-calendar"></span> Schedules</a></li>
           <li><a href="shop_services.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-list"></span> Services</a></li>
-            <li><a href="shop_locations.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Locations</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-map-marker"></span> Locations
+                <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                  
+                   <li><a href="shop_locations.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Add Locations</a></li>
+                  <li><a href="remove_markers.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Delete Locations</a></li>
+              
+                </ul>
+
+            </li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-stats"></span> Reports
                 <span class="caret"></span></a>
@@ -36,7 +46,6 @@
               
                 </ul>
             </li>
-            
        
       
 
@@ -78,3 +87,12 @@
 
     </div>
   </nav>
+<!-- 
+  <script type="text/javascript">
+    
+        $("a[href='#mymap']").on('shown.bs.tab', function(){
+          google.maps.event.trigger(map, 'resize');
+        });
+  </script>
+
+ -->

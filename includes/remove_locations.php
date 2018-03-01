@@ -38,7 +38,7 @@
 
 
   // Marker results
-    $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id");
+    $marker_results = mysqli_query($connection, "SELECT * FROM markers");
 
 
 
@@ -87,10 +87,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
-
-    
   </head>
-  <body id="p_myshop">
+  <body id="#">
     
 
      <?php include '../includes/layouts/provider_header.php';?>
@@ -163,7 +161,10 @@
           zoom: 12,
           center: uluru
         });
-       
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
 
         <?php
               $datas = array();

@@ -52,12 +52,12 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
-    <!-- JQuery -->
-    <script src="javascripts/jquery-3.2.1.min.js"></script>
 
-   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>From Info Windows to a Database: Saving User-Added Form Data</title>
+
     
 
 
@@ -68,16 +68,21 @@
   <?php include '../includes/layouts/provider_header.php';?>
 
 
-      <div class=" content container">
-
+      <div class="content container">
+       
         <div class="row">
 
+
+
+         
+          
             <div class="col-sm-12">
+                     <h1>Add <span class="glyphicon glyphicon-plus" ></span> Locations </h1>
                     <?php   $resultCheck = mysqli_num_rows($results);
                         if ($resultCheck < 1): ?>
                     <script type="text/javascript">
 
-                     /* $(function() { $("#nolocations").modal('show'); });*/
+                     $(function() { $("#nolocations").modal('show'); });
 
                     </script>
 
@@ -86,32 +91,26 @@
             
 
 
-        <h1>ADD <span class="glyphicon glyphicon-plus" ></span> Locations </h1>
+         <ul class="bg-info">
+         <li ><p >To add <span class="glyphicon glyphicon-plus"></span> location just click the place where the shop is located.<p></li>
+         <li>Fill the form and then click <strong>Save.</strong> <span class="glyphicon glyphicon-floppy-saved"></span></li>
+       </ul>
             </div>
         
-       
+ 
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-         
-        </div>
-      </div>
-
+  
       <div class="row">
         <div class="col-sm-12">
 
    <div id="map" height="460px" width="100%"></div>
    <br/>
     <div id="form">
-      <table>
+      <table >
        <tr><td><input type='hidden' id='shop' value="<?php echo $shop_id;?>" /> </td> </tr>
       <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
       <tr><td>Address:</td> <td><input type='text' id='address'/> </td> </tr>
-      <tr><td>Type:</td> <td><select id='type'> +
-                 <option value='bar' SELECTED>bar</option>
-                 <option value='restaurant'>restaurant</option>
-                 </select> </td></tr>
-                 <tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td></tr>
+       <tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td></tr>
       </table>
     </div>
     <br/>
@@ -154,10 +153,8 @@
         var shop = escape(document.getElementById('shop').value);
         var name = escape(document.getElementById('name').value);
         var address = escape(document.getElementById('address').value);
-        var type = document.getElementById('type').value;
         var latlng = marker.getPosition();
-        var url = 'phpsqlinfo_addrow.php?shop='+ shop +'&name=' + name + '&address=' + address +
-                  '&type=' + type + '&lat=' + latlng.lat() + '&lng=' + latlng.lng();
+        var url = 'phpsqlinfo_addrow.php?shop='+ shop +'&name=' + name + '&address=' + address + '&lat=' + latlng.lat() + '&lng=' + latlng.lng();
 
         downloadUrl(url, function(data, responseCode) {
 
