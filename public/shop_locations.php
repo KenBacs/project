@@ -52,22 +52,13 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
+    <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+
    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>From Info Windows to a Database: Saving User-Added Form Data</title>
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    
 
 
   </head>
@@ -92,17 +83,25 @@
 
 
               <?php endif ?> 
-        
+            
+
+
+        <h1>ADD <span class="glyphicon glyphicon-plus" ></span> Locations </h1>
             </div>
-         
-        <h1><span class="glyphicon glyphicon-map-marker"></span> Shop Locations</h1>
+        
        
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+         
+        </div>
       </div>
 
       <div class="row">
         <div class="col-sm-12">
 
    <div id="map" height="460px" width="100%"></div>
+   <br/>
     <div id="form">
       <table>
        <tr><td><input type='hidden' id='shop' value="<?php echo $shop_id;?>" /> </td> </tr>
@@ -115,6 +114,7 @@
                  <tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td></tr>
       </table>
     </div>
+    <br/>
     <div id="message">Location saved</div>
     <script>
       var map;
@@ -123,7 +123,7 @@
       var messagewindow;
 
       function initMap() {
-        var california = {lat: 37.4419, lng: -122.1419};
+        var california = {lat: -33.863276, lng: 151.207977 };
         map = new google.maps.Map(document.getElementById('map'), {
           center: california,
           zoom: 13

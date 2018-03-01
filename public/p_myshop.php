@@ -36,10 +36,45 @@
    // Retrieve services
     $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['myshop']."");
 
- 
+
+  // Marker results
+    $marker_results = mysqli_query($connection, "SELECT * FROM markers");
+
+
+
+/*      $datas = array();
+  if (mysqli_num_rows($results) > 0) {
+    while ($row = mysqli_fetch_assoc($marker_results)) {
+      $datas[] = array(array( $row['shop_id'], $row['name'], $row['address'], $row['lat'], $row['lng'], $row['type']));
+      $datas[] = $row;
+    }
+  }*/
+
+/*
+        $datas = array();
+  if (mysqli_num_rows($results) > 0) {
+    while ($row = mysqli_fetch_assoc($marker_results)) {
+      $datas[] = array(array("shop_id" => $row['shop_id'],"name" => $row['name'],"address" => $row['address'],"lat" => $row['lat'],"lng" => $row['lng'],"type" => $row['type']));
+      
+    }
+  }*/
 
   
+
+/*    foreach($datas as $product)
+    {
+        $item = new Item();
+        $item->setName($product['service_name'])
+            ->setPrice($product['service_cost'])
+            ->setCurrency('PHP')
+            ->setQuantity($product['quantity']);
+        $items[] = $item; 
+    }*/
+  
 ?>
+
+
+
 
 <!doctype html>
 <html lang="en">
@@ -74,6 +109,7 @@
             <img src="images/<?php echo $shop_image;?>"  style="height: 300px; width: 300px;" class="img-responsive img-circle">
           </div>
           <div class="col-sm-8">
+          
             <h3>Shop description</h3>
             <p><pre><?php echo $shop_description; ?></pre></p>
 
@@ -81,6 +117,7 @@
             <p><pre><span class="glyphicon glyphicon-phone-alt"></span> <?php echo $shop_contact; ?></pre></p>
             <p><pre>Business hours: <?php echo $day_start; ?> &mdash; <?php echo $day_end; ?>  <?php echo $time_start; ?> &mdash; <?php echo $time_end; ?></pre></p>
 
+           
 
              <h3>Services Offered</h3>
             <div class="table-responsive" >
@@ -106,93 +143,107 @@
               </table>
             </div> 
 
+
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-12">
             <h3><span class="glyphicon glyphicon-map-marker"></span>Shop Locations</h3>
-                 <div id="map" style="margin-bottom: 20px;"></div>
-            <script>
-      var customLabel = {
-        restaurant: {
-          label: 'R'
-        },
-        bar: {
-          label: 'B'
-        }
-      };
+                 
 
-        function initMap() {
+       <div id="map" style="margin-bottom: 20px;"></div>
+        <script>
+
+      function initMap() {
+        var uluru = {lat:  -33.863276, lng:151.207977};
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: new google.maps.LatLng(-33.863276, 151.207977),
-          zoom: 12
+          zoom: 12,
+          center: uluru
         });
-        var infoWindow = new google.maps.InfoWindow;
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
 
-          // Change this depending on the name of your PHP or XML file
-          downloadUrl('https://storage.googleapis.com/mapsdevsite/json/mapmarkers2.xml', function(data) {
-            var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-              var id = markerElem.getAttribute('id');
-              var name = markerElem.getAttribute('name');
-              var address = markerElem.getAttribute('address');
-              var type = markerElem.getAttribute('type');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
+        <?php
+              $datas = array();
+             if (mysqli_num_rows($marker_results) > 0) {
+              while ($row = mysqli_fetch_assoc($marker_results)) {
+                $datas[] = $row;
+                
+              }
+           }
 
-              var infowincontent = document.createElement('div');
-              var strong = document.createElement('strong');
-              strong.textContent = name
-              infowincontent.appendChild(strong);
-              infowincontent.appendChild(document.createElement('br'));
+        foreach ($datas as $key ) { ?>
 
-              var text = document.createElement('text');
-              text.textContent = address
-              infowincontent.appendChild(text);
-              var icon = customLabel[type] || {};
-              var marker = new google.maps.Marker({
-                map: map,
-                position: point,
-                label: icon.label
-              });
-              marker.addListener('click', function() {
-                infoWindow.setContent(infowincontent);
-                infoWindow.open(map, marker);
-              });
-            });
-          });
+          addMarker({coords:{lat:<?php echo $key['lat'];?>,lng:<?php echo $key['lng'];?>},
+            content:'<h4><?php echo $key['name'];?></h4><h5><?php echo $key['address'];?></h5>'});
+          
+        <?php }?>
+
+          
+              /*  var markers = [
+        {
+          coords:{lat:-33.869843,lng:-151.225769},
+          iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+          content:'<h1>Lynn MA</h1>'
+        },
+        {
+          coords:{lat:-33.840282,lng:-70.9300},
+          content:'<h1>Amesbury MA</h1>'
+        },
+        {
+          coords:{lat:42.7762,lng:-71.0773}
         }
+      ];*/
+
+/*        echo "Product ID\tAmount";
+foreach ( $array as $var ) {
+    echo "\n", $var['product_id'], "\t\t", $var['amount'];
+}
+
+          foreach($datas as $product)
+    {
+        $item = new Item();
+        $item->setName($product['service_name'])
+            ->setPrice($product['service_cost'])
+            ->setCurrency('PHP')
+            ->setQuantity($product['quantity']);
+        $items[] = $item; 
+    }*/
+
+       /* addMarker({lat:-33.861034,lng:151.171936});
+
+         addMarker({lat:-33.869843,lng:151.225769});*/
 
 
+     // Add Marker Function
+      function addMarker(props){
 
-      function downloadUrl(url, callback) {
-        var request = window.ActiveXObject ?
-            new ActiveXObject('Microsoft.XMLHTTP') :
-            new XMLHttpRequest;
+        var marker = new google.maps.Marker({
+          position:props.coords,
+          map:map,
+        });
 
-        request.onreadystatechange = function() {
-          if (request.readyState == 4) {
-            request.onreadystatechange = doNothing;
-            callback(request, request.status);
-          }
-        };
+      var infowindow = new google.maps.InfoWindow({
+          content: props.content
+        });
 
-        request.open('GET', url, true);
-        request.send(null);
+         marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+
+        }
       }
-
-      function doNothing() {}
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHqHUCFSjE6G0i9mX5hQTR1kJprdDSDnk&callback=initMap">
     </script>
-              
    
           </div>
         </div>
+
 
     </div>
         
