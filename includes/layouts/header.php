@@ -39,19 +39,7 @@
                   
               }
 
-        /*    if (isset($_POST['search_btn'])) {
-                   $keywords = $_POST['shop_keywords'];
-
-              if (!empty($keywords)) {
-                $search = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name LIKE '%{$shop_keywords}%' ") or die(mysqli_error($connection));
-                $record = mysqli_fetch_array($search);
-                $resultCheck=mysqli_num_rows($results);
-                if (!$resultCheck < 1) {
-                  $shop_id = $record['shop_id'];
-                  redirect_to("shop_profile?view=".$shop_id);
-                } 
-               }
-            }*/
+ 
           ?>
          
           <form class="navbar-form" action="#" method="POST">
@@ -103,19 +91,7 @@
                   
               }
 
-        /*    if (isset($_POST['search_btn'])) {
-                   $keywords = $_POST['shop_keywords'];
-
-              if (!empty($keywords)) {
-                $search = mysqli_query($connection, "SELECT * FROM shops WHERE shop_name LIKE '%{$shop_keywords}%' ") or die(mysqli_error($connection));
-                $record = mysqli_fetch_array($search);
-                $resultCheck=mysqli_num_rows($results);
-                if (!$resultCheck < 1) {
-                  $shop_id = $record['shop_id'];
-                  redirect_to("shop_profile?view=".$shop_id);
-                } 
-               }
-            }*/
+   
           ?>
               <form class="navbar-form" action="#" method="POST">
             <div class="form-group">
@@ -141,11 +117,20 @@
          
           </li>
 
+
           </ul>
 
         <?php } ?>
 
          <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown"><a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span><span class="glyphicon glyphicon-bell"></span> <span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+                <li><a href="">TEST 1</a></li>
+                <li><a href="">TEST 2</a></li>
+              </ul>
+
+              </li>
               <li class = "navbar-text">Welcome, <?php echo $_SESSION['u_uid']; ?> </li>
               <li> 
                 <form class="navbar-form" action="../includes/logout.inc.php" method="post">

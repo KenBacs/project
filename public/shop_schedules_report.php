@@ -251,7 +251,7 @@
     }
 
 //Retrieve service
-    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id") or die(mysqli_error($connection));
+    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id GROUP BY service_name") or die(mysqli_error($connection));
 
 
 ?>
@@ -426,29 +426,62 @@
       }
       </script>
 
-  <!--     <script>
-        
-        new Morris.Line({
-          // ID of the element in which to draw the chart.
-          element: 'myfirstchart',
-          // Chart data records -- each entry in this array corresponds to a point on
-          // the chart.
-          data: [
-            { year: '2008', value: 20 },
-            { year: '2009', value: 10 },
-            { year: '2010', value: 5 },
-            { year: '2011', value: 5 },
-            { year: '2012', value: 20 }
-          ],
-          // The name of the data record attribute that contains x-values.
-          xkey: 'year',
-          // A list of names of data record attributes that contain y-values.
-          ykeys: ['value'],
-          // Labels for the ykeys -- will be displayed when you hover over the
-          // chart.
-          labels: ['Value']
-        });
-      </script> -->
+ <script>
+$(document).ready(function(){
+ 
+ function load_unseen_notification(view = '')
+ {
+  $.ajax({
+   url:"fetch.php",
+   method:"POST",
+   data:{view:view},
+   dataType:"json",
+   success:function(data)
+   {
+    $('.dropdown-menu').html(data.notification);
+    if(data.unseen_notification > 0)
+    {
+     $('.count').html(data.unseen_notification);
+    }
+   }
+  });
+ }
+ 
+ load_unseen_notification();
+ 
+ $('#comment_form').on('submit', function(event){
+  event.preventDefault();
+  if($('#subject').val() != '' && $('#comment').val() != '')
+  {
+   var form_data = $(this).serialize();
+   $.ajax({
+    url:"insert.php",
+    method:"POST",
+    data:form_data,
+    success:function(data)
+    {
+     $('#comment_form')[0].reset();
+     load_unseen_notification();
+    }
+   });
+  }
+  else
+  {
+   alert("Both Fields are Required");
+  }
+ });
+ 
+ $(document).on('click', '.dropdown-toggle', function(){
+  $('.count').html('');
+  load_unseen_notification('yes');
+ });
+ 
+ setInterval(function(){ 
+  load_unseen_notification();; 
+ }, 5000);
+ 
+});
+</script>
   
 
     <?php include '../includes/layouts/footer.php';?>

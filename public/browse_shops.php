@@ -73,8 +73,11 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
-    <!-- jquery -->
+    <!-- Javascripts -->
      <script src="javascripts/jquery-3.2.1.min.js"></script>
+     <script src="javascripts/bootstrap.min.js"></script>
+
+   
 
   </head>
   <body id="browse_shops">

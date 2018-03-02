@@ -12,7 +12,8 @@ $(function() {
   $("#p_myshop a:contains('Home')").parent().addClass('active');
   $("#shop_schedules a:contains('Schedules')").parent().addClass('active');
   $("#shop_services a:contains('Services')").parent().addClass('active');
-  $("#shop_locations a:contains('Locations')").parent().addClass('active');
+  $("#shop_locations a:contains('Add Locations')").parent().addClass('active');
+   $("#remove_markers a:contains('Delete Locations')").parent().addClass('active');
   $("#shop_reports a:contains('Reports')").parent().addClass('active');
   $("#admin a:contains('My Profile')").parent().addClass('active');
   $("#admins a:contains('Admins')").parent().addClass('active');
@@ -29,6 +30,7 @@ $(function() {
   $("#shop_report a:contains('Shop Report')").parent().addClass('active');
   $("#subscription_report a:contains('Subscription Report')").parent().addClass('active');
   $("#schedules_report a:contains('Schedule Report')").parent().addClass('active');
+
 
 });
 

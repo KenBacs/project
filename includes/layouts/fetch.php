@@ -1,16 +1,14 @@
- <?php  
- 
+<?php
 //fetch.php;
 if(isset($_POST["view"]))
 {
- include_once ('../includes/db_connection.php');
-
-/* if($_POST["view"] != '')
+  include ('connect.php');
+ if($_POST["view"] != '')
  {
   $update_query = "UPDATE comments SET comment_status=1 WHERE comment_status=0";
-  mysqli_query($connect, $update_query) or die(mysqli_error($connect));
- }*/
- $query = "SELECT * FROM schedules,users,services WHERE schedules.user_id = users.user_id AND schedules.service_id = services.service_id ORDER BY schedule_id DESC LIMIT 5";
+  mysqli_query($connection, $update_query) or die(mysqli_error($connection));
+ }
+ $query = "SELECT * FROM comments ORDER BY comment_id DESC LIMIT 5";
  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
  $output = '';
  
@@ -21,9 +19,8 @@ if(isset($_POST["view"]))
    $output .= '
    <li>
     <a href="#">
-     <strong>'.$row["user_uid"].'</strong><br />
-     <strong>'.$row["service_name"].'</strong><br />
-     <small><em>'.$row["description"].'</em></small>
+     <strong>'.$row["comment_subject"].'</strong><br />
+     <small><em>'.$row["comment_text"].'</em></small>
     </a>
    </li>
    <li class="divider"></li>
@@ -36,13 +33,12 @@ if(isset($_POST["view"]))
  }
  
  $query_1 = "SELECT * FROM comments WHERE comment_status=0";
- $result_1 = mysqli_query($connect, $query_1) or die(mysqli_error($connect));
+ $result_1 = mysqli_query($connection, $query_1) or die(mysqli_error($connection));
  $count = mysqli_num_rows($result_1);
  $data = array(
   'notification'   => $output,
   'unseen_notification' => $count
  );
  echo json_encode($data);
-} 
- ?>
- 
+}
+?>

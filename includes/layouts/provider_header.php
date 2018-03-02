@@ -54,6 +54,14 @@
       
 
          <ul class="nav navbar-nav navbar-right">
+           <li class="dropdown"><a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span><span class="glyphicon glyphicon-bell"></span> <span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+                <li><a href="">TEST 1</a></li>
+                <li><a href="">TEST 2</a></li>
+              </ul>
+
+              </li>
               <li class = "navbar-text">Welcome, <?php echo $_SESSION['u_uid']; ?> </li>
               <li> 
                 <form class="navbar-form" action="../includes/logout.inc.php" method="post">
