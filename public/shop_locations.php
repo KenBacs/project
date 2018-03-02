@@ -36,8 +36,7 @@
 
   //Retrieve markers
   $results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id") or die(mysqli_error($connection));
-  $resultCheck = mysqli_num_rows($results);
-  echo $resultCheck
+
 ?>
 
 <!doctype html>
@@ -46,20 +45,14 @@
     <title>Fixpertr</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
-
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-
-    
-
+    <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
 
   </head>
   <body id="shop_locations">
@@ -67,18 +60,17 @@
 
   <?php include '../includes/layouts/provider_header.php';?>
 
-
+  
       <div class="content container">
+           
        
-        <div class="row">
-
-
-
-         
-          
+        <div class="row">   
+            
             <div class="col-sm-12">
-                     <h1>Add <span class="glyphicon glyphicon-plus" ></span> Locations </h1>
-                    <?php   $resultCheck = mysqli_num_rows($results);
+                    <h1>Add <span class="glyphicon glyphicon-plus" ></span> Locations </h1>  
+
+            <div>
+                <?php   $resultCheck = mysqli_num_rows($results);
                         if ($resultCheck < 1): ?>
                     <script type="text/javascript">
 
@@ -89,20 +81,21 @@
 
               <?php endif ?> 
             
+            </div>
+                    
 
 
          <ul class="bg-info">
          <li ><p >To add <span class="glyphicon glyphicon-plus"></span> location just click the place where the shop is located.<p></li>
-         <li>Fill the form and then click <strong>Save.</strong> <span class="glyphicon glyphicon-floppy-saved"></span></li>
+         <li>Click the </span><strong>marker</strong> <span class="glyphicon glyphicon-map-marker"></span> and fill the form and then click <strong>Save.</strong> <span class="glyphicon glyphicon-floppy-saved"></span></li>
        </ul>
-            </div>
+        </div>
         
  
       </div>
   
       <div class="row">
         <div class="col-sm-12">
-
    <div id="map" height="460px" width="100%"></div>
    <br/>
     <div id="form">
@@ -122,10 +115,11 @@
       var messagewindow;
 
       function initMap() {
-        var california = {lat: -33.863276, lng: 151.207977 };
+        var cebu = {lat:10.315308, lng:123.885462};
         map = new google.maps.Map(document.getElementById('map'), {
-          center: california,
-          zoom: 13
+          center: cebu,
+          zoom: 8
+
         });
 
         infowindow = new google.maps.InfoWindow({

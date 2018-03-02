@@ -40,37 +40,9 @@
   // Marker results
     $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id");
 
+    $resultCheck = mysqli_num_rows($marker_results);
 
 
-/*      $datas = array();
-  if (mysqli_num_rows($results) > 0) {
-    while ($row = mysqli_fetch_assoc($marker_results)) {
-      $datas[] = array(array( $row['shop_id'], $row['name'], $row['address'], $row['lat'], $row['lng'], $row['type']));
-      $datas[] = $row;
-    }
-  }*/
-
-/*
-        $datas = array();
-  if (mysqli_num_rows($results) > 0) {
-    while ($row = mysqli_fetch_assoc($marker_results)) {
-      $datas[] = array(array("shop_id" => $row['shop_id'],"name" => $row['name'],"address" => $row['address'],"lat" => $row['lat'],"lng" => $row['lng'],"type" => $row['type']));
-      
-    }
-  }*/
-
-  
-
-/*    foreach($datas as $product)
-    {
-        $item = new Item();
-        $item->setName($product['service_name'])
-            ->setPrice($product['service_cost'])
-            ->setCurrency('PHP')
-            ->setQuantity($product['quantity']);
-        $items[] = $item; 
-    }*/
-  
 ?>
 
 
@@ -152,16 +124,28 @@
         <div class="row">
           <div class="col-md-12">
             <h3><span class="glyphicon glyphicon-map-marker"></span>Shop Locations</h3>
-                 
+            
+                                 <ul class="bg-info">
+         <li ><p style="padding: 20px"><span class="glyphicon glyphicon-eye-open"></span><strong> Click the shop marker to show  address. </strong></li>
+        
+       </ul>
+
+       <?php if ($resultCheck < 1) { ?>
+          <ul class="bg-danger">
+         <li ><p style="padding: 20px"><span class="glyphicons glyphicons-database-ban"></span><strong> No Locations Found.</strong></li>
+        
+       </ul>
+       <?php } ?>     
 
        <div id="map" style="margin-bottom: 20px;"></div>
         <script>
 
       function initMap() {
-        var uluru = {lat:  -33.863276, lng:151.207977};
+        var uluru = {lat:10.315308, lng:123.885462};
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
+          zoom: 8,
           center: uluru
+
         });
        
 
@@ -181,40 +165,6 @@
           
         <?php }?>
 
-          
-              /*  var markers = [
-        {
-          coords:{lat:-33.869843,lng:-151.225769},
-          iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-          content:'<h1>Lynn MA</h1>'
-        },
-        {
-          coords:{lat:-33.840282,lng:-70.9300},
-          content:'<h1>Amesbury MA</h1>'
-        },
-        {
-          coords:{lat:42.7762,lng:-71.0773}
-        }
-      ];*/
-
-/*        echo "Product ID\tAmount";
-foreach ( $array as $var ) {
-    echo "\n", $var['product_id'], "\t\t", $var['amount'];
-}
-
-          foreach($datas as $product)
-    {
-        $item = new Item();
-        $item->setName($product['service_name'])
-            ->setPrice($product['service_cost'])
-            ->setCurrency('PHP')
-            ->setQuantity($product['quantity']);
-        $items[] = $item; 
-    }*/
-
-       /* addMarker({lat:-33.861034,lng:151.171936});
-
-         addMarker({lat:-33.869843,lng:151.225769});*/
 
 
      // Add Marker Function

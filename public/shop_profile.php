@@ -38,10 +38,15 @@
 
 
     // Retrieve services
-    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['view']."");
+    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $id AND service_status = 1");
+    $resultCheck2 = mysqli_num_rows($service_results);
    
   // Retrieve all shops
   $shop_all = mysqli_query($connection, "SELECT * FROM shops WHERE shop_status = 1 ");
+
+    // Marker results
+    $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $id");
+    $resultCheck = mysqli_num_rows($marker_results);
 ?>
 
 <!doctype html>
@@ -55,6 +60,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+    <!-- JQUERY -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
   <body id="contact">
     
@@ -68,7 +76,12 @@
             <h1><?php echo $shop_name; ?> <small><?php echo $shop_category; ?></small></h1>
           </div>
           <div class="col-md-6">
-            <a href="set_schedule.php?set=<?php echo $id; ?>" class="btn btn-success btn-lg" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
+            <?php if ($resultCheck2 < 1): ?>
+                <a href="set_schedule.php?set=<?php echo $id; ?>" class="btn btn-success btn-lg disabled" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
+            <?php else: ?>
+               <a href="set_schedule.php?set=<?php echo $id; ?>" class="btn btn-success btn-lg" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
+            <?php endif ?>
+           
           </div>
         </div>
         
@@ -87,7 +100,20 @@
              <p><pre>Business hours: <?php echo $day_start; ?> &mdash; <?php echo $day_end; ?>  <?php echo $time_start; ?> &mdash; <?php echo $time_end; ?></pre></p>
   
 
+             <?php if ($resultCheck2 < 1) : ?>
+                <h3>No Services Offered</h3> 
+                <div>
+                       <script type="text/javascript">
+
+                        $(function() { $("#noserviceoffered").modal('show'); });
+
+                      </script>
+                </div>
+               
+
+            <?php else : ?>
             <h3>Services Offered</h3> 
+           <?php endif ?>
             <div class="table-responsive" >
               <table class="table ">
 
@@ -117,79 +143,70 @@
              <div class="row">
             <div class="col-md-12">
                       <h3><span class="glyphicon glyphicon-map-marker"></span>Shop Locations</h3>
-                 <div id="map" style="margin-bottom: 20px;"></div>
-            <script>
-      var customLabel = {
-        restaurant: {
-          label: 'R'
-        },
-        bar: {
-          label: 'B'
-        }
-      };
 
-        function initMap() {
+                         <ul class="bg-info">
+         <li ><p style="padding: 20px"><span class="glyphicon glyphicon-eye-open"></span><strong> Click the shop marker to show  address. </strong></li>
+        
+       </ul>
+
+       <?php if ($resultCheck < 1) { ?>
+          <ul class="bg-danger">
+         <li ><p style="padding: 20px"><span class="glyphicons glyphicons-database-ban"></span><strong> No Locations Found.</strong></li>
+        
+       </ul>
+       <?php } ?>
+        </div>
+      
+                
+       <div id="map" style="margin-bottom: 20px;"></div>
+        <script>
+
+      function initMap() {
+
+        var uluru = {lat:10.315308, lng:123.885462};
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: new google.maps.LatLng(-33.863276, 151.207977),
-          zoom: 12
+          zoom: 8,
+          center: uluru
+
         });
-        var infoWindow = new google.maps.InfoWindow;
+       
 
-          // Change this depending on the name of your PHP or XML file
-          downloadUrl('https://storage.googleapis.com/mapsdevsite/json/mapmarkers2.xml', function(data) {
-            var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-              var id = markerElem.getAttribute('id');
-              var name = markerElem.getAttribute('name');
-              var address = markerElem.getAttribute('address');
-              var type = markerElem.getAttribute('type');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
+        <?php
+              $datas = array();
+             if (mysqli_num_rows($marker_results) > 0) {
+              while ($row = mysqli_fetch_assoc($marker_results)) {
+                $datas[] = $row;
+                
+              }
+           }
 
-              var infowincontent = document.createElement('div');
-              var strong = document.createElement('strong');
-              strong.textContent = name
-              infowincontent.appendChild(strong);
-              infowincontent.appendChild(document.createElement('br'));
+        foreach ($datas as $key ) { ?>
 
-              var text = document.createElement('text');
-              text.textContent = address
-              infowincontent.appendChild(text);
-              var icon = customLabel[type] || {};
-              var marker = new google.maps.Marker({
-                map: map,
-                position: point,
-                label: icon.label
-              });
-              marker.addListener('click', function() {
-                infoWindow.setContent(infowincontent);
-                infoWindow.open(map, marker);
-              });
-            });
-          });
+          addMarker({coords:{lat:<?php echo $key['lat'];?>,lng:<?php echo $key['lng'];?>},
+            content:'<h4><?php echo $key['name'];?></h4><h5><?php echo $key['address'];?></h5>'});
+          
+        <?php }?>
+
+       
+
+     // Add Marker Function
+      function addMarker(props){
+
+        var marker = new google.maps.Marker({
+          position:props.coords,
+          map:map,
+        });
+
+      var infowindow = new google.maps.InfoWindow({
+          content: props.content
+        });
+
+         marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+
         }
-
-
-
-      function downloadUrl(url, callback) {
-        var request = window.ActiveXObject ?
-            new ActiveXObject('Microsoft.XMLHTTP') :
-            new XMLHttpRequest;
-
-        request.onreadystatechange = function() {
-          if (request.readyState == 4) {
-            request.onreadystatechange = doNothing;
-            callback(request, request.status);
-          }
-        };
-
-        request.open('GET', url, true);
-        request.send(null);
       }
-
-      function doNothing() {}
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHqHUCFSjE6G0i9mX5hQTR1kJprdDSDnk&callback=initMap">
@@ -200,6 +217,30 @@
   
 
       </div>
+
+        <!-- Modal -->
+  <div class="modal fade" id="noserviceoffered" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" ><span class="glyphicon glyphicon-floppy-remove"></span></span> Oops! This shop don't have any services yet!</span></h4>
+        </div>
+        <div class="modal-body">
+       
+            <div class="alert alert-danger">
+        <strong>Info!</strong> You cannot set schedule to this shop.
+         </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="OK" class="btn btn-primary" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
   
 
     <?php include '../includes/layouts/footer.php';?>

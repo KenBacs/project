@@ -46,10 +46,10 @@
             $msg= 'Username is already taken.';
             $msgClass='alert-danger';
           } else {
-            if (preg_match('/^[0-9]{4}-[0-9]{3}-[0-9]{4}$/', $mobilenumber)) {
+            if (preg_match('/^[0-9]{10}$/', $mobilenumber)) {
 
               //Insert the user into the database
-            $sql = "INSERT INTO users (user_first, user_last, user_gender, user_address, user_email, user_mobile, user_uid, user_pwd, user_type, date_registered) VALUES ('$first', '$last', '$gender', '$address', '$email', '$mobilenumber', '$uid', '$pwd', '$selectUser','$date')";
+            $sql = "INSERT INTO users (user_first, user_last, user_gender, user_address, user_email, user_mobile, user_uid, user_pwd, user_type, date_registered) VALUES ('$first', '$last', '$gender', '$address', '$email', '+63$mobilenumber', '$uid', '$pwd', '$selectUser','$date')";
             mysqli_query($connection,$sql) or die(mysqli_error($connection));
               $msg= 'You have succesfully registered.';
               $msgClass='alert-success';
@@ -147,7 +147,11 @@
 
             <div class="form-group">
               <label for="">Mobile number:</label>
-              <input type="text" class="form-control" name="mobilenumber" value="<?php echo isset($_POST['mobilenumber']) ? $mobilenumber : '';?>" placeholder = "xxxx-xxx-xxxx">
+              <div class="input-group">
+                <span class="input-group-addon">+63</span>
+                <input type="number" class="form-control" name="mobilenumber" value="<?php echo isset($_POST['mobilenumber']) ? $mobilenumber : '';?>" >
+              </div>
+   
            </div>
 
            <div class="form-group">

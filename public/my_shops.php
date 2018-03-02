@@ -264,7 +264,7 @@
   if (isset($_GET['check'])) {
     // Retrive service records
     $shop_id = $_GET['check'];
-    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id");
+    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_status = 1");
 
     $resultCheck = mysqli_num_rows($service_results);
     if ($resultCheck < 1){

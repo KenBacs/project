@@ -87,12 +87,4 @@
 
     </div>
   </nav>
-<!-- 
-  <script type="text/javascript">
-    
-        $("a[href='#mymap']").on('shown.bs.tab', function(){
-          google.maps.event.trigger(map, 'resize');
-        });
-  </script>
-
- -->
+y

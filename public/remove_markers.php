@@ -34,43 +34,14 @@
   }
 
    // Retrieve services
-    $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['myshop']." AND service_status = 1");
+    $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_status = 1");
 
 
   // Marker results
-    $marker_results = mysqli_query($connection, "SELECT * FROM markers");
+    $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id");
 
 
 
-/*      $datas = array();
-  if (mysqli_num_rows($results) > 0) {
-    while ($row = mysqli_fetch_assoc($marker_results)) {
-      $datas[] = array(array( $row['shop_id'], $row['name'], $row['address'], $row['lat'], $row['lng'], $row['type']));
-      $datas[] = $row;
-    }
-  }*/
-
-/*
-        $datas = array();
-  if (mysqli_num_rows($results) > 0) {
-    while ($row = mysqli_fetch_assoc($marker_results)) {
-      $datas[] = array(array("shop_id" => $row['shop_id'],"name" => $row['name'],"address" => $row['address'],"lat" => $row['lat'],"lng" => $row['lng'],"type" => $row['type']));
-      
-    }
-  }*/
-
-  
-
-/*    foreach($datas as $product)
-    {
-        $item = new Item();
-        $item->setName($product['service_name'])
-            ->setPrice($product['service_cost'])
-            ->setCurrency('PHP')
-            ->setQuantity($product['quantity']);
-        $items[] = $item; 
-    }*/
-  
 ?>
 
 
@@ -88,8 +59,9 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
-      <!-- JQuery -->
-    <script src="javascripts/jquery-3.2.1.min.js"></script>
+
+    <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script> 
 
         <style>
       /* Always set the map height explicitly to define the size of the div
@@ -122,12 +94,26 @@
       <div class="row">
         <div class="col-sm-12">
          <h1>Remove <span class="glyphicon glyphicon-remove" ></span> Locations </h1>
+             <div>
+                <?php   $resultCheck = mysqli_num_rows($marker_results);
+                        if ($resultCheck < 1): ?>
+                    <script type="text/javascript">
+
+                     $(function() { $("#nolocations").modal('show'); });
+
+                    </script>
+
+
+              <?php endif ?> 
+            
+            </div>
+            
 
         <table class="bg-danger" >
           <tr > 
-              <th ><h2><span class="glyphicon glyphicon-warning-sign" style="margin-left: 20px"></span></h2></th>
+              <th ><h2><span class="glyphicon glyphicon-warning-sign" style="margin-left: 20px;"></span></h2></th>
             
-              <th width="100%" > <p style="margin: 20px"><strong> Warning! This is a one time delete. If you click <kbd>Delete Markers</kbd> , all locations will be deleted.</strong> </p></th>
+              <th width="100%"> <p style="margin: 20px;"><strong> Warning! This is a one time delete. If you click <kbd>Delete Markers</kbd> , all locations will be deleted.</strong> </p></th>
           </tr>
          
          </table>
@@ -166,12 +152,13 @@
       var markers = [];
 
       function initMap() {
-        var haightAshbury = {lat: 37.769, lng: -122.446};
+        var cebu = {lat:10.315308, lng:123.885462};
 
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: haightAshbury,
-          mapTypeId: 'terrain'
+          zoom: 8,
+          center: cebu
+
+         
         });
 
         // This event listener will call addMarker() when the map is clicked.
@@ -222,6 +209,30 @@
        </div>
 
     </div>
+
+     <!-- Modal -->
+  <div class="modal fade" id="nolocations" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" ><span class="glyphicon glyphicon-floppy-remove"></span></span> Oops! You don't have any location yet!</span></h4>
+        </div>
+        <div class="modal-body">
+       
+            <div class="alert alert-info">
+        <strong>Info!</strong> Location is essential, so the customers know where is your shop.
+         </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
         
   
 
