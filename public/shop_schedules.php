@@ -144,6 +144,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+        <!-- JQUERY -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
   <body id="shop_schedules">
     
@@ -212,17 +215,19 @@
 
                 <tr>
               
-                    <th width="15%"> User</th>
-                  <th width="20%">Scheduled Date</th>
-                  <th width="20%">Service</th>
-                  <th width="20%">Status</th>
-                  <th width="25%">Action</th>
+                    <th width="10%"> User</th>
+                  <th width="10%">Scheduled Date</th>
+                  <th width="10%">Service</th>
+                  <th width="10%">Details</th>
+                  <th width="10%">Status</th>
+                  <th width="20%">Action</th>
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
                           <td><a href="p_user_provider.php?myshop=<?php echo $shop_id?>&user=<?php echo $row['user_id'];?>"><?php echo $row['user_uid']; ?></a></td>
                       <td><?php echo $row['schedule_date']; ?></td>
                       <td><?php echo $row['service_name']; ?></td>
+                      <td><?php echo $row['description']; ?></td>
                       <td><?php echo $row['status']; ?></td>
                       <td>
 
@@ -272,11 +277,11 @@ $(document).ready(function(){
   $.ajax({
    url:"fetch.php",
    method:"POST",
-   data:{view:view},
+   data:{view:view,shop_id:<?php echo $shop_id;?>},
    dataType:"json",
    success:function(data)
    {
-    $('.dropdown-menu').html(data.notification);
+    $('#notify').html(data.notification);
     if(data.unseen_notification > 0)
     {
      $('.count').html(data.unseen_notification);

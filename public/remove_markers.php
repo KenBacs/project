@@ -241,11 +241,11 @@ $(document).ready(function(){
   $.ajax({
    url:"fetch.php",
    method:"POST",
-   data:{view:view},
+   data:{view:view,shop_id:<?php echo $shop_id;?>},
    dataType:"json",
    success:function(data)
    {
-    $('.dropdown-menu').html(data.notification);
+    $('#notify').html(data.notification);
     if(data.unseen_notification > 0)
     {
      $('.count').html(data.unseen_notification);

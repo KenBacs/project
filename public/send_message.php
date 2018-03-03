@@ -9,6 +9,7 @@ use Twilio\Rest\Client;
 
 	$sid = 'AC7e9dd4e18f3c03b53abf72d6339c995a';
 	$token = '7162e668c2944c38c08da560b6b287a0';
+	 date_default_timezone_set('Asia/Manila');
 
 if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
@@ -21,7 +22,9 @@ if (isset($_GET['myshop'])) {
 
 if (isset($_GET['accept'])) {
 
-	$schedule_id = $_GET['accept'];
+  $schedule_id = $_GET['accept'];
+ 
+
 
   $status = 'Accepted';
   $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";

@@ -46,13 +46,13 @@
             <div class="form-group">
 
          
-              <input type="text"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3">
+              <input type="text" style="width: 150px;"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3"/>
 
 
                   <datalist id="datalist3">
 
                   <?php while ($row = mysqli_fetch_array($shop_all)) { ?>
-                       <!-- <img src="images/<?php echo $row['shop_image'];?>" class="img-rounded"> -->
+                    
                    <option  value="<?php echo $row['shop_name'];?>">
                   <?php } ?>
   
@@ -73,7 +73,7 @@
                 
           <li ><a href="profile.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
            <li><a href="my_schedules.php"><span class="glyphicon glyphicon-calendar"></span> My Schedules</a></li>
-          <li><a href="browse_shops.php"></span> Browse Shops</a></li>
+             <li><a href="browse_shops.php"></span> Browse Shops</a></li>
           <li>
            <?php
 
@@ -94,16 +94,15 @@
    
           ?>
               <form class="navbar-form" action="#" method="POST">
-            <div class="form-group">
+            <div class="form-group ">
 
-         
-              <input type="text"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3">
+                    <input type="text" name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" > value="<?php echo $shop_keywords;?>" list="datalist3">
 
 
                   <datalist id="datalist3">
 
                   <?php while ($row = mysqli_fetch_array($shop_all)) { ?>
-                       <!-- <img src="images/<?php echo $row['shop_image'];?>" class="img-rounded"> -->
+                 
                    <option  value="<?php echo $row['shop_name'];?>">
                   <?php } ?>
   
@@ -123,11 +122,10 @@
         <?php } ?>
 
          <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span><span class="glyphicon glyphicon-bell"></span> <span class="caret"></span></a>
+               <li class="dropdown"><a href="" class="dropdown-toggle" id="notify-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> <span class="glyphicon glyphicon-bell"></span> <span class="caret"></span></a>
 
-              <ul class="dropdown-menu">
-                <li><a href="">TEST 1</a></li>
-                <li><a href="">TEST 2</a></li>
+              <ul class="dropdown-menu" id="notify">
+                
               </ul>
 
               </li>

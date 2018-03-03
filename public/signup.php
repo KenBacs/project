@@ -5,6 +5,8 @@
     $msg = '';
     $msgClass = '';
 
+    $shop_keywords = '';
+
 
     if (filter_has_var(INPUT_POST, 'submit')) {
       include_once '../includes/db_connection.php';

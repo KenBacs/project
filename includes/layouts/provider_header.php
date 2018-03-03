@@ -54,11 +54,10 @@
       
 
          <ul class="nav navbar-nav navbar-right">
-           <li class="dropdown"><a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span><span class="glyphicon glyphicon-bell"></span> <span class="caret"></span></a>
+           <li class="dropdown"><a href="" class="dropdown-toggle" id="notify-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> <span class="glyphicon glyphicon-bell"></span> <span class="caret"></span></a>
 
-              <ul class="dropdown-menu">
-                <li><a href="">TEST 1</a></li>
-                <li><a href="">TEST 2</a></li>
+              <ul class="dropdown-menu" id="notify">
+                
               </ul>
 
               </li>
@@ -95,4 +94,3 @@
 
     </div>
   </nav>
-y

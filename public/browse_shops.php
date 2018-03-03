@@ -73,11 +73,8 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
-    <!-- Javascripts -->
-     <script src="javascripts/jquery-3.2.1.min.js"></script>
-     <script src="javascripts/bootstrap.min.js"></script>
-
-   
+       <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
 
   </head>
   <body id="browse_shops">
@@ -224,6 +221,44 @@
 
 
   </div>
+
+  
+    <script>
+$(document).ready(function(){
+ 
+ function load_unseen_notification(view2 = '')
+ {
+  $.ajax({
+   url:"user_fetch.php",
+   method:"POST",
+   data:{view2:view2,user_id:<?php echo $_SESSION['u_id'];?>},
+   dataType:"json",
+   success:function(data)
+   {
+    $('#notify').html(data.notification);
+    if(data.unseen_notification > 0)
+    {
+     $('.count').html(data.unseen_notification);
+    }
+   }
+  });
+ }
+ 
+ load_unseen_notification();
+ 
+
+ 
+ $(document).on('click', '#notify-toggle', function(){
+  $('.count').html('');
+  load_unseen_notification('yes');
+ });
+ 
+ setInterval(function(){ 
+  load_unseen_notification();; 
+ }, 5000);
+ 
+});
+</script>
 
 
   <?php include '../includes/layouts/footer.php';?>

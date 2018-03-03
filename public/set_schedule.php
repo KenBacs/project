@@ -12,7 +12,8 @@
     $schedule_date = '';
     $schedule_time = '';
     //date_default_timezone_set('Asia/Hong_Kong');
-    date_default_timezone_get();
+    date_default_timezone_get('Asia/Manila');
+    $date_now = date('m/d/Y');
 
 
     //Quick search variable
@@ -40,13 +41,16 @@
     $schedule_time = mysql_prep($_POST['schedule_time']);
     $service_id = mysql_prep($_POST['service']);
     $desc = mysql_prep($_POST['repair_desc']);
+    date_default_timezone_set('Asia/Manila');
+    $sched_timestamp = date('Y-m-d H:i:s',time());
+    $date = date('Y-m-d H:i:s');
 
-    $date_now = date("m/d/Y",strtotime('now')); 
+    
 
     if (!empty($schedule_date) && !empty($service_id) && !empty($schedule_time)) {
       if ($schedule_date > $date_now) {
 
-          $query = "INSERT INTO schedules (user_id, service_id, shop_id, schedule_date, schedule_time, description) VALUES ('".$_SESSION['u_id']."', $service_id, $shop_id, '$schedule_date','$schedule_time', '$desc')";
+          $query = "INSERT INTO schedules (user_id, service_id, shop_id, schedule_date, schedule_time, description, date_sched_created, time_sched_created) VALUES ('".$_SESSION['u_id']."', $service_id, $shop_id, '$schedule_date', '$schedule_time','$desc', '$date', NOW())";
 
             if (mysqli_query($connection,$query)) {
               $msg = 'Schedule request sent succesfully';
@@ -103,6 +107,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+        <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+
   </head>
   <body id="set_schedule">
     
@@ -181,6 +189,43 @@
           </div>
         
       </div>
+
+          <script>
+$(document).ready(function(){
+ 
+ function load_unseen_notification(view2 = '')
+ {
+  $.ajax({
+   url:"user_fetch.php",
+   method:"POST",
+   data:{view2:view2,user_id:<?php echo $_SESSION['u_id'];?>},
+   dataType:"json",
+   success:function(data)
+   {
+    $('#notify').html(data.notification);
+    if(data.unseen_notification > 0)
+    {
+     $('.count').html(data.unseen_notification);
+    }
+   }
+  });
+ }
+ 
+ load_unseen_notification();
+ 
+
+ 
+ $(document).on('click', '#notify-toggle', function(){
+  $('.count').html('');
+  load_unseen_notification('yes');
+ });
+ 
+ setInterval(function(){ 
+  load_unseen_notification();; 
+ }, 5000);
+ 
+});
+</script>
   
 
     <?php include '../includes/layouts/footer.php';?>

@@ -84,6 +84,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+        <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
   <body id="my_schedules">
 
@@ -142,11 +145,12 @@
 
                 <tr>
               
-                   <th width="20%">Shop Name</th>
-                  <th width="20%">Scheduled Date</th>
-                  <th width="20%">Service</th>
-                  <th width="20%">Status</th>
-                  <th width="20%">Action</th>
+                   <th width="10%">Shop Name</th>
+                  <th width="10%">Scheduled Date</th>
+                  <th width="10%">Service</th>
+                  <th width="10%">Details</th>
+                  <th width="10%">Status</th>
+                  <th width="15%">Action</th>
                 
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
@@ -154,6 +158,7 @@
                       <td><?php echo $row['shop_name']; ?></td>
                       <td><?php echo $row['schedule_date']; ?></td>
                       <td><?php echo $row['service_name']; ?></td>
+                      <td><?php echo $row['description']; ?></td>
                       <td><?php echo $row['status']; ?></td>
                     
 
@@ -189,6 +194,44 @@
       </div>
               
     </div> 
+
+    
+    <script>
+$(document).ready(function(){
+ 
+ function load_unseen_notification(view2 = '')
+ {
+  $.ajax({
+   url:"user_fetch.php",
+   method:"POST",
+   data:{view2:view2,user_id:<?php echo $_SESSION['u_id'];?>},
+   dataType:"json",
+   success:function(data)
+   {
+    $('#notify').html(data.notification);
+    if(data.unseen_notification > 0)
+    {
+     $('.count').html(data.unseen_notification);
+    }
+   }
+  });
+ }
+ 
+ load_unseen_notification();
+ 
+
+ 
+ $(document).on('click', '#notify-toggle', function(){
+  $('.count').html('');
+  load_unseen_notification('yes');
+ });
+ 
+ setInterval(function(){ 
+  load_unseen_notification();; 
+ }, 5000);
+ 
+});
+</script>
 
 
 
