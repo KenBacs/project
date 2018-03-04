@@ -11,6 +11,7 @@
     <script src="javascripts/jquery-3.2.1.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/myscript.js"></script>
+    <script src="javascripts/admin_notify.js"></script>
 
 
   </body>

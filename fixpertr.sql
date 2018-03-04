@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 01, 2018 at 03:18 AM
+-- Generation Time: Mar 04, 2018 at 11:12 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -36,8 +36,10 @@ CREATE TABLE IF NOT EXISTS `admins` (
   `admin_uid` varchar(256) NOT NULL,
   `admin_pwd` varchar(256) NOT NULL,
   `admin_image` varchar(256) DEFAULT NULL,
-  `date_registered` date NOT NULL,
+  `date_registered` date DEFAULT NULL,
+  `time_registered` time DEFAULT NULL,
   `admin_status` tinyint(4) NOT NULL DEFAULT '1',
+  `seen` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`admin_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
@@ -45,8 +47,8 @@ CREATE TABLE IF NOT EXISTS `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`admin_id`, `admin_first`, `admin_last`, `admin_uid`, `admin_pwd`, `admin_image`, `date_registered`, `admin_status`) VALUES
-(14, 'Kenneth', 'Bacayo', 'ken', '123', NULL, '2018-02-14', 1);
+INSERT INTO `admins` (`admin_id`, `admin_first`, `admin_last`, `admin_uid`, `admin_pwd`, `admin_image`, `date_registered`, `time_registered`, `admin_status`, `seen`) VALUES
+(14, 'Kenneth', 'Bacayo', 'ken', '123', NULL, '2018-02-14', '09:22:09', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -63,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `job_orders` (
   PRIMARY KEY (`job_order_id`),
   KEY `schedule_id` (`schedule_id`),
   KEY `job_orders_ibfk_2` (`service_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `job_orders`
@@ -73,7 +75,9 @@ INSERT INTO `job_orders` (`job_order_id`, `schedule_id`, `service_id`, `quantity
 (4, 3, 126, 1),
 (7, 5, 126, 1),
 (9, 6, 123, 2),
-(14, 4, 125, 1);
+(14, 4, 125, 1),
+(16, 10, 124, 1),
+(17, 12, 124, 1);
 
 -- --------------------------------------------------------
 
@@ -89,19 +93,19 @@ CREATE TABLE IF NOT EXISTS `markers` (
   `address` varchar(256) NOT NULL,
   `lat` float(10,6) NOT NULL,
   `lng` float(10,6) NOT NULL,
-  `type` varchar(256) NOT NULL,
+  `marker_status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `markers_ibfk_1` (`shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `markers`
 --
 
-INSERT INTO `markers` (`id`, `shop_id`, `name`, `address`, `lat`, `lng`, `type`) VALUES
-(33, 42, 'Best Bar Ever', '123 Main St', -37.123451, 122.123451, 'bar'),
-(34, 42, '', '', 37.453075, -122.152626, 'bar'),
-(35, 42, '', '', 37.450485, -122.152458, 'bar');
+INSERT INTO `markers` (`id`, `shop_id`, `name`, `address`, `lat`, `lng`, `marker_status`) VALUES
+(46, 42, 'Red Crow - Mactan', 'M.L.Quezon Ave Lapu-Lapu City, Cebu', 10.312668, 123.955818, 1),
+(47, 42, 'Red Crow- Cebu City', 'Gorordo Avenue', 10.312013, 123.903481, 1),
+(48, 45, 'Repair Shop -Tabunok', 'Cebu S Rd', 10.259558, 123.831001, 1);
 
 -- --------------------------------------------------------
 
@@ -121,14 +125,15 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `payment_time` time NOT NULL,
   PRIMARY KEY (`payment_id`),
   KEY `schedule_id` (`schedule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `payments`
 --
 
 INSERT INTO `payments` (`payment_id`, `schedule_id`, `cash_given`, `amount_paid`, `amount_change`, `method`, `payment_date`, `payment_time`) VALUES
-(1, 3, '350.00', '350.00', '0.00', 'PayPal', '2018-02-28', '08:03:11');
+(1, 3, '350.00', '350.00', '0.00', 'PayPal', '2018-02-28', '08:03:11'),
+(2, 4, '300.00', '300.00', '0.00', 'PayPal', '2018-03-01', '21:26:19');
 
 -- --------------------------------------------------------
 
@@ -146,27 +151,43 @@ CREATE TABLE IF NOT EXISTS `schedules` (
   `schedule_time` time NOT NULL,
   `description` text,
   `claim_date` date DEFAULT NULL,
-  `claim_time` time DEFAULT '00:00:00',
+  `claim_time` time DEFAULT NULL,
   `status` varchar(256) NOT NULL DEFAULT 'Pending',
   `payment_status` tinyint(4) NOT NULL DEFAULT '0',
+  `user_notify` tinyint(4) DEFAULT '0',
+  `notify_status` tinyint(4) NOT NULL DEFAULT '0',
+  `date_sched_created` date DEFAULT NULL,
+  `time_sched_created` time DEFAULT NULL,
+  `accept_date` date DEFAULT NULL,
+  `accept_time` time DEFAULT NULL,
+  `decline_date` date DEFAULT NULL,
+  `decline_time` time DEFAULT NULL,
+  `decline_message` text,
+  `done_date` date DEFAULT NULL,
+  `done_time` time DEFAULT NULL,
   PRIMARY KEY (`schedule_id`),
   KEY `service_id` (`service_id`),
   KEY `shop_id` (`shop_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `schedules`
 --
 
-INSERT INTO `schedules` (`schedule_id`, `user_id`, `service_id`, `shop_id`, `schedule_date`, `schedule_time`, `description`, `claim_date`, `claim_time`, `status`, `payment_status`) VALUES
-(3, 17, 128, 43, '2018-03-01', '13:00:00', '', NULL, '00:00:00', 'Ready to Claim', 1),
-(4, 18, 124, 42, '2018-03-01', '16:00:00', '', NULL, '00:00:00', 'Done', 0),
-(5, 17, 126, 43, '2018-03-02', '15:00:00', '', NULL, '00:00:00', 'Done', 0),
-(6, 18, 123, 44, '2018-03-02', '12:00:00', '', NULL, '00:00:00', 'Done', 0),
-(7, 17, 126, 43, '2018-02-07', '15:00:00', '', NULL, '00:00:00', 'Accepted', 0),
-(8, 20, 124, 42, '2018-03-01', '13:59:00', '', NULL, '00:00:00', 'Accepted', 0),
-(9, 18, 124, 42, '2018-03-02', '14:00:00', '', NULL, '00:00:00', 'Accepted', 0);
+INSERT INTO `schedules` (`schedule_id`, `user_id`, `service_id`, `shop_id`, `schedule_date`, `schedule_time`, `description`, `claim_date`, `claim_time`, `status`, `payment_status`, `user_notify`, `notify_status`, `date_sched_created`, `time_sched_created`, `accept_date`, `accept_time`, `decline_date`, `decline_time`, `decline_message`, `done_date`, `done_time`) VALUES
+(3, 17, 128, 43, '2018-03-01', '13:00:00', '', NULL, '00:00:00', 'Ready to Claim', 0, 1, 1, '2018-03-26', '15:24:15', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 18, 124, 42, '2018-03-01', '16:00:00', '', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-02-26', '11:18:39', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 17, 126, 43, '2018-03-02', '15:00:00', '', NULL, '00:00:00', 'Done', 0, 1, 1, '2018-02-27', '11:44:25', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 18, 123, 44, '2018-03-02', '12:00:00', '', NULL, '00:00:00', 'Done', 0, 1, 1, '2018-02-27', '12:02:52', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 17, 126, 43, '2018-02-07', '15:00:00', '', NULL, '00:00:00', 'Accepted', 0, 1, 1, '2018-03-28', '04:28:42', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 20, 124, 42, '2018-03-01', '13:59:00', '', NULL, '00:00:00', 'Pending', 0, 0, 1, '2018-02-28', '16:14:07', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 18, 124, 42, '2018-03-02', '14:00:00', '', NULL, '00:00:00', 'Declined', 0, 1, 1, '2018-03-01', '09:00:00', NULL, NULL, '2018-03-04', '23:42:40', 'because of the holiday.', NULL, NULL),
+(10, 21, 124, 42, '2018-03-02', '14:01:00', '', NULL, '00:00:00', 'Done', 0, 0, 1, '2018-03-01', '10:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, 18, 125, 42, '2018-03-04', '12:59:00', '', NULL, '00:00:00', 'Declined', 0, 1, 1, '2018-03-01', '10:30:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 20, 125, 42, '2018-03-04', '15:00:00', '', NULL, '00:00:00', 'Done', 0, 1, 1, '2018-03-03', '00:00:00', '2018-03-03', '19:07:33', '2018-03-03', '19:04:07', NULL, '2018-03-03', '19:08:11'),
+(17, 18, 124, 42, '2018-03-12', '13:00:00', '', NULL, '00:00:00', 'Accepted', 0, 1, 1, '2018-03-03', '14:22:02', '2018-03-03', '19:03:36', NULL, NULL, NULL, NULL, NULL),
+(18, 20, 124, 42, '2018-03-04', '13:00:00', '', NULL, NULL, 'Accepted', 0, 1, 1, '2018-03-03', '19:25:10', '2018-03-03', '19:39:22', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -195,9 +216,9 @@ INSERT INTO `services` (`service_id`, `shop_id`, `service_name`, `service_descri
 (123, 44, 'Oil Change', 'test', '1000.00', 1),
 (124, 42, 'Alteration', 'test', '100.00', 1),
 (125, 42, 'Restyling', 'test', '300.00', 1),
-(126, 43, 'Alteration', 'test', '350.00', 1),
+(126, 43, 'Alteration', 'test', '350.00', 0),
 (127, 43, 'Alteration', 'test', '350.00', 0),
-(128, 43, 'Restyling', 'test', '230.00', 1);
+(128, 43, 'Restyling', 'test', '230.00', 0);
 
 -- --------------------------------------------------------
 
@@ -223,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `shops` (
   PRIMARY KEY (`shop_id`),
   KEY `shops_ibfk_1` (`user_id`),
   KEY `shop_cat_id` (`shop_cat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `shops`
@@ -233,7 +254,8 @@ INSERT INTO `shops` (`shop_id`, `user_id`, `shop_cat_id`, `shop_name`, `shop_des
 (42, 17, 4, 'Red Crow', 'test', '5a952becd2e141.61971710.png', '123-454-2398', 'Monday', 'Wednesday', '08:00:00', '17:00:00', '2018-02-27', 1),
 (43, 18, 4, 'Fast Repair', 'test', '5a952c6ba574e3.28568026.jpg', '324-459-4542', 'Wednesday', 'Sunday', '08:30:00', '19:00:00', '2018-02-27', 1),
 (44, 17, 6, 'Garage Repair', 'test', '5a9534960a8546.77518566.jpg', '777-777-3456', 'Monday', 'Saturday', '08:00:00', '20:00:00', '2018-02-27', 0),
-(45, 17, 7, 'Repair Shop', 'test', '5a9654cf3ab391.71461464.jpg', '345-678-5674', 'Monday', 'Wednesday', '13:00:00', '18:00:00', '2018-02-28', 1);
+(45, 17, 7, 'Repair Shop', 'test', '5a9654cf3ab391.71461464.jpg', '345-678-5674', 'Monday', 'Wednesday', '13:00:00', '18:00:00', '2018-02-28', 1),
+(46, 21, 7, 'Tech Repair', 'test', '5a97fdbf8b5d84.03111443.png', '452-264-2346', 'Monday', 'Sunday', '12:00:00', '20:00:00', '2018-03-01', 1);
 
 -- --------------------------------------------------------
 
@@ -278,18 +300,20 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   `subscribe_date` date NOT NULL,
   `subscribe_time` time NOT NULL,
   `subscription_status` tinyint(4) NOT NULL DEFAULT '1',
+  `seen_subscribe` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`subscription_id`),
   KEY `user_id` (`user_id`),
   KEY `sub_type_id` (`sub_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subscriptions`
 --
 
-INSERT INTO `subscriptions` (`subscription_id`, `user_id`, `sub_type_id`, `method`, `subscribe_date`, `subscribe_time`, `subscription_status`) VALUES
-(17, 17, 6, 'Trial', '2018-02-27', '17:48:10', 1),
-(18, 18, 6, 'Trial', '2018-02-27', '17:49:33', 1);
+INSERT INTO `subscriptions` (`subscription_id`, `user_id`, `sub_type_id`, `method`, `subscribe_date`, `subscribe_time`, `subscription_status`, `seen_subscribe`) VALUES
+(17, 17, 6, 'Trial', '2018-02-27', '17:48:10', 1, 1),
+(18, 18, 6, 'Trial', '2018-02-27', '17:49:33', 1, 1),
+(19, 21, 6, 'Trial', '2018-03-01', '21:17:42', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -338,20 +362,24 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_pwd` varchar(256) NOT NULL,
   `user_type` varchar(256) NOT NULL,
   `date_registered` date NOT NULL,
+  `time_registered` time NOT NULL DEFAULT '00:00:00',
+  `user_seen` tinyint(4) DEFAULT '0',
   `user_timestamp` timestamp NULL DEFAULT NULL,
   `sub_status` tinyint(4) NOT NULL DEFAULT '0',
   `user_status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_first`, `user_last`, `user_image`, `user_gender`, `user_address`, `user_email`, `user_mobile`, `user_uid`, `user_pwd`, `user_type`, `date_registered`, `user_timestamp`, `sub_status`, `user_status`) VALUES
-(17, 'Natalie', 'Portman', '5a952cc7c489b3.84716282.jpg', 'Female', 'Jerusalem', 'natalie@gmail.com', '9999-999-9999', 'natalie1', '123', 'Service Provider', '2018-02-27', '2018-02-27 09:48:10', 1, 1),
-(18, 'Victoria', 'Justice', '5a952cb2dead87.94267001.jpg', 'Female', 'test', 'victoria@gmail.com', '+639277445743', 'victoria2', '123', 'Service Provider', '2018-02-27', '2018-02-27 09:49:33', 1, 1),
-(20, 'Vivien', 'Torrizo', NULL, 'Female', 'Cebu City', 'vien@gmail.com', '7777-777-7777', 'vien', '123', 'User', '2018-02-28', NULL, 0, 1);
+INSERT INTO `users` (`user_id`, `user_first`, `user_last`, `user_image`, `user_gender`, `user_address`, `user_email`, `user_mobile`, `user_uid`, `user_pwd`, `user_type`, `date_registered`, `time_registered`, `user_seen`, `user_timestamp`, `sub_status`, `user_status`) VALUES
+(17, 'Natalie', 'Portman', '5a952cc7c489b3.84716282.jpg', 'Female', 'Jerusalem', 'natalie@gmail.com', '+639277445743', 'natalie1', '123', 'Service Provider', '2018-02-27', '00:00:00', 0, '2018-02-27 09:48:10', 1, 1),
+(18, 'Victoria', 'Justice', '5a952cb2dead87.94267001.jpg', 'Female', 'test', 'victoria@gmail.com', '+639277445743', 'victoria2', '123', 'Service Provider', '2018-02-27', '00:00:00', 0, '2018-02-27 09:49:33', 1, 1),
+(20, 'Vivien', 'Torrizo', NULL, 'Female', 'Cebu City', 'vien@gmail.com', '+639277445743', 'vien', '123', 'User', '2018-02-28', '00:00:00', 0, NULL, 0, 1),
+(21, 'Kenneth', 'Bacayo', '5a97fe1d649910.80718961.jpg', 'Male', 'Cebu City', 'ken@gmail.com', '+639277445743', 'ken2017', '123', 'Service Provider', '2018-03-01', '00:00:00', 0, '2018-03-01 13:17:42', 1, 1),
+(23, 'test', 'test', NULL, 'Male', 'test', 'kennethbacayo@yahoo.com', '+639277445743', 'test', '123', 'User', '2018-03-02', '00:00:00', 0, NULL, 0, 1);
 
 --
 -- Constraints for dumped tables
