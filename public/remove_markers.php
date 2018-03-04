@@ -4,6 +4,7 @@
   
     include_once '../includes/db_connection.php';
   
+    
     $id = 0;
     $shop_name = '';
     $fileNameNew = '';
@@ -13,10 +14,10 @@
     $day_end = '';
     $time_start = '';
     $time_end = '';
-    $shop_category = 0;
-  
+    $shop_category = '';
 
-  if (isset($_GET['myshop'])) {
+
+    if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
     $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
@@ -33,19 +34,15 @@
    
   }
 
-   // Retrieve services
-    $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id AND service_status = 1");
+  //Retrieve markers
+  $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id") or die(mysqli_error($connection));
 
-
-  // Marker results
-    $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id");
+ $resultCheck = mysqli_num_rows($marker_results);
 
 
 
+ 
 ?>
-
-
-
 
 <!doctype html>
 <html lang="en">
@@ -59,41 +56,23 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
-
     <!-- JQuery -->
-    <script src="javascripts/jquery-3.2.1.min.js"></script> 
-
-        <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-
-      #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 35%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
-    </style>
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
 
   </head>
   <body id="remove_markers">
     
 
-     <?php include '../includes/layouts/provider_header.php';?>
+  <?php include '../includes/layouts/provider_header.php';?>
 
-
-      <div class=" content container">
-
+  
+      <div class="content container">
+           
+       
+        
       <div class="row">
         <div class="col-sm-12">
-         <h1>Remove <span class="glyphicon glyphicon-remove" ></span> Locations </h1>
+         <h1>Update and Delete Locations </h1>
              <div>
                 <?php   $resultCheck = mysqli_num_rows($marker_results);
                         if ($resultCheck < 1): ?>
@@ -133,84 +112,151 @@
        </ul>
         </div>
       </div>
-       <div class="row">
-         <div class="col-sm-12">
-           
-    <div id="floating-panel">
-      <input onclick="clearMarkers();" type=button value="Hide Markers">
-      <input onclick="showMarkers();" type=button value="Show All Markers">
-      <input onclick="deleteMarkers();" type=button value="Delete Markers">
+  
+      <div class="row">
+        <div class="col-sm-12">
+   <div id="map" height="460px" width="100%"></div>
+   <br/>
+    <div id="form">
+      <table >
+       <tr><td><input type='hidden' id='shop' value="<?php echo $shop_id;?>" /> </td> </tr>
+      <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
+      <tr><td>Address:</td> <td><input type='text' id='address'/> </td> </tr>
+       <tr><td></td><td><input type='button' value='Update' onclick='saveData()'/><input type='button' value='Delete' onclick='saveData()'/></td>
+
+       </tr>
+      </table>
     </div>
-    <div id="map" style="margin-bottom: 20px;"></div>
-
+    <br/>
+    <div id="message">Location updated</div>
     <script>
-
-      // In the following example, markers appear when the user clicks on the map.
-      // The markers are stored in an array.
-      // The user can then click an option to hide, show or delete the markers.
       var map;
-      var markers = [];
+      var marker;
+      var infowindow;
+      var messagewindow;
 
       function initMap() {
         var cebu = {lat:10.315308, lng:123.885462};
-
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 8,
-          center: cebu
+          center: cebu,
+          zoom: 8
 
-         
         });
 
-        // This event listener will call addMarker() when the map is clicked.
-        map.addListener('click', function(event) {
-          addMarker(event.latLng);
+          <?php
+              $datas = array();
+             if (mysqli_num_rows($marker_results) > 0) {
+              while ($row = mysqli_fetch_assoc($marker_results)) {
+                $datas[] = $row;
+                
+              }
+           }
+
+        foreach ($datas as $key ) { ?>
+
+          addMarker({id:<?php echo $key['id']?>,coords:{lat:<?php echo $key['lat'];?>,lng:<?php echo $key['lng'];?>},
+            name:'<?php echo $key['name'];?>',address: '<?php echo $key['address'];?>'});
+          
+        <?php }?>
+
+
+        infowindow = new google.maps.InfoWindow({
+          content: document.getElementById('form')
         });
 
-        // Adds a marker at the center of the map.
-        addMarker(haightAshbury);
-      }
+        messagewindow = new google.maps.InfoWindow({
+          content: document.getElementById('message')
+        });
 
-      // Adds a marker to the map and push to the array.
-      function addMarker(location) {
+     /*   google.maps.event.addListener(map, 'click', function(event) {
+          marker = new google.maps.Marker({
+            position: event.latLng,
+            map: map
+          });
+
+        });*/
+
+           // Add Marker Function
+      function addMarker(props){
+          document.getElementById('shop').value = props.id;
+           document.getElementById('name').value = props.name;
+          document.getElementById('address').value = props.address;
+        
+
         var marker = new google.maps.Marker({
-          position: location,
-          map: map
+          position:props.coords,
+          map:map,
         });
-        markers.push(marker);
-      }
 
-      // Sets the map on all markers in the array.
-      function setMapOnAll(map) {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
+         var infowindow = new google.maps.InfoWindow({
+          content: document.getElementById('form')
+            
+        });
+
+
+    /*  var infowindow = new google.maps.InfoWindow({
+          content: props.content
+        });
+
+         marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });*/
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+          });
+
         }
+
+        
       }
 
-      // Removes the markers from the map, but keeps them in the array.
-      function clearMarkers() {
-        setMapOnAll(null);
+   /*   function saveData() {
+        var shop = escape(document.getElementById('shop').value);
+        var name = escape(document.getElementById('name').value);
+        var address = escape(document.getElementById('address').value);
+        var latlng = marker.getPosition();
+        var url = 'phpsqlinfo_addrow.php?shop='+ shop +'&name=' + name + '&address=' + address + '&lat=' + latlng.lat() + '&lng=' + latlng.lng();
+
+        downloadUrl(url, function(data, responseCode) {
+
+          if (responseCode == 200 && data.length <= 1) {
+            infowindow.close();
+            messagewindow.open(map, marker);
+          }
+        });
       }
 
-      // Shows any markers currently in the array.
-      function showMarkers() {
-        setMapOnAll(map);
+      function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+          if (request.readyState == 4) {
+            request.onreadystatechange = doNothing;
+            callback(request.responseText, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
       }
 
-      // Deletes all markers in the array by removing references to them.
-      function deleteMarkers() {
-        clearMarkers();
-        markers = [];
-      }
+      function doNothing () {
+      }*/
+
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHqHUCFSjE6G0i9mX5hQTR1kJprdDSDnk&callback=initMap">
     </script>
-         </div>
-       </div>
 
-    </div>
+        </div>
+      </div>
 
-     <!-- Modal -->
+  </div>
+
+            <!-- Modal -->
   <div class="modal fade" id="nolocations" role="dialog">
     <div class="modal-dialog">
     
@@ -233,7 +279,8 @@
       
     </div>
   </div>
-   <script>
+
+<script>
 $(document).ready(function(){
  
  function load_unseen_notification(view = '')
@@ -288,7 +335,8 @@ $(document).ready(function(){
  }, 5000);
  
 });
-</script>     
+</script>
+
   
 
     <?php include '../includes/layouts/footer.php';?>
