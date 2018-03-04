@@ -235,4 +235,4 @@ $(document).ready(function(){
 
 
 
-    <?php include '../includes/layouts/footer.php';?>
+ <?php include '../includes/layouts/footer.php';?>

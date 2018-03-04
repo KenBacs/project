@@ -120,9 +120,14 @@
     <div id="form">
       <table >
        <tr><td><input type='hidden' id='shop' value="<?php echo $shop_id;?>" /> </td> </tr>
-      <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
-      <tr><td>Address:</td> <td><input type='text' id='address'/> </td> </tr>
-       <tr><td></td><td><input type='button' value='Update' onclick='saveData()'/><input type='button' value='Delete' onclick='saveData()'/></td>
+      <tr><td>Name:</td> <td colspan="2" ><input type='text' id='name'/> </td> </tr>
+      <tr><td>Address:</td> <td colspan="2"><input type='text' id='address'/> </td> </tr>
+
+       <tr>
+       <td></td>
+       <td><input type='button' value='Update' onclick='updateData()'/></td>
+       <td> <input type='button' value='Delete' onclick='deleteData()'/> </td>
+      
 
        </tr>
       </table>
@@ -160,10 +165,10 @@
         <?php }?>
 
 
-        infowindow = new google.maps.InfoWindow({
+      /*  infowindow = new google.maps.InfoWindow({
           content: document.getElementById('form')
         });
-
+*/
         messagewindow = new google.maps.InfoWindow({
           content: document.getElementById('message')
         });
@@ -178,6 +183,7 @@
 
            // Add Marker Function
       function addMarker(props){
+          var contentString = '';
           document.getElementById('shop').value = props.id;
            document.getElementById('name').value = props.name;
           document.getElementById('address').value = props.address;
@@ -201,17 +207,39 @@
          marker.addListener('click', function() {
           infowindow.open(map, marker);
         });*/
-
-          google.maps.event.addListener(marker, 'click', function() {
+            google.maps.event.addListener(marker, 'click', function() {
             infowindow.open(map, marker);
           });
 
+
+
         }
+
+      
+
 
         
       }
 
-   /*   function saveData() {
+          function updateData() {
+          var shop = escape(document.getElementById('shop').value);
+          var name = escape(document.getElementById('name').value);
+          var address = escape(document.getElementById('address').value);
+          var latlng = marker.getPosition();
+          var url = 'phpsqlinfo_updaterow.php?shop='+ shop +'&name=' + name + '&address=' + address + '&lat=' + latlng.lat() + '&lng=' + latlng.lng();
+
+          downloadUrl(url, function(data, responseCode) {
+
+            if (responseCode == 200 && data.length <= 1) {
+              infowindow.close();
+              messagewindow.open(map, marker);
+            }
+          });
+        }
+
+  
+
+       function deleteData() {
         var shop = escape(document.getElementById('shop').value);
         var name = escape(document.getElementById('name').value);
         var address = escape(document.getElementById('address').value);
@@ -244,7 +272,7 @@
       }
 
       function doNothing () {
-      }*/
+      }
 
     </script>
     <script async defer

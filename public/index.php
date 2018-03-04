@@ -16,6 +16,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
   <body id="home">
     
@@ -25,7 +27,13 @@
 
       <div class="content container-fluid bg" style="padding-top: 150px; padding-bottom: 150px;" >
     
-        
+        <?php if(isset($_GET['accountdeletion'])) : ?>
+            <script type="text/javascript">
+
+                      $(function() { $("#deleted").modal('show'); });
+
+                    </script>
+        <?php endif ?>
 
          <div class="center">
             <div class="row">
@@ -123,6 +131,32 @@
         </div>
         </div>
       </div>
+
+                           <!-- Modal -->
+                    <div id="deleted" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Message</h4>
+                          </div>
+                          <div class="modal-body">
+                          <ul class="list-inline">
+                          
+                            <li> <h5 class="alert alert-success">Your account is successfully deleted.</h5> </li>
+                          </ul>
+                           
+                           
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
 
 
 

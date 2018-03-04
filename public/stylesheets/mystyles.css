@@ -69,4 +69,26 @@ body {
     width: 100px;
 }
 
+.footer {
+
+	/*height: 50px;
+	margin-top: 30px;
+    position: static;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #222;
+    color: white;
+    text-align: center;*/
+
+   
+    color:white;
+    text-align:center;
+    background-color: #222;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
 
