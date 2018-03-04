@@ -41,3 +41,32 @@ body {
     margin: 0 auto;
     width:80% /* value of your choice which suits your alignment */
 }
+
+.img-responsive {
+    margin: 0 auto;
+}
+
+.bg {
+	/*background: url('images/jGlzr.png');*/
+	background-color: #ff5050;
+	background-repeat: no-repeat;
+	background-position: top;
+    background-size: contain;
+    /*height:600px; */ 
+}
+
+.center {
+    padding: 70px 0;
+    /*border: 3px solid green;*/
+    text-align: center;	
+}
+
+
+.features{
+    font-size: 75px;
+}
+#paypal{
+    width: 100px;
+}
+
+
