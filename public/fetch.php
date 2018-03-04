@@ -21,13 +21,15 @@ if(isset($_POST["view"]))
  {
   while($row = mysqli_fetch_array($result))
   {
-  	/*date("g:i a", strtotime($record['time_start']))*/
+
+  /*$time_sched_created = date("g:i a", strtotime($row['time_sched_created'])); */
+  
    $output .= '
    <li>
     <a href="#">	
      <strong>'.$row["user_uid"].'</strong> <small>set schedule to you shop</small><br />
   	 <small>with a service of </small><strong>'.$row["service_name"].'</strong><br />
-         <small>'.$row["date_sched_created"].' '.$row["time_sched_created"].'</small>
+         <small>'.$row["date_sched_created"].' '.date("g:i a", strtotime($row["time_sched_created"])).'</small>
     </a>
    </li>
    <li class="divider"></li>

@@ -9,7 +9,7 @@ if(isset($_POST["view2"]))
 
 if($_POST["view2"] != '')
  {
-  $update_query = "UPDATE schedules SET notify_status = 1 WHERE user_id = $user_id AND notify_status = 0 ";
+  $update_query = "UPDATE schedules SET user_notify = 1 WHERE user_id = $user_id AND user_notify = 0 ";
   mysqli_query($connection, $update_query) or die(mysqli_error($connection));
  }
 
@@ -35,19 +35,31 @@ if($_POST["view2"] != '')
          <strong>'.$row["shop_name"].'</strong> <small>your item is already repaired or altered</small><br />
          <small>with a service of </small><strong>'.$row["service_name"].'.</strong><br />
          <small>Thank you for choosing us!</small><br />
-         <small>'.$row["date_sched_created"].' '.$row["time_sched_created"].'</small>
+         <small>'.$row["done_date"].' '.date("g:i a", strtotime($row["done_time"])).'</small>
         </a>
        </li>
        <li class="divider"></li>
        ';
       
-    } else {
+    } elseif ($row['status'] == "Accepted") {
+         $output .= '
+       <li>
+        <a href="#">  
+         <strong>'.$row["shop_name"].'</strong> <small>'.$row['status'].' your schedule</small><br />
+         <small>with a service of </small><strong>'.$row["service_name"].'</strong><br />
+         <small>'.$row["accept_date"].' '.date("g:i a", strtotime($row["accept_time"])).'</small>
+        </a>
+       </li>
+       <li class="divider"></li>
+       ';
+    }
+     else {
         $output .= '
        <li>
         <a href="#">  
          <strong>'.$row["shop_name"].'</strong> <small>'.$row['status'].' your schedule</small><br />
          <small>with a service of </small><strong>'.$row["service_name"].'</strong><br />
-         <small>'.$row["date_sched_created"].' '.$row["time_sched_created"].'</small>
+         <small>'.$row["decline_date"].' '.date("g:i a", strtotime($row["decline_time"])).'</small>
         </a>
        </li>
        <li class="divider"></li>
@@ -65,7 +77,7 @@ if($_POST["view2"] != '')
  
  $query_1 ="SELECT * FROM shops 
            INNER JOIN schedules 
-           ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id and schedules.notify_status = 0
+           ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id and schedules.user_notify = 0
            INNER JOIN services
            ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done')
            ORDER BY schedule_id  ";

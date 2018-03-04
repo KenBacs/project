@@ -12,21 +12,21 @@
    
 
 
-        $results = mysqli_query($connection,"SELECT * FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date");
+        $results = mysqli_query($connection,"SELECT * FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created");
 
-        $count_results = mysqli_query($connection,"SELECT COUNT(*) AS count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date ");
+        $count_results = mysqli_query($connection,"SELECT COUNT(*) AS count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created ");
   
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
 
             // Retrieve for chart
-          $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules  GROUP BY schedule_date";
+          $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules  GROUP BY date_sched_created";
           $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
-            $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+            $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
           }
 
      if (isset($_POST['submit'])) {
@@ -49,21 +49,21 @@
 
            
            
-        $results = mysqli_query($connection,"SELECT * FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date");
+        $results = mysqli_query($connection,"SELECT * FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created");
 
-        $count_results = mysqli_query($connection,"SELECT COUNT(*) AS count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date ");
+        $count_results = mysqli_query($connection,"SELECT COUNT(*) AS count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created ");
   
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
 
             // Retrieve for chart
-          $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules  GROUP BY schedule_date";
+          $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules  GROUP BY date_sched_created";
           $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
-            $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+            $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
           }
 
 
@@ -71,21 +71,21 @@
                  
                   
                  
-                 $query = "SELECT *  FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date";
+                 $query = "SELECT *  FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                   // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE status = '$status' GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE status = '$status' GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
 
@@ -95,21 +95,21 @@
               if(!empty($service)) {
                  
                   
-                 $query = "SELECT *  FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date";
+                 $query = "SELECT *  FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                   // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE service_id = $service GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE service_id = $service GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
 
@@ -121,83 +121,83 @@
 
                   if (!empty($date_start) && !empty($date_end)) {
 
-             $query = "SELECT *  FROM users,schedules, services,shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+             $query = "SELECT *  FROM users,schedules, services,shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                   // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
            if (!empty($keywords)) {
                      
-                 $query = "SELECT *  FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date";
+                 $query = "SELECT *  FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users, schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                   // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
            }
 
                 if (!empty($date_start) && !empty($date_end) && !empty($status)) {
 
-             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE status = '$status' AND schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE status = '$status' AND date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
            if (!empty($date_start) && !empty($date_end) && !empty($service)) {
 
-              $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+              $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE service_id = $service AND schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE service_id = $service AND date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
 
@@ -205,42 +205,42 @@
 
             if (!empty($date_start) && !empty($date_end) && !empty($keywords)) {
 
-             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            } 
 
             if (!empty($status) && !empty($keywords)) {
 
-             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' ORDER BY schedule_date";
+             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND status = '$status'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND status = '$status'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
@@ -248,21 +248,21 @@
 
             if (!empty($service) && !empty($keywords)) {
 
-             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND services.service_id = $service ORDER BY schedule_date";
+             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND services.service_id = $service ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND services.service_id = $service  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND services.service_id = $service  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
@@ -271,126 +271,126 @@
 
                if (!empty($status) && !empty($service)) {
 
-             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' ORDER BY schedule_date";
+             $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE service_id = $service AND status = '$status'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE service_id = $service AND status = '$status'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
              if (!empty($date_start) && !empty($date_end) && !empty($status) && !empty($service)) {
 
-                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND services.service_id = $service AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND services.service_id = $service AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND services.service_id = $service AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE service_id = $service AND status = '$status' AND schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE service_id = $service AND status = '$status' AND date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
                 if (!empty($date_start) && !empty($date_end) && !empty($status) && !empty($keywords)) {
 
-                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND status = '$status' AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND status = '$status' AND schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND status = '$status' AND date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
                      if (!empty($date_start) && !empty($date_end) && !empty($service) && !empty($keywords)) {
 
-                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service AND schedule_date BETWEEN '$date_start' AND '$date_end'  GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service AND date_sched_created BETWEEN '$date_start' AND '$date_end'  GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
                if (!empty($status) && !empty($service) && !empty($keywords)) {
 
-                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' ORDER BY schedule_date";
+                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status'  ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status'  ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service AND status = '$status' GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service AND status = '$status' GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
 
                 if (!empty($date_start) && !empty($date_end) && !empty($status) && !empty($service) && !empty($keywords)) {
 
-                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date";
+                  $query = "SELECT *  FROM users,schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created";
                  $results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
-                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' AND schedules.schedule_date BETWEEN '$date_start' AND '$date_end' ORDER BY schedule_date");
+                  $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM users,schedules, services, shops WHERE  schedules.shop_id = shops.shop_id AND shops.shop_name LIKE '%{$keywords}%' AND services.service_id = $service AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id AND status = '$status' AND schedules.date_sched_created BETWEEN '$date_start' AND '$date_end' ORDER BY date_sched_created");
               
                      $record = mysqli_fetch_array($count_results);
                      $count = $record['count'];
 
                    // Retrieve for chart
-                    $query = "SELECT schedule_date, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service AND status = '$status' AND schedule_date BETWEEN '$date_start' AND '$date_end' GROUP BY schedule_date";
+                    $query = "SELECT date_sched_created, COUNT(*) AS user FROM schedules WHERE shop_id = $shop_id AND service_id = $service AND status = '$status' AND date_sched_created BETWEEN '$date_start' AND '$date_end' GROUP BY date_sched_created";
                     $chart_results = mysqli_query($connection, $query) or die(mysqli_error($connection));
 
                     $chart_data = '';
                     while ($row = mysqli_fetch_array($chart_results)) {
-                      $chart_data .= "{ date:'".$row["schedule_date"]."', users:".$row["user"]."}, ";
+                      $chart_data .= "{ date:'".$row["date_sched_created"]."', users:".$row["user"]."}, ";
                     }
 
            }
@@ -558,7 +558,7 @@
                   <tr>
                       <td><?php echo $row['user_uid']; ?></td>
                       <td><?php echo $row['shop_name']; ?></td>
-                      <td><?php echo $row['schedule_date']; ?></td>
+                      <td><?php echo $row['date_sched_created']; ?></td>
                       <td><?php echo $row['claim_date']; ?></td>
                       <td><?php echo $row['service_name']; ?></td>
                       <td><?php echo $row['status']; ?></td>

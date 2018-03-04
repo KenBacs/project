@@ -46,7 +46,7 @@
             <div class="form-group">
 
          
-              <input type="text" style="width: 150px;"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3"/>
+              <input type="text" style="width: 150px;"  name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" value="<?php echo $shop_keywords;?>" list="datalist3">
 
 
                   <datalist id="datalist3">
@@ -96,7 +96,7 @@
               <form class="navbar-form" action="#" method="POST">
             <div class="form-group ">
 
-                    <input type="text" name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off" > value="<?php echo $shop_keywords;?>" list="datalist3">
+                    <input type="text" name="shop_keywords" id="shop_keywords" class="form-control" placeholder="Search Shop" autocomplete="off"  value="<?php echo $shop_keywords;?>" list="datalist3">
 
 
                   <datalist id="datalist3">

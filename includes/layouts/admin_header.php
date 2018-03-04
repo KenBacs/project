@@ -1,4 +1,4 @@
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse ">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsemenu" aria-expanded="false">
@@ -52,6 +52,13 @@
       
 
          <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown"><a href="" class="dropdown-toggle" id="notify-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> <span class="glyphicon glyphicon-bell"></span> Notification <span class="caret"></span></a>
+
+              <ul class="dropdown-menu" id="notify">
+                
+              </ul>
+
+              </li>
               <li class = "navbar-text">Welcome, <?php echo $_SESSION['a_uid']; ?> </li>
               <li> 
                 <form class="navbar-form" action="../includes/logout.inc.php" method="post">

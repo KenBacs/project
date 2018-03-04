@@ -20,10 +20,19 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+       $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
+      
+
+
+         
+            
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
@@ -31,7 +40,7 @@
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
 
-        
+          
           }
 
 
@@ -52,17 +61,24 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+        $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
+
+      
+          
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
 
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
-
+        
         
           }
 
@@ -78,16 +94,24 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+        $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.sub_type_id = $sub_type") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.sub_type_id = $sub_type AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
+
+      
+    
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
 
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
+ 
 
         
           }
@@ -105,17 +129,24 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+         $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.method = '$method_type'") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.method = '$method_type' AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
+
+      
+          
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
 
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
-
+          
         
           }
 
@@ -128,21 +159,28 @@
         $results = mysqli_query($connection, "SELECT * FROM subscriptions,subscription_types WHERE subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.sub_type_id = subscription_types.sub_type_id"); 
 
         $count_results = mysqli_query($connection,"SELECT COUNT(*) as count FROM subscriptions WHERE subscribe_date BETWEEN '$date_start' AND '$date_end' ") or die(mysqli_error($connection));
+
   
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
+
+        $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end'") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
 
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date") or die(mysqli_error($connection));
        
-
+      
+          
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
 
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
-
+    
         
           }
 
@@ -160,11 +198,16 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+         $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.sub_type_id = $sub_type") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.sub_type_id = $sub_type AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
-
+          
+      
+          
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
 
@@ -189,7 +232,14 @@
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.method = '$method_type' AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
+
+           $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.method = '$method_type' ") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
+    
+        
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
@@ -197,7 +247,7 @@
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
 
-        
+       
           }
 
          }
@@ -212,10 +262,17 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+          $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.sub_type_id = $sub_type AND subscriptions.method = '$method_type' ") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.sub_type_id = $sub_type AND subscriptions.method = '$method_type' AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
+
+    
+        
 
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
@@ -223,7 +280,7 @@
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
 
-        
+         
           }
 
          }
@@ -238,18 +295,23 @@
          $record = mysqli_fetch_array($count_results);
          $count = $record['count'];
 
+          $sales_results = mysqli_query($connection,"SELECT SUM(subscription_types.sub_cost) AS total_sales FROM subscriptions,subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.sub_type_id = $sub_type AND subscriptions.method = '$method_type' ") or die(mysqli_error($connection));
+
+         $rec = mysqli_fetch_array($sales_results);
+         $sales = $rec['total_sales'];
+
+
 
            // Retrieve for chart
           $chart_results = mysqli_query($connection, "SELECT COUNT(*) as n_sub, SUM(subscription_types.sub_cost) as daily_sales, subscriptions.subscribe_date as subscribe_date FROM subscriptions, subscription_types WHERE subscriptions.subscribe_date BETWEEN '$date_start' AND '$date_end' AND subscriptions.sub_type_id = $sub_type AND subscriptions.method = '$method_type' AND subscriptions.sub_type_id = subscription_types.sub_type_id GROUP BY subscriptions.subscribe_date");
-       
-
+      
+          
           $chart_data = '';
           while ($row = mysqli_fetch_array($chart_results)) {
 
 
             $chart_data .= "{ date:'".$row["subscribe_date"]."', users:".$row["n_sub"].", sales:".$row["daily_sales"]."}, ";
-
-        
+          
           }
 
          }
@@ -379,6 +441,7 @@
          <div class="col-sm-12">
              
               <h4><strong>Subcriptions: <?php echo $count; ?></strong></h4>
+              <h4><strong>Sales: <?php if(isset($sales)){echo $sales;} else {echo "0.00";}  ?></strong></h4>
               <div class="table-responsive">
               <table class="table">
 
