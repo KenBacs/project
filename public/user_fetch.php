@@ -58,7 +58,8 @@ if($_POST["view2"] != '')
        <li>
         <a href="#">  
          <strong>'.$row["shop_name"].'</strong> <small>'.$row['status'].' your schedule</small><br />
-         <small>with a service of </small><strong>'.$row["service_name"].'</strong><br />
+         <small>with a service of </small><strong>'.$row["service_name"].'</strong>. <br />
+         <small>Reason: '.$row["decline_message"].'</small> <br />
          <small>'.$row["decline_date"].' '.date("g:i a", strtotime($row["decline_time"])).'</small>
         </a>
        </li>

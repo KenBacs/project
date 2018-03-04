@@ -148,7 +148,8 @@
                    <th width="10%">Shop Name</th>
                   <th width="10%">Scheduled Date</th>
                   <th width="10%">Service</th>
-                  <th width="10%">Details</th>
+                  <th width="10%">Service Details</th>
+                  <th width="10%">Declined Message</th>
                   <th width="10%">Status</th>
                   <th width="15%">Action</th>
                 
@@ -157,8 +158,9 @@
                   <tr>
                       <td><?php echo $row['shop_name']; ?></td>
                       <td><?php echo $row['schedule_date']; ?></td>
-                      <td><?php echo $row['service_name']; ?></td>
+                      <td><?php echo $row['service_name']; ?></td>                  
                       <td><?php echo $row['description']; ?></td>
+                      <td><?php echo $row['decline_message']; ?></td>
                       <td><?php echo $row['status']; ?></td>
                     
 

@@ -89,11 +89,12 @@ if (isset($_GET['accept'])) {
       
     }
 
-    if (isset($_GET['decline'])) {
-      $schedule_id = $_GET['decline'];
-
+    if (isset($_POST['submit_declined'])) {
+   	  $shop_id = $_POST['shop_id'];	 	
+      $schedule_id = $_POST['schedule_id'];
+      $comment = $_POST['comment'];
       $status = 'Declined';
-      $query = "UPDATE schedules SET status = '$status', decline_date = '$date_now', decline_time = NOW() WHERE schedule_id = $schedule_id ";
+      $query = "UPDATE schedules SET status = '$status', decline_message = '$comment', decline_date = '$date_now', decline_time = NOW() WHERE schedule_id = $schedule_id ";
       $rec = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
       	$query = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE users.user_id = schedules.user_id AND schedules.service_id = services.service_id AND schedules.schedule_id = $schedule_id") or die(mysqli_error($connection));
@@ -111,7 +112,7 @@ if (isset($_GET['accept'])) {
 	 $user_mobile, // number to send to
 	 array(
 	 'from' => '+16162084171', // your Twilio number
-	 'body' => "$shop_name : Hello, $username. Your schedule is declined with a service of $service_name"
+	 'body' => "$shop_name : Hello, $username. Your schedule is declined with a service of $service_name. Reason: $comment"
 	 )
 	);
 
