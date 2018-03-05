@@ -1,4 +1,4 @@
-  <nav class="navbar navbar-inverse ">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsemenu" aria-expanded="false">
@@ -21,15 +21,15 @@
         
         <li ><a href="admin.php"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-wrench"></span> Manage
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Manage
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="admins.php"><span class="glyphicon glyphicon-wrench"></span> Admins</a></li>
-                    <li><a href="users_admin.php"><span class="glyphicon glyphicon-wrench"></span> Users</a></li>
-                    <li><a href="shops_admin.php"><span class="glyphicon glyphicon-wrench"></span> Shops</a></li>
-                    <li><a href="services_admin.php"><span class="glyphicon glyphicon-wrench"></span> Services</a></li>
-                    <li><a href="shop_categories_admin.php"><span class="glyphicon glyphicon-wrench"></span> Shop Categories</a></li>
-                    <li><a href="subscriptions_admin.php"><span class="glyphicon glyphicon-wrench"></span> Subscriptions</a></li>
+                    <li><a href="admins.php"><span class="glyphicon glyphicon-cog"></span> Admins</a></li>
+                    <li><a href="users_admin.php"><span class="glyphicon glyphicon-cog"></span> Users</a></li>
+                    <li><a href="shops_admin.php"><span class="glyphicon glyphicon-cog"></span> Shops</a></li>
+                    <li><a href="services_admin.php"><span class="glyphicon glyphicon-cog"></span> Services</a></li>
+                    <li><a href="shop_categories_admin.php"><span class="glyphicon glyphicon-cog"></span> Shop Categories</a></li>
+                    <li><a href="subscriptions_admin.php"><span class="glyphicon glyphicon-cog"></span> Subscriptions</a></li>
 
                 </ul>
         </li>
@@ -52,9 +52,9 @@
       
 
          <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="" class="dropdown-toggle" id="notify-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> <span class="glyphicon glyphicon-bell"></span> Notification <span class="caret"></span></a>
+                <li class="dropdown"><a href="" class="dropdown-toggle" id="notify-toggle-admin" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> <span class="glyphicon glyphicon-bell"></span> Notification <span class="caret"></span></a>
 
-              <ul class="dropdown-menu" id="notify">
+              <ul class="dropdown-menu" id="notify-admin">
                 
               </ul>
 

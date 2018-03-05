@@ -24,6 +24,7 @@
     $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $id AND shops.shop_cat_id = shop_categories.shop_cat_id");
     $record = mysqli_fetch_array($rec);
     $id = $record['shop_id'];
+    $u_id = $record['user_id'];
     $shop_name = $record['shop_name'];
     $shop_image = $record['shop_image'];
     $shop_description = $record['shop_description'];
@@ -70,13 +71,13 @@
   <?php include '../includes/layouts/header.php';?>
 
 
-      <div class=" content container">
+      <div class="content container">
            <div class="row">
           <div class="col-md-6">
             <h1><?php echo $shop_name; ?> <small><?php echo $shop_category; ?></small></h1>
           </div>
           <div class="col-md-6">
-            <?php if ($resultCheck2 < 1): ?>
+            <?php if ($resultCheck2 < 1 || $u_id == $_SESSION['u_id']): ?>
                 <a href="set_schedule.php?set=<?php echo $id; ?>" class="btn btn-success btn-lg disabled" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
             <?php else: ?>
                <a href="set_schedule.php?set=<?php echo $id; ?>" class="btn btn-success btn-lg" style="margin-top: 20px;" role="button">Set Schedule Now!</a>
@@ -211,6 +212,7 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHqHUCFSjE6G0i9mX5hQTR1kJprdDSDnk&callback=initMap">
     </script>
+
             </div>
           </div>
           

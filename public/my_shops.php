@@ -381,7 +381,7 @@
    <?php if(date("Y-m-d") < $MembershipEnds) :  ?>
 
     <div class="content container">
-     <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> My Shops</h1>
+     <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-cog"></span> My Shops</h1>
 
             <?php if(!isset($_POST['search'])):?>
               <?php   $resultCheck = mysqli_num_rows($results);

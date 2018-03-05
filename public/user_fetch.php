@@ -27,6 +27,7 @@ if($_POST["view2"] != '')
   while($row = mysqli_fetch_array($result))
   {
     /*date("g:i a", strtotime($record['time_start']))*/
+  
     if ($row['status'] == "Done") {
 
        $output .= '

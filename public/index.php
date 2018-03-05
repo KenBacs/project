@@ -120,7 +120,7 @@
                     <img src="images/Paypal-icon.png" id="paypal"> 
                 </td>
                 <td colspan="2">
-                    <h3>Online payment</h3> 
+                    <h3>You can pay online</h3> 
                 </td>
               </tr>
 

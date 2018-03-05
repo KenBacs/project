@@ -25,7 +25,7 @@
         </li>
         <li ><a href="p_myshop.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         <li><a href="shop_schedules.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-calendar"></span> Schedules</a></li>
-          <li><a href="shop_services.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-list"></span> Services</a></li>
+          <li><a href="shop_services.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-cog"></span> Services</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-map-marker"></span> Locations
                 <span class="caret"></span></a>

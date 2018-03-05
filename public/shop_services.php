@@ -217,7 +217,7 @@
     
     
     <div class="content container">
-     <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> <?php echo $shop_name;?> <small>Services</small> </h1>
+     <h1 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-cog"></span> <?php echo $shop_name;?> <small>Services</small> </h1>
     <div class="row">
 
       <div class="col-md-4">

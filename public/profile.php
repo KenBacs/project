@@ -119,8 +119,8 @@
                       
                       <h1 class="text-center"> <?php echo $_SESSION['u_uid']; ?> </h1><br/>
                       <h5 class="text-center">ID: <?php echo $_SESSION['u_id']; ?> </h5><br/>
-                      <h5 class="text-center">First Name: <?php echo $_SESSION['u_first']; ?> </h5><br/>
-                      <h5 class="text-center">Last Name: <?php echo $_SESSION['u_last']; ?> </h5><br/>
+                      <h5 class="text-center">First Name: <?php echo ucwords($_SESSION['u_first']); ?> </h5><br/>
+                      <h5 class="text-center">Last Name: <?php echo ucwords($_SESSION['u_last']); ?> </h5><br/>
                       <h5 class="text-center">Gender: <?php echo $_SESSION['u_gender']; ?> </h5><br/>
                       <h5 class="text-center">Address: <?php echo $_SESSION['u_address']; ?> </h5><br/>
                       <h5 class="text-center">Email: <?php echo $_SESSION['u_email']; ?></h5><br/>

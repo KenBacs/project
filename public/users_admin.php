@@ -309,7 +309,7 @@
     
     
     <div class="content container">
-     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-wrench"></span> Users</h2>
+     <h2 class="text-center" style="margin-bottom: 20px;"><span class="glyphicon glyphicon-cog"></span> Users</h2>
     <div class="row">
 
       <div class="col-md-4">

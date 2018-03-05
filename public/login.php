@@ -139,10 +139,10 @@
               <label for="">Password</label>
               <input type="password" name="pwd" class="form-control" id="" placeholder="Password" value="<?php echo isset($_POST['pwd']) ? $pwd : '';?>">
             </div>
-            <div class="form-check">
+            <!-- <div class="form-check">
               <input type="checkbox" class="form-check-input" id="remember" name="remember">
               <label class="form-check-label" for="remember me">Remember me</label>
-            </div>
+            </div> -->
             <button type="submit" name="submit" class="btn-login btn btn-primary">Submit</button>
           </form>
          

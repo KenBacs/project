@@ -22,7 +22,7 @@ if(isset($_POST["view3"]))
      <small>New subscription: </small><strong>'.$row["user_uid"].'</strong><br />
      <small>with a subscription plan of</small><br/> 
      <strong>'.$row["method"].'</strong><br/>
-     <small>'.$row['subscribe_date'].' '.$row['subscribe_time'].'</small>
+     <small>'.$row['subscribe_date'].' '.date("g:i a", strtotime($row["subscribe_time"])).'</small>
     </a>
    </li>
    <li class="divider"></li>

@@ -238,7 +238,26 @@
                   <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined'&& $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed')  : ?>
                          <a href="send_message.php?myshop=<?php echo $shop_id;?>&accept=<?php echo $row['schedule_id'];?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
 
-                       <a href="#"  class="btn btn-danger" role="button" title="<strong>Why?</strong>" data-toggle="popover" data-placement="top" data-content='<form method="POST" action="send_message.php"><input type="hidden" name="shop_id" value="<?php echo $shop_id;?>"><input type="hidden" name="schedule_id" value="<?php echo $row['schedule_id'];?>"><div class="form-group"><textarea class="form-control" rows="5" id="comment" name="comment"></textarea></div><div class="form-group"><button type="submit" name="submit_declined" class = "btn btn-success btn-block"><span class ="glyphicon glyphicon-ok"></span> Confirm</button></div></form>' data-html="true"><span class="glyphicon glyphicon-remove"></span> Decline</a>
+                       <a href="#"  class="btn btn-danger" role="button" title="<strong>Why?</strong>" data-toggle="popover" data-placement="top" data-content='                       
+
+                      <form method="POST" action="send_message.php">
+
+                      <input type="hidden" name="shop_id" value="<?php echo $shop_id;?>">
+
+                      <input type="hidden" name="schedule_id" value="<?php echo $row['schedule_id'];?>">
+
+                      <div class="form-group">
+
+                        <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+
+                      </div>
+                      <div class="form-group">
+
+                      <button type="submit" name="submit_declined" class = "btn btn-success btn-block"><span class ="glyphicon glyphicon-ok"></span> Confirm</button>
+
+                      </div>
+                      </form>' 
+                      data-html="true"><span class="glyphicon glyphicon-remove"></span> Decline</a>
                   <?php elseif($row['status'] == 'Accepted') : ?>
                       
                      <a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"></span> Create Bill</a>

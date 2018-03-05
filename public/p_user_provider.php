@@ -82,8 +82,8 @@
                       
                       <h1 class="text-center"> <?php echo $uid; ?> </h1><br/>
                        <h5 class="text-center">ID: <?php echo $id; ?> </h5><br/>
-                      <h5 class="text-center">First Name: <?php echo $first; ?> </h5><br/>
-                      <h5 class="text-center">Last Name: <?php echo $last; ?> </h5><br/>
+                      <h5 class="text-center">First Name: <?php echo ucwords($first); ?> </h5><br/>
+                      <h5 class="text-center">Last Name: <?php echo ucwords($last) ; ?> </h5><br/>
                       <h5 class="text-center">Gender: <?php echo $gender; ?> </h5><br/>
                       <h5 class="text-center">Email: <?php echo $email; ?> </h5><br/>
                       <h5 class="text-center">Mobile number: <?php echo $mobilenumber; ?> </h5><br/>
