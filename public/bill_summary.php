@@ -47,9 +47,23 @@
     $user_id = $record['user_id'];
     $schedule_date = $record['schedule_date'];
     $schedule_time = date("g:i a", strtotime($record['schedule_time']));
+    $total_amount = 0.00;
+
+
+      // Retrieve job orders of a particular schedule
+   $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
+
+
+   // Total bill
+   $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
+
+
+    $total = mysqli_fetch_array($total_results); 
+    $total_amount = $total['total'];
   }
 
     if (isset($_GET['cash'])) {
+
     $schedule_id = $_GET['cash'];
     $rec = mysqli_query($connection,"SELECT * from schedules, users WHERE schedules.user_id = users.user_id AND schedules.schedule_id = $schedule_id ");
     $record = mysqli_fetch_array($rec);
@@ -58,12 +72,26 @@
     $user_id = $record['user_id'];
     $schedule_date = $record['schedule_date'];
     $schedule_time = date("g:i a", strtotime($record['schedule_time']));
+    $total_amount = 0.00;
+
+      // Retrieve job orders of a particular schedule
+   $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
+
+
+   // Total bill
+   $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
+
+
+    $total = mysqli_fetch_array($total_results); 
+    $total_amount = $total['total'];
+
   }
+
 
 
   if (isset($_GET['view'])) {
     $schedule_id = $_GET['view'];
-    $rec = mysqli_query($connection,"SELECT * FROM payments,schedules,users WHERE schedules.user_id = users.user_id  AND payments.schedule_id = $schedule_id ");
+    $rec = mysqli_query($connection,"SELECT * from schedules, users , payments WHERE schedules.user_id = users.user_id AND schedules.schedule_id = payments.schedule_id AND schedules.schedule_id = $schedule_id ");
     $record = mysqli_fetch_array($rec);
     $schedule_id = $record ['schedule_id'];
     $user_uid = $record['user_uid'];
@@ -72,7 +100,22 @@
     $schedule_time = date("g:i a", strtotime($record['schedule_time']));
     $payment_date = $record['payment_date'];
     $payment_time = date("g:i a", strtotime($record['payment_time']));
- 
+    $payment_method = $record['method'];
+    $payment_cash_given = $record['cash_given'];
+    $payment_change = $record['amount_change'];
+    $total_amount = 0.00;
+
+      // Retrieve job orders of a particular schedule
+   $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
+
+
+   // Total bill
+   $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
+
+
+    $total = mysqli_fetch_array($total_results); 
+    $total_amount = $total['total'];
+
   }
 
   if (isset($_POST['submit'])) {
@@ -92,7 +135,7 @@
     $query = "UPDATE schedules SET status = '$status',payment_status = 1 WHERE schedule_id = $schedule_id ";
     mysqli_query($connection, $query) or die(mysqli_error($connection)); 
           
-          $query = "INSERT INTO payments (schedule_id, cash_given, amount_paid, amount_change, method, payment_date, payment_time) VALUES ($schedule_id, $cash_given, $amount_due, $change,'$method', '$date', NOW() )";
+   $query = "INSERT INTO payments (schedule_id, cash_given, amount_paid, amount_change, method, payment_date, payment_time) VALUES ($schedule_id, $cash_given, $amount_due, $change,'$method', '$date', NOW() )";
    mysqli_query($connection, $query) or die(mysqli_error($connection)); 
   
           $msg = 'Payment made. Thanks!';
@@ -124,18 +167,10 @@
 
    
 
-  // Retrieve job orders of a particular schedule
-   $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
 
    //Retrive service of a particular shop
    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id ") or die(mysqli_error($connection));
 
-   // Total bill
-   $total_results =  mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, SUM(service_cost * quantity) as total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id") or die(mysqli_error($connection));
-
-
-  $total = mysqli_fetch_array($total_results); 
-  $total_amount = $total['total'];
 
 
 ?>
@@ -161,35 +196,30 @@
 
   <?php include '../includes/layouts/provider_header.php';?>
 
-   
+   <?php if(isset($_GET['cash'])) : ?>
     <div class="content container">
 
-    <?php if(isset($_GET['view'])) : ?>
-        <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>
-      <h1>Transaction</h1>
-
-    <?php elseif(isset($_GET['cash'])) : ?>
-        <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>
-      <h1 class="text-right">Bill Summary</h1>
 
 
-    <?php else: ?>
-       <a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id; ?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Billing</a>
-      <h1>Bill Summary</h1>
-    <?php endif ?>
-
-      
       <div class="row">
-        <div class="col-sm-4 ">
+        <div class="col-sm-4">
 
-
-            <?php if(isset($_GET['cash'])) : ?>   
-
-             <?php if($msg !=''): ?>
+           <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>        
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-4">
+           <h3>Bill Summary</h3>
+        </div>
+      </div>
+     <div class="row">
+      <div class="col-sm-4">
+      
+          <?php if($msg !=''): ?>
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
           <?php endif;?>
-
-            <form action="bill_summary.php?myshop=<?php echo $shop_id;?>&cash=<?php echo $schedule_id;?>" method="POST">
+          
+           <form action="bill_summary.php?myshop=<?php echo $shop_id;?>&cash=<?php echo $schedule_id;?>" method="POST">
               <input type="hidden" name="schedule_id" value="<?php echo $schedule_id; ?>" >
            
                        
@@ -227,23 +257,29 @@
               <button  type="submit" name="clear" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-erase"> </span> Clear fields</button> 
 
            </form>
+      </div>
 
-          <?php endif ?>
-        </div>
-                 
-        <div class="<?php if(isset($_GET['bill']) || isset($_GET['view'])){ echo 'col-sm-12';}?>">
-          <pre >Information:<br/><?php echo $shop_name;?><br/>Username: <?php echo $user_uid; ?><br>Schedule Date: <?php echo $schedule_date;?><br>Schedule time: <?php echo $schedule_time;?><?php if(isset($_GET['view'])) : ?><br/>Payment date: <?php echo $payment_date; ?><br/>Payment time: <?php echo $payment_time; ?><?php endif ?>
+      <div class="col-sm-8">
+          <div class="bg-info" style="padding: 5px;">
+            <h3>Information</h3>
+            <p>Schedule id: <?php echo $schedule_id;?></p>
+            <p>Username: <?php echo $user_uid;?></p>
+            <p>Schedule date: <?php echo $schedule_date;?></p>
+            <p>Schedule time: <?php echo $schedule_time;?></p>
 
-              <div class="table-responsive"  >
-              <table>
-
+            <div class="table-responsive">
+             <table>
                 <tr >
-                  <th width="5%">Quantity</th>
-                  <th width="5%">Service</th>
-                  <th width="5%">Cost</th>
-                  <th width="5%">Sub-total</th>
+                  <th width="10%">Quantity</th>
+                  <th width="10%">Service</th>
+                  <th width="10%">Cost</th>
+                  <th width="10%">Sub-total</th>
               
-                </tr                  <?php while ($row = mysqli_fetch_array($results)) { ?>
+                </tr> 
+
+             
+
+                <?php while($row = mysqli_fetch_array($results)) { ?>
                   <tr>
                       <td><?php echo $row['quantity']; ?></td>
                       <td><?php echo $row['service_name']; ?></td>
@@ -251,20 +287,138 @@
                        <td>P <?php echo $row['sub_total']; ?></td>
                
                   </tr>
-                 <?php } ?>
-                 <tr>
-            
-                   <td></td>
-                   <td></td>
-                   <td><h3>Total cost :  </h3> </td>
-                   <td><h3 >P <?php if (isset($total['total'])) { echo $total['total'];} else { echo "0.00";} ?></h3></td>
-                 </tr>
-              </table>
-            </div>        
-          </pre>
-        </div>
-       </div> 
+                <?php }?>
+                <tr>
+                  <td colspan="2"></td>
+                  <td><h3>Total:</h3></td>
+                  <td><h3>P <?php echo $total_amount;?></h3></td>
+                </tr>
+            </table>
+            </div>
+         
+          </div>
+      </div>
+    </div>
+    </div>
+   <?php endif ?> 
 
+    <?php if(isset($_GET['bill'])) : ?>
+
+
+    <div class="content container">
+      <a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id; ?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Billing</a>
+      <h3>Bill Summary</h3>
+      <div class="row">
+        <div class="col-sm-8">
+           <div class="bg-info" style="padding: 5px;">
+            <h3>Information</h3>
+            <p>Schedule id: <?php echo $schedule_id;?></p>
+            <p>Username: <?php echo $user_uid;?></p>
+            <p>Schedule date: <?php echo $schedule_date;?></p>
+            <p>Schedule time: <?php echo $schedule_time;?></p>
+
+            <div class="table-responsive">
+             <table>
+                <tr >
+                  <th width="10%">Quantity</th>
+                  <th width="10%">Service</th>
+                  <th width="10%">Cost</th>
+                  <th width="10%">Sub-total</th>
+              
+                </tr> 
+
+             
+
+                <?php while($row = mysqli_fetch_array($results)) { ?>
+                  <tr>
+                      <td><?php echo $row['quantity']; ?></td>
+                      <td><?php echo $row['service_name']; ?></td>
+                      <td>P <?php echo $row['service_cost']; ?></td>
+                       <td>P <?php echo $row['sub_total']; ?></td>
+               
+                  </tr>
+                <?php }?>
+              
+                <tr>
+                  <td colspan="2"></td>
+                  <td><h3>Total:</h3></td>
+                  <td><h3>P <?php echo $total_amount;?></h3></td>
+                </tr>
+
+               
+            </table>
+            </div>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+   <?php endif ?> 
+
+    <?php if(isset($_GET['view'])) : ?>
+    <div class="content container">
+      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>
+      <h1>Transaction</h1>
+      <div class="row">
+        <div class="col-sm-8">
+           <div class="bg-info" style="padding: 5px;">
+            <h3>Information</h3>
+            <p>Schedule id: <?php echo $schedule_id;?></p>
+            <p>Username: <?php echo $user_uid;?></p>
+            <p>Schedule date: <?php echo $schedule_date;?></p>
+            <p>Schedule time: <?php echo $schedule_time;?></p>
+            <p>Payment date: <?php echo $payment_date;?></p>
+            <p>Payment time: <?php echo $payment_time;?></p>
+            <p>Payment method: <?php echo $payment_method;?></p>
+    
+
+            <div class="table-responsive">
+             <table>
+                <tr >
+                  <th width="10%">Quantity</th>
+                  <th width="10%">Service</th>
+                  <th width="10%">Cost</th>
+                  <th width="10%">Sub-total</th>
+              
+                </tr> 
+
+             
+
+                <?php while($row = mysqli_fetch_array($results)) { ?>
+                  <tr>
+                      <td><?php echo $row['quantity']; ?></td>
+                      <td><?php echo $row['service_name']; ?></td>
+                      <td>P <?php echo $row['service_cost']; ?></td>
+                       <td>P <?php echo $row['sub_total']; ?></td>
+               
+                  </tr>
+                <?php }?>
+                  <tr>
+                  <td colspan="2"></td>
+                  <td><h3>Total:</h3></td>
+                  <td><h3>P <?php echo $total_amount;?></h3></td>
+                </tr>
+
+                   <tr>
+                  <td colspan="2"></td>
+                  <td><h3>Cash Given:</h3></td>
+                  <td><h3>P <?php echo $payment_cash_given;?></h3></td>
+                </tr>
+              
+                 <tr>
+                  <td colspan="2"></td>
+                  <td><h3>Change:</h3></td>
+                  <td><h3>P <?php echo $payment_change;?></h3></td>
+                </tr>
+
+            </table>
+            </div>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+   <?php endif ?> 
 
     
     <script>

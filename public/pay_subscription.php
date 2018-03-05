@@ -50,16 +50,19 @@
     $record = mysqli_fetch_array($rec);
     $sub_type_id = $record['sub_type_id']; 
 	$sub_cost =  $record['sub_cost'];
-	 $sub_status = 1;
+
+	$shop_status = 1;
 
 	$query = "INSERT INTO subscriptions (user_id, sub_type_id, method, subscribe_date, subscribe_time) VALUES ($user_id, $sub_type_id,'$method', '$date', NOW() )";
 	 mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 	
      
 
-	$query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
-	mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+	$query = "UPDATE users SET user_timestamp = '$date' WHERE user_id = $user_id";
+	mysqli_query($connection, $query) or die(mysqli_error($connection));
 
+	$query = "UPDATE shops SET shop_status = $shop_status WHERE user_id = $user_id " ;
+     mysqli_query($connection, $query) or die(mysqli_error($connection));
 
 	$_SESSION['u_timestamp'] = $date;
 
@@ -103,4 +106,3 @@
 
   
 
-  <?php include '../includes/layouts/footer.php';?>

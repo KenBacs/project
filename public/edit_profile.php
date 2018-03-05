@@ -47,9 +47,9 @@
           $msgClass='alert-danger';
         } else {
          
-            if (preg_match('/^[0-9]{4}-[0-9]{3}-[0-9]{4}$/', $mobilenumber)) {
+            if (preg_match('/^[0-9]{10}$/', $mobilenumber)) {
 
-              $query = "UPDATE users SET user_first = '$first', user_last = '$last', user_gender = '$gender', user_address = '$address', user_email = '$email', user_mobile = '$mobilenumber', user_uid = '$uid', user_pwd = '$pwd' WHERE user_id= $id";
+              $query = "UPDATE users SET user_first = '$first', user_last = '$last', user_gender = '$gender', user_address = '$address', user_email = '$email', user_mobile = '+63$mobilenumber', user_uid = '$uid', user_pwd = '$pwd' WHERE user_id= $id";
 
                     mysqli_query($connection,$query);
 
@@ -103,7 +103,7 @@
     $gender = $record['user_gender'];
     $address = $record['user_address'];
     $email = $record['user_email'];
-    $mobilenumber = $record['user_mobile'];
+    $mobilenumber = substr($record['user_mobile'], 3);
     $uid = $record['user_uid'];
     $pwd = $record['user_pwd'];
 
@@ -201,8 +201,13 @@
            </div>
 
             <div class="form-group">
-              <label for="">Mobile number:</label>
-              <input type="text" class="form-control" name="mobilenumber" value="<?php echo $mobilenumber; ?>">
+            <label for="">Mobile number:</label>
+              <div class="input-group">
+                <span class="input-group-addon">+63</span>
+               <input type="text" class="form-control" name="mobilenumber" value="<?php echo $mobilenumber; ?>" placeholder = "10 numbers">
+              </div>
+              
+           
            </div>
 
            <div class="form-group">

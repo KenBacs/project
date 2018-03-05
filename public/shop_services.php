@@ -313,14 +313,16 @@
                 <th width="10%">Shop ID</th>
                 <th width="10%">Service ID</th>
                    <th width="10%">Service</th>
+                   <th width="10%">Service Description</th>
                   <th width="10%">Cost</th>
-                  <th width="30%">Action</th>
+                  <th width="20%">Action</th>
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
                       <td><?php echo $row['shop_id']; ?></td>
-                      <td><?php echo $row['service_id']; ?></td>
+                      <td><?php echo $row['service_id']; ?></td> 
                       <td><?php echo $row['service_name']; ?></td>
+                       <td><?php echo $row['service_description']; ?></td>
                       <td>P <?php echo $row['service_cost']; ?></td>
                       <td>
             

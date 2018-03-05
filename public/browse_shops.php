@@ -86,6 +86,7 @@
 
 
         <div class="row">
+        
           <div class="col-sm-2"> </div>
           <div class="col-sm-4"><h3>Search Shop</h3></div>
         </div>

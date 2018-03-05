@@ -151,7 +151,7 @@
               <label for="">Mobile number:</label>
               <div class="input-group">
                 <span class="input-group-addon">+63</span>
-                <input type="number" class="form-control" name="mobilenumber" value="<?php echo isset($_POST['mobilenumber']) ? $mobilenumber : '';?>" >
+                <input type="number" class="form-control" name="mobilenumber" value="<?php echo isset($_POST['mobilenumber']) ? $mobilenumber : '';?>" placeholder="10 numbers" >
               </div>
    
            </div>

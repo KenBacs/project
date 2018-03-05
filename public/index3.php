@@ -22,30 +22,23 @@ o<?php require_once("../includes/session.php");?>
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
 
     <script src="javascripts/jquery-3.2.1.min.js"></script>
+
   </head>
-  <body id="home">
+  <body id="home3">
     
-  <?php include '../includes/layouts/header.php';?>
+  <?php include '../includes/layouts/admin_header.php';?>
 
    
 
       <div class="content container-fluid bg" style="padding-top: 150px; padding-bottom: 150px;" >
     
-        <?php if(isset($_GET['accountdeletion'])) : ?>
-            <script type="text/javascript">
-
-                      $(function() { $("#deleted").modal('show'); });
-
-                    </script>
-        <?php endif ?>
+ 
 
          <div class="center">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2"><h1 style="color:white;"><strong>Fixpertr a web and mobile application for repair and alteration services</strong>  </h1></div>
             </div>
-              <?php if (!isset($_SESSION['u_id'])) : ?>
-                <a href="signup.php" class="btn btn-success btn-lg" role="button">Sign Up Now!</a>
-              <?php endif ?>
+          
              
           </div>
 
@@ -163,43 +156,44 @@ o<?php require_once("../includes/session.php");?>
 
                       </div>
                     </div>
+ <script type="text/javascript">
+              $(document).ready(function(){
+     
+     function load_unseen_notification(view3 = '')
+     {
+      $.ajax({
+       url:"admin_fetch_subscriptions.php",
+       method:"POST",
+       data:{view3:view3},
+       dataType:"json",
+       success:function(data)
+       {
+        $('#notify-admin').html(data.notification);
+        if(data.unseen_notification > 0)
+        {
+         $('.count').html(data.unseen_notification);
+        }
+       }
+      });
+     }
+     
+     load_unseen_notification();
+     
 
-                        <script>
-$(document).ready(function(){
- 
- function load_unseen_notification(view2 = '')
- {
-  $.ajax({
-   url:"user_fetch.php",
-   method:"POST",
-   data:{view2:view2,user_id:<?php echo $_SESSION['u_id'];?>},
-   dataType:"json",
-   success:function(data)
-   {
-    $('#notify').html(data.notification);
-    if(data.unseen_notification > 0)
-    {
-     $('.count').html(data.unseen_notification);
-    }
-   }
-  });
- }
- 
- load_unseen_notification();
- 
+     
+     $(document).on('click', '#notify-toggle-admin', function(){
+      $('.count').html('');
+      load_unseen_notification('yes');
+     });
+     
+     setInterval(function(){ 
+      load_unseen_notification();; 
+     }, 5000);
+     
+    });
 
- 
- $(document).on('click', '#notify-toggle', function(){
-  $('.count').html('');
-  load_unseen_notification('yes');
- });
- 
- setInterval(function(){ 
-  load_unseen_notification();; 
- }, 5000);
- 
-});
-</script>
+
+        </script>
 
 
 

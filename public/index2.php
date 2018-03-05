@@ -1,13 +1,50 @@
-o<?php require_once("../includes/session.php");?>
+<?php require_once("../includes/session.php");?>
 <?php require_once("../includes/functions.php");?>
 <?php
+  
     include_once '../includes/db_connection.php';
-      //Quick search variable
-       $shop_keywords = '';
+  
+    $id = 0;
+    $shop_name = '';
+    $fileNameNew = '';
+    $shop_description = '';
+    $shop_contact = '';
+    $day_start = '';
+    $day_end = '';
+    $time_start = '';
+    $time_end = '';
+    $shop_category = 0;
+  
 
-        // Retrieve all shops
-         $shop_all = mysqli_query($connection, "SELECT * FROM shops WHERE shop_status = 1");
+  if (isset($_GET['myshop'])) {
+    $shop_id = $_GET['myshop'];
+    $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
+    $record = mysqli_fetch_array($rec);
+    $shop_id = $record['shop_id'];
+    $shop_name = $record['shop_name'];
+    $shop_image = $record['shop_image'];
+    $shop_description = $record['shop_description'];
+    $shop_contact = $record['shop_contact'];
+    $day_start = $record['day_start'];
+    $day_end = $record['day_end'];
+    $time_start = date("g:i a", strtotime($record['time_start'])); ;
+    $time_end = date("g:i a", strtotime($record['time_end'])); 
+    $shop_category = $record['shop_category'];
+   
+  }
+
+   // Retrieve services
+    $results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = ".$_GET['myshop']." AND service_status = 1");
+
+
+  // Marker results
+    $marker_results = mysqli_query($connection, "SELECT * FROM markers WHERE shop_id = $shop_id");
+
+    $resultCheck = mysqli_num_rows($marker_results);
+
+
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -23,29 +60,21 @@ o<?php require_once("../includes/session.php");?>
 
     <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
-  <body id="home">
+  <body id="home2">
     
-  <?php include '../includes/layouts/header.php';?>
+  <?php include '../includes/layouts/provider_header.php';?>
 
    
 
       <div class="content container-fluid bg" style="padding-top: 150px; padding-bottom: 150px;" >
     
-        <?php if(isset($_GET['accountdeletion'])) : ?>
-            <script type="text/javascript">
-
-                      $(function() { $("#deleted").modal('show'); });
-
-                    </script>
-        <?php endif ?>
+ 
 
          <div class="center">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2"><h1 style="color:white;"><strong>Fixpertr a web and mobile application for repair and alteration services</strong>  </h1></div>
             </div>
-              <?php if (!isset($_SESSION['u_id'])) : ?>
-                <a href="signup.php" class="btn btn-success btn-lg" role="button">Sign Up Now!</a>
-              <?php endif ?>
+          
              
           </div>
 
@@ -167,12 +196,12 @@ o<?php require_once("../includes/session.php");?>
                         <script>
 $(document).ready(function(){
  
- function load_unseen_notification(view2 = '')
+ function load_unseen_notification(view = '')
  {
   $.ajax({
    url:"user_fetch.php",
    method:"POST",
-   data:{view2:view2,user_id:<?php echo $_SESSION['u_id'];?>},
+   data:{view:view,user_id:<?php echo $_SESSION['u_id'];?>},
    dataType:"json",
    success:function(data)
    {

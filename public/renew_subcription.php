@@ -9,6 +9,9 @@
   $results = mysqli_query($connection, "SELECT * FROM subscription_types LIMIT 4");
   $user_id = $_SESSION['u_id'];
 
+  //keywords for quick search
+  $shop_keywords = '';
+
 ?>
 
 <!doctype html>

@@ -284,8 +284,8 @@
 
   // Retrive subscription cost
   $rec = mysqli_query($connection,"SELECT * FROM subscription_types WHERE sub_type_id = $sub_type_id");
-    $record = mysqli_fetch_array($rec);
-    $sub_type_id = $record['sub_type_id']; 
+  $record = mysqli_fetch_array($rec);
+  $sub_type_id = $record['sub_type_id']; 
   $sub_cost =  $record['sub_cost'];
    $sub_status = 1;
 
@@ -294,7 +294,7 @@
   
      
 
-  $query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
+  $query = "UPDATE users SET user_timestamp = '$date' WHERE user_id = $user_id";
   mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
 
@@ -325,7 +325,7 @@
   $category_results = mysqli_query($connection, "SELECT * FROM shop_categories");
 
   // Retrieve subcription
-  $sub_results = mysqli_query($connection,"SELECT * FROM subscriptions,subscription_types WHERE user_id = {$_SESSION['u_id']} AND subscriptions.sub_type_id = subscription_types.sub_type_id ") or die(mysqli_error($connection));
+  $sub_results = mysqli_query($connection,"SELECT * FROM subscriptions, subscription_types WHERE subscriptions.sub_type_id = subscription_types.sub_type_id AND subscriptions.user_id = {$_SESSION['u_id']} ORDER BY subscription_id DESC LIMIT  1") or die(mysqli_error($connection));
   $rec = mysqli_fetch_array($sub_results);
   $duration = $rec['sub_duration'];
 
@@ -395,11 +395,11 @@
               <?php endif ?>  
              <?php endif ?>  
 
-    
+
     <div class="row">
 
       <div class="col-md-4">
-       
+          
 
           <?php if($msg !=''): ?>
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
@@ -584,10 +584,11 @@
 
         </div>
       </div>
-                  
-
+                 
+ 
               
     </div> 
+
     <?php elseif ($sub_count < 1) : ?>
         <div class="content container">
           <div class="row">
@@ -600,11 +601,15 @@
     <?php else: ?>
         <div class="content container">
         <?php  
-            $sub_status = 0;
-            $query = "UPDATE users SET sub_status = $sub_status WHERE user_id = ".$_SESSION['u_id']." " ;
-            mysqli_query($connection, $query) or die(mysqli_error($connection)); 
-            $_SESSION['u_substatus'] = $sub_status;?>
+          
+            $shop_status = 0;
+            $query = "UPDATE shops SET shop_status = $shop_status WHERE user_id = ".$_SESSION['u_id']." " ;
+            mysqli_query($connection, $query) or die(mysqli_error($connection));
+          
+
+            ?>
           <div class="row">
+          <!-- <h1 class="text-center"><?php echo $MembershipEnds;?></h1> -->
             <h1 class="text-center">Subcription has expired!</h1>
 
             <div class="col-sm-4 col-sm-offset-4">

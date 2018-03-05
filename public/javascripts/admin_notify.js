@@ -1,4 +1,4 @@
- $(document).ready(function(){
+/* $(document).ready(function(){
      
      function load_unseen_notification(view3 = '')
      {
@@ -31,4 +31,4 @@
       load_unseen_notification();; 
      }, 5000);
      
-    });
+    });*/

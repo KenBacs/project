@@ -8,7 +8,7 @@
           <span class="icon-bar"></span>
         </button>
 
-        <a class="navbar-brand " href="profile.php" role="button"></span> Fixpertr</a>
+        <a class="navbar-brand " href="index2.php?myshop=<?php echo $shop_id;?>" role="button"></span> Fixpertr</a>
       </div>
       <div class="collapse navbar-collapse" id="collapsemenu">
       

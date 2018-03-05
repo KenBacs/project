@@ -20,7 +20,8 @@
     $select_method = mysql_prep($_POST['select_method']);
     date_default_timezone_set('Asia/Manila');
     $date = date('Y-m-d H:i:s');
-    $sub_status = 1;
+
+
 
     if (!empty($user_id) && !empty($select_sub) && !empty($select_method)) {
       $query = "SELECT * FROM users WHERE user_id = $user_id";
@@ -31,9 +32,17 @@
           $query = "INSERT INTO subscriptions (user_id, sub_type_id, method, subscribe_date, subscribe_time) VALUES ($user_id, '$select_sub','$select_method', '$date', NOW() )";
           mysqli_query($connection, $query) or die(mysqli_error($connection)); 
           
-           $query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
+           $query = "UPDATE users SET user_timestamp = '$date' WHERE user_id = $user_id";
           mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
+          if ($select_sub == 5) {
+             $query = "UPDATE shops SET shop_status = 0 WHERE user_id = $user_id";
+             mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+          } else {
+             $query = "UPDATE shops SET shop_status = 1 WHERE user_id = $user_id";
+          mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+          }
+         
           $user_id = 0;
           $select_sub = 0;
           $subscription_id = 0;
@@ -56,7 +65,7 @@
   
   }
 
-   if (isset($_POST['update'])) {
+/*   if (isset($_POST['update'])) {
     $subscription_id = mysql_prep($_POST['subscription_id']);
     $user_id = mysql_prep($_POST['user_id']);
     $select_sub = mysql_prep($_POST['select_sub']);
@@ -85,6 +94,9 @@
            $query = "UPDATE users SET user_timestamp = '$date', sub_status = $sub_status  WHERE user_id = $user_id";
           mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
+           $query = "UPDATE shops SET shop_status = 0  WHERE user_id = $user_id";
+          mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+
           $user_id = 0;
           $select_sub = 0;
           $subscription_id = 0;
@@ -105,7 +117,7 @@
     }
 
   
-  }
+  }*/
 
      if (isset($_POST['clear'])) {
           $user_id = 0;
@@ -114,7 +126,7 @@
           $select_method = '';
   }
   
-  if (isset($_GET['edit'])) {
+/*  if (isset($_GET['edit'])) {
     $subscription_id = $_GET['edit'];
     $edit_state=true;
     $rec = mysqli_query($connection,"SELECT * FROM subscriptions WHERE subscription_id = $subscription_id");
@@ -135,12 +147,12 @@
       $msgClass ="alert-success";
     
        
-  }
+  }*/
    if (isset($_POST['reset'])) {
     $keywords = '';
   }
    // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM subscriptions, subscription_types, users WHERE subscriptions.user_id = users.user_id AND subscriptions.sub_type_id = subscription_types.sub_type_id AND subscription_status = 1");
+  $results = mysqli_query($connection, "SELECT * FROM subscriptions, subscription_types, users WHERE subscriptions.user_id = users.user_id AND subscriptions.sub_type_id = subscription_types.sub_type_id AND subscription_status = 1 ORDER BY subscription_id DESC");
 
   // Retrieve subscription plan
   $sub_results = mysqli_query($connection, "SELECT * FROM subscription_types");
@@ -176,6 +188,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/mystyles.css">
+
+        <!-- JQuery -->
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
   </head>
   <body id="subscriptions_admin">
 
@@ -226,6 +241,8 @@
                             <label for="select_method">Payment method</label>
                             <select name="select_method" id="select_method" class="form-control">
                               <option value="">Choose payment method</option>
+                              <option value="None">None</option>
+                              <option value="Trial">Trial</option>
                               <option value="Cash">Cash</option>
                                <option value="PayPal">PayPal</option>
                             </select>
@@ -261,14 +278,14 @@
                         <option value="<?php echo $row['user_uid'];?>">
                         <option value="<?php echo $row['sub_type'];?>">
                         <option value="<?php echo $row['method'];?>">
-                        <option value="<?php echo $row['sub_status'];?>">
+               
     
                 
                         
                          <td><?php echo $row['sub_type']; ?></td>
                       <td><?php echo $row['method']; ?></td>
                       <td><?php echo $row['subscribe_date']; ?></td>
-                       <td><?php echo $row['sub_status']; ?></td>
+                       
                   <?php } ?>
  
               
@@ -294,8 +311,8 @@
                 <th width="10%">Subscription Plan</th>
                    <th width="10%">Payment Method</th>
                   <th width="10%">Subcription Date</th>
-                  <th width="10%">Subcription Status</th>
-                  <th width="20%">Action</th>
+            
+                 <!--  <th width="20%">Action</th> -->
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
@@ -303,12 +320,12 @@
                       <td><?php echo $row['sub_type']; ?></td>
                       <td><?php echo $row['method']; ?></td>
                       <td><?php echo $row['subscribe_date']; ?></td>
-                       <td><?php echo $row['sub_status']; ?></td>
-                      <td>
+                    
+                    <!--   <td>
             
                       <a href="subscriptions_admin.php?edit=<?php echo $row['subscription_id']?>" class="btn btn-success" role="button"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                       <a href="subscriptions_admin.php?del=<?php echo $row['subscription_id']?>" class="btn btn-danger" role="button" onclick="return confirm('Are you sure you want to delete this subscription?');"><span class="glyphicon glyphicon-remove" ></span> Delete</a>
-                      </td>
+                      </td> -->
 
                   </tr>
 
@@ -327,6 +344,46 @@
 
               
     </div> 
+
+     <script type="text/javascript">
+              $(document).ready(function(){
+     
+     function load_unseen_notification(view3 = '')
+     {
+      $.ajax({
+       url:"admin_fetch_subscriptions.php",
+       method:"POST",
+       data:{view3:view3},
+       dataType:"json",
+       success:function(data)
+       {
+        $('#notify-admin').html(data.notification);
+        if(data.unseen_notification > 0)
+        {
+         $('.count').html(data.unseen_notification);
+        }
+       }
+      });
+     }
+     
+     load_unseen_notification();
+     
+
+     
+     $(document).on('click', '#notify-toggle-admin', function(){
+      $('.count').html('');
+      load_unseen_notification('yes');
+     });
+     
+     setInterval(function(){ 
+      load_unseen_notification();; 
+     }, 5000);
+     
+    });
+
+
+        </script>
+
 
 
 

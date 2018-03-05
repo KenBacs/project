@@ -92,7 +92,7 @@ if (isset($_GET['accept'])) {
     if (isset($_POST['submit_declined'])) {
    	  $shop_id = $_POST['shop_id'];	 	
       $schedule_id = $_POST['schedule_id'];
-      $comment = $_POST['comment'];
+      $comment = mysql_prep($_POST['comment']);
       $status = 'Declined';
       $query = "UPDATE schedules SET status = '$status', decline_message = '$comment', decline_date = '$date_now', decline_time = NOW() WHERE schedule_id = $schedule_id ";
       $rec = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
