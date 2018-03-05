@@ -405,6 +405,13 @@
             <div class="alert <?php echo $msgClass;?>"><?php echo $msg; ?></div> 
           <?php endif;?>
 
+
+        <?php if($edit_state == false): ?>
+         <h3 class="text-center"><strong> <span class="glyphicon glyphicon-plus-sign"> </span> Create Shop</strong></h3> 
+        <?php else: ?>
+          <h3 class="text-center"><strong> <span class="glyphicon glyphicon-refresh"> </span> Update Shop</strong></h3> 
+        <?php endif ?>
+
          
        <form id="" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
                   <input type="hidden" name="shop_id" value="<?php echo $shop_id;?>">

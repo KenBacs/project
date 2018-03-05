@@ -228,6 +228,12 @@
           <?php endif;?>
 
          
+        <?php if($edit_state == false): ?>
+         <h3 class="text-center"><strong> <span class="glyphicon glyphicon-plus-sign"> </span> Create Services</strong></h3> 
+        <?php else: ?>
+          <h3 class="text-center"><strong> <span class="glyphicon glyphicon-refresh "> </span> Update Services</strong></h3> 
+        <?php endif ?>
+
        <form id="" action="shop_services.php?myshop=<?php echo $shop_id;?>" method="POST" >
                   <input type="hidden" name="service_id" value="<?php echo $service_id;?>">
                        

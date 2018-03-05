@@ -290,7 +290,7 @@
                 <?php }?>
                 <tr>
                   <td colspan="2"></td>
-                  <td><h3>Total:</h3></td>
+                  <td><h3>Total Cost:</h3></td>
                   <td><h3>P <?php echo $total_amount;?></h3></td>
                 </tr>
             </table>
@@ -341,7 +341,7 @@
               
                 <tr>
                   <td colspan="2"></td>
-                  <td><h3>Total:</h3></td>
+                  <td><h3>Total Cost:</h3></td>
                   <td><h3>P <?php echo $total_amount;?></h3></td>
                 </tr>
 
@@ -395,7 +395,7 @@
                 <?php }?>
                   <tr>
                   <td colspan="2"></td>
-                  <td><h3>Total:</h3></td>
+                  <td><h3>Amount Due:</h3></td>
                   <td><h3>P <?php echo $total_amount;?></h3></td>
                 </tr>
 

@@ -57,6 +57,9 @@
     $schedule_id = $record ['schedule_id'];
     $payment_date = $record['payment_date'];
     $payment_time = date("g:i a", strtotime($record['payment_time']));
+    $payment_method = $record['method'];
+    $payment_change = $record['amount_change'];
+    $cash_given = $record['cash_given'];
  
   }
 
@@ -115,7 +118,7 @@
 
      
         <div class="col-sm-8">
-          <pre >Information:<br/><?php echo $shop_name;?><br/>Username: <?php echo $user_uid; ?><br>Schedule date: <?php echo $schedule_date;?><br>Schedule time: <?php echo $schedule_time;?><?php if(isset($_GET['view'])) : ?><br/>Payment date: <?php echo $payment_date; ?><br/>Payment time: <?php echo $payment_time; ?><?php endif ?>
+          <pre >Information:<br/><?php echo $shop_name;?><br/>Username: <?php echo $user_uid; ?><br>Schedule date: <?php echo $schedule_date;?><br>Schedule time: <?php echo $schedule_time;?><?php if(isset($_GET['view'])) : ?><br/>Payment date: <?php echo $payment_date; ?><br/>Payment time: <?php echo $payment_time; ?><br/>Payment type: <?php echo $payment_method; ?><?php endif ?>
          
 
               <div class="table-responsive"  >
@@ -137,13 +140,44 @@
                
                   </tr>
                  <?php } ?>
+                       
+                 <?php if (isset($_GET['view'])) { ?>
+
+                   <tr>
+                   <td></td>
+                   <td></td>
+                   <td><h3>Cash Given  :  </h3> </td>
+                   <td><h3 >P <?php echo $cash_given; ?></h3></td>
+                 </tr>
                  <tr>
                  
                    <td></td>
                    <td></td>
-                   <td><h3>Total cost :  </h3> </td>
+                   <td><h3>Amount Due :  </h3> </td>
                    <td><h3 >P <?php if (isset($total['total'])) { echo $total['total'];} else { echo "0.00";} ?></h3></td>
                  </tr>
+
+                   <tr>
+                 
+                   <td></td>
+                   <td></td>
+                   <td><h3>Change  :  </h3> </td>
+                   <td><h3 >P <?php echo $payment_change; ?></h3></td>
+                 </tr>
+                
+                <?php } else { ?>
+                      <tr>
+                 
+                   <td></td>
+                   <td></td>
+                   <td><h3>Total Cost :  </h3> </td>
+                   <td><h3 >P <?php if (isset($total['total'])) { echo $total['total'];} else { echo "0.00";} ?></h3></td>
+                 </tr>
+
+                   <tr>
+                <?php } ?> 
+                 
+                 
               </table>
             </div>        
           </pre>
