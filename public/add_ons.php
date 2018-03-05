@@ -11,7 +11,7 @@
     $user_uid = '';
     $schedule_date = '';
     $schedule_time = '';
-    $quantity = '';
+    $quantity = 0;
 
     $job_order_id = 0;
     $edit_state = false;
@@ -190,12 +190,12 @@
 
    
     <div class="content container">
-      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>
+      <a href="billing.php?myshop=<?php echo $shop_id;?>&bill=<?php echo $schedule_id;?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Billing</a>
      <h1 class="text-center" style="margin-bottom: 20px;"><?php echo $shop_name; ?><small> Billing</small></h1>
 
     <div class="row">
 
-      <div class="col-sm-4">
+      <div class="col-md-4">
 
           <h2 class="text-center bg-info"><span class="glyphicon glyphicon-plus"></span> Add Service Rendered</h2>
        
@@ -209,8 +209,8 @@
                   <input type="hidden" name="job_order_id" value="<?php echo $job_order_id;?>">
                   
                         <div class="form-group">
-                            <label for="quantity">Number of services</label> 
-                            <input type="number" class="form-control" name="quantity" value="<?php echo $quantity; ?>" placeholder = "0">
+                            <label for="quantity">Number of items</label> 
+                            <input type="number" class="form-control" name="quantity" value="<?php echo $quantity; ?>">
                         </div> 
 
                              <div class="form-group">
@@ -233,10 +233,11 @@
 
                           </div>
 
-                          <!-- <div class="form-group form-inline ">
-                            <a href="add_ons.php?myshop=<?php echo $shop_id;?>&bill=<?php echo $schedule_id;?>" role="button" class="btn btn-warning btn-block">Add ons</a>
-                              <a href="deductions.php?myshop=<?php echo $shop_id;?>&bill=<?php echo $schedule_id;?>" role="button" class="btn btn-warning btn-block">Deductions</a>
-                          </div> -->             
+                          <div class="form-group form-inline ">
+                            <a href="#" role="button" class="btn btn-warning btn-block">Add ons</a>
+                              <a href="#" role="button" class="btn btn-warning btn-block">Deductions</a>
+                          </div>
+              
 
                         
                           <?php if($edit_state == false): ?>
@@ -248,105 +249,12 @@
                           <button  type="submit" name="clear" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-erase"></span> </span> Clear fields</button>
 
                       </form>
-                        <br>
-                          <form>
-                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                  <div class="panel panel-info">
-                                    <div class="panel-heading" role="tab" id="headingOne">
-                                      <h4 class="panel-title">
-                                        <a class=" collapsed" href="#project-info1" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="project-info1"><strong>Add-ons</strong></a>
-                                      </h4>
-                                       </div>
-                                         <div class="panel-collapse collapse " id="project-info1" role="tabpanel" arialabelledby="headingOne">
-
-                                         <div class="panel-body">
-                                               <div class="form-group">
-                                                  <label for="quantity">Number of items</label> 
-                                                  <input type="number" class="form-control" name="addon_quantity" value="<?php echo $quantity; ?>" placeholder = "0" >
-                                              </div> 
-                                                <div class="form-group">
-                                                  <label for="quantity">Name of service or item</label> 
-                                                  <input type="text" class="form-control" name="addon_name" value="">
-                                              </div> 
-                                                <div class="form-group">
-                                                <label for="quantity">Cost</label> 
-                                                <div class="input-group">
-                                                  <span class="input-group-addon">P</span>
-                                                   <input type="number" class="form-control" name="addon_quantity" value="" placeholder="0.00">
-                                                </div>
-                                              
-                                               
-                                              </div> 
-
-
-                                         </div>
-
-                                         <div class="panel-footer">
-                                           <a href="#" role="button" class="btn btn-info btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Add-on services or item</a>
-
-                                         </div>
-                                  
-                               
-
-                                    </div>
-                                  </div>
-
-                                </div>
-                          </form>
-
-                                  <form>
-                            <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
-                                  <div class="panel panel-warning">
-                                    <div class="panel-heading" role="tab" id="headingTwo">
-                                      <h4 class="panel-title">
-                                        <a class=" collapsed" href="#project-info2" role="button" data-toggle="collapse" data-parent="#accordion2" aria-expanded="false" aria-controls="project-info2"><strong>Deductions</strong></a>
-                                      </h4>
-                                       </div>
-                                         <div class="panel-collapse collapse " id="project-info2" role="tabpanel" arialabelledby="headingTwo">
-
-                                         <div class="panel-body">
-                                               <div class="form-group">
-                                                  <label for="quantity">Number of items</label> 
-                                                  <input type="number" class="form-control" name="deduction_quantity" value="<?php echo $quantity; ?>" placeholder = "0" >
-                                              </div> 
-                                                <div class="form-group">
-                                                  <label for="quantity">Name of service or item</label> 
-                                                  <input type="text" class="form-control" name="deduction_name" value="">
-                                              </div> 
-                                                <div class="form-group">
-                                                <label for="quantity">Cost</label> 
-                                                <div class="input-group">
-                                                  <span class="input-group-addon">P</span>
-                                                   <input type="number" class="form-control" name="deduction_quantity" value="" placeholder="0.00">
-                                                </div>
-                                              
-                                               
-                                              </div> 
-
-
-                                         </div>
-
-                                         <div class="panel-footer">
-                                           <a href="#" role="button" class="btn btn-warning btn-block"><span class="glyphicon glyphicon-plus-sign"> </span> Deduction services or item</a>
-
-                                         </div>
-                                  
-                               
-
-                                    </div>
-                                  </div>
-
-                                </div>
-                          </form>
-                               
-                               
-
-                      
+                     
                     
       </div>  
 
       
-        <div class="col-sm-8">
+        <div class="col-md-8">
             <pre class="text-info">Information:<br/>Username: <?php echo $user_uid; ?><br>Schedule Date: <?php echo $schedule_date;?><br>Schedule time: <?php echo $schedule_time;?></pre>
            <?php $total = mysqli_fetch_array($total_results); 
             $grand_total = $total['total'];
@@ -453,43 +361,6 @@
 
               
     </div> 
-
-
-    <script>
-$(document).ready(function(){
- 
- function load_unseen_notification(view = '')
- {
-  $.ajax({
-   url:"fetch.php",
-   method:"POST",
-   data:{view:view,shop_id:<?php echo $shop_id;?>},
-   dataType:"json",
-   success:function(data)
-   {
-    $('#notify').html(data.notification);
-    if(data.unseen_notification > 0)
-    {
-     $('.count').html(data.unseen_notification);
-    }
-   }
-  });
- }
- 
- load_unseen_notification();
-
- 
- $(document).on('click', '#notify-toggle', function(){
-  $('.count').html('');
-  load_unseen_notification('yes');
- });
- 
- setInterval(function(){ 
-  load_unseen_notification();; 
- }, 5000);
- 
-});
-</script>
      
 
 
