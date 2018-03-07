@@ -50,7 +50,7 @@
    $record = mysqli_fetch_array($total_results);
    $total_amount = $record['total'];
 
-	$status = 'Ready to Claim';
+	$status = 'Paid';
 	$query = "UPDATE schedules SET status = '$status',payment_status = 1 WHERE schedule_id = $schedule_id ";
 	mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 

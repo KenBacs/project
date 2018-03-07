@@ -55,6 +55,40 @@ if (isset($_GET['accept'])) {
 	redirect_to('shop_schedules.php?myshop='.$shop_id);
 }
 
+if (isset($_GET['readytoclaim'])) {
+
+  $schedule_id = $_GET['readytoclaim'];
+ 
+
+
+  $status = 'Ready to Claim';
+  $query = "UPDATE schedules SET status = '$status', rtc_date = '$date_now', rtc_time = NOW() WHERE schedule_id = $schedule_id ";
+  $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));
+
+
+	$query = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE users.user_id = schedules.user_id AND schedules.service_id = services.service_id AND schedules.schedule_id = $schedule_id") or die(mysqli_error($connection));
+	$record = mysqli_fetch_array($query);
+	$username = $record['user_uid'];
+	$service_name = $record['service_name'];
+	$user_mobile = $record['user_mobile'];
+
+
+
+	$client = new Client($sid, $token);
+
+
+	$client->messages->create(
+	 $user_mobile, // number to send to
+	 array(
+	 'from' => '+16162084171', // your Twilio number
+	 'body' => "$shop_name : Hello, $username ! Your item is ready to be claim with a service of $service_name "
+	 )
+	);
+
+
+	redirect_to('shop_schedules.php?myshop='.$shop_id);
+}
+
    if (isset($_GET['done'])) {
       $schedule_id = $_GET['done'];
 
@@ -77,7 +111,7 @@ if (isset($_GET['accept'])) {
 	 $user_mobile, // number to send to
 	 array(
 	 'from' => '+16162084171', // your Twilio number
-	 'body' => "$shop_name : Hello, $username ! Your item is done repairing. Thank you for choosing us!"
+	 'body' => "$shop_name : Hello, $username ! You already have bill of the services you rendered. You can pay online or cash. Thank you!"
 	 )
 	);
 

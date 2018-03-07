@@ -9,6 +9,7 @@
     $schedule_id = 0;
     $date_start = '';
     $date_end = '';
+
     
     //Quick search variable
        $shop_keywords = '';
@@ -36,22 +37,22 @@
 
          $date_start = $_POST['date_start'];
          $date_end = $_POST['date_end'];
-         $status = $_POST['status'];
+         $selectStatus = $_POST['selectStatus'];
 
       // Retrieve records
       $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ");
 
-      if (!empty($status)) {
+      if (!empty($selectStatus)) {
          // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.status = '$status' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
       } 
       if (!empty($date_start) && !empty($date_end)) {
            // Retrieve records
       $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
       } 
 
-      if (!empty($date_start) && !empty($date_end) && !empty($status)) {
-         $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$status' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
+      if (!empty($date_start) && !empty($date_end) && !empty($selectStatus)) {
+         $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
       }
 
     }
@@ -60,7 +61,7 @@
     if (isset($_POST['reset'])) {
       $date_start = '';
        $date_end = '';
-       $status = '';
+       $selectStatus = '';
     }
 
 
@@ -108,20 +109,21 @@
                <label> <p>to</p> </label>
                <input type="date" class="form-control" name="date_end" id="date_end" value="<?php echo $date_end;?>">
 
-                <select name="status" id="status" class="form-control">
+                <select name="selectStatus" id="selectStatus" class="form-control">
 
                 <option value="">Select Status</option>
                 <option value="Pending">Pending</option>
                 <option value="Accepted">Accepted</option>
                 <option value="Declined">Declined</option>
                 <option value="Done">Done</option>
+                <option value="Paid">Paid</option>
                 <option value="Ready to Claim">Ready to Claim</option>
                  <option value="Claimed">Claimed</option>
 
                 </select>
 
                 <script type="text/javascript">
-                    document.getElementById('status').value = "<?php echo $status;?>";
+                    document.getElementById('selectStatus').value = "<?php echo $selectStatus;?>";
                   </script>
 
                <button type="submit" name="submit" class="btn btn-primary">Submit</button>

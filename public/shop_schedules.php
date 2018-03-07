@@ -25,6 +25,7 @@
     $date_start = '';
     $date_end = '';
 
+
     if (isset($_GET['myshop'])) {
     $shop_id = $_GET['myshop'];
     $rec = mysqli_query($connection,"SELECT * FROM shops,shop_categories WHERE shop_id = $shop_id AND shops.shop_cat_id = shop_categories.shop_cat_id");
@@ -94,24 +95,24 @@
    if (isset($_POST['submit'])) {
         $date_start = $_POST['date_start'];
         $date_end =$_POST['date_end'];
-        $status = $_POST['status'];
+        $selectStatus = $_POST['selectStatus'];
         $service = $_POST['service'];
 
         $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
 
-        if (!empty($status)) {
-          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.status = '$status' AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+        if (!empty($selectStatus)) {
+          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.status = '$selectStatus' AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         }
         if (!empty($service)) {
           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE services.service_id = $service AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         }
-         if (!empty($status) && !empty($service)) {
-          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.status = '$status' AND services.service_id = $service AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+         if (!empty($selectStatus) && !empty($service)) {
+          $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.status = '$selectStatus' AND services.service_id = $service AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         }
         if (!empty($date_start) && !empty($date_end)) {
           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         } 
-        if (!empty($date_start) && !empty($date_end) && !empty($status)) {
+        if (!empty($date_start) && !empty($date_end) && !empty($selectStatus)) {
 
            $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$status'  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         }
@@ -119,12 +120,19 @@
 
            $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND services.service_id = $service  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         }
-           if (!empty($date_start) && !empty($date_end) && !empty($status) && !empty($service)) {
+           if (!empty($date_start) && !empty($date_end) && !empty($selectStatus) && !empty($service)) {
 
-           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$status' AND services.service_id = $service  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
+           $results = mysqli_query($connection,"SELECT * FROM users, schedules, services WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$selectStatus' AND services.service_id = $service  AND  schedules.shop_id = $shop_id AND schedules.service_id = services.service_id AND schedules.user_id = users.user_id  ORDER BY schedule_id DESC");
         }
 
    }
+
+    if (isset($_POST['reset'])) {
+      $date_start = '';
+       $date_end = '';
+       $selectStatus = '';
+    }
+
 
    //Retrieve services
 
@@ -164,20 +172,21 @@
                <label> <p>to</p> </label>
                <input type="date" class="form-control" name="date_end" id="date_end" value="<?php echo $date_end;?>">
 
-                <select name="status" id="status" class="form-control">
+                <select name="selectStatus" id="selectStatus" class="form-control">
 
                 <option value="">Select Status</option>
                 <option value="Pending">Pending</option>
                 <option value="Accepted">Accepted</option>
                 <option value="Declined">Declined</option>
                 <option value="Done">Done</option>
+                <option value="Paid">Paid</option>
                 <option value="Ready to Claim">Ready to Claim</option>
                  <option value="Claimed">Claimed</option>
 
                 </select>
 
                 <script type="text/javascript">
-                    document.getElementById('status').value = "<?php echo $status;?>";
+                    document.getElementById('selectStatus').value = "<?php echo $selectStatus;?>";
                   </script>
 
                <select name="service" id="service" class="form-control">
@@ -221,7 +230,7 @@
                   <th width="10%">Service Details</th>
                   <th width="10%">Declined Message</th>
                   <th width="10%">Status</th>
-                  <th width="20%">Action</th>
+                  <th width="30%">Action</th>
                 </tr>
                  <?php while ($row = mysqli_fetch_array($results)) { ?>
                   <tr>
@@ -235,7 +244,7 @@
 
 
 
-                  <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined'&& $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed')  : ?>
+                  <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined'&& $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed'  && $row['status'] != 'Paid')  : ?>
                          <a href="send_message.php?myshop=<?php echo $shop_id;?>&accept=<?php echo $row['schedule_id'];?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
 
                        <a href="#"  class="btn btn-danger" role="button" title="<strong>Why?</strong>" data-toggle="popover" data-placement="top" data-content='                       
@@ -274,6 +283,12 @@
                    <?php elseif($row['status'] == 'Claimed') : ?>
 
                       <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&unclaim=<?php echo $row['schedule_id']?>"  class="btn btn-warning" role="button"><span class="glyphicon glyphicon-remove"></span> Unclaim</a>
+
+                    <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Transaction</a>
+
+                  <?php elseif($row['status'] == 'Paid') : ?>
+
+                      <a href="send_message.php?myshop=<?php echo $shop_id?>&readytoclaim=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button"><span class="glyphicon glyphicon-thumbs-up"></span> Ready to Claim </a>
 
                     <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Transaction</a>
                   <?php endif ?>

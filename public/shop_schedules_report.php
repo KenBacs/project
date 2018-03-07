@@ -319,6 +319,7 @@
                 <option value="Accepted">Accepted</option>
                 <option value="Declined">Declined</option>
                 <option value="Done">Done</option>
+                <option value="Paid">Paid</option>
                 <option value="Ready to Claim">Ready to Claim</option>
                  <option value="Claimed">Claimed</option>
 
@@ -360,7 +361,7 @@
        <div class="row">
          <div class="col-sm-12">
              
-              <h4><strong>Schedules: <?php echo $count; ?></strong></h4>
+              <h4><strong>Number of schedules: <?php echo $count; ?></strong></h4>
               <div class="table-responsive">
               <table class="table">
 
@@ -415,7 +416,7 @@
 
           ykeys: ['users'],
 
-          labels: ['Users'],
+          labels: ['Number of schedules'],
 
           resize: true,
 

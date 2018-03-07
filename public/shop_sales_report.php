@@ -321,7 +321,7 @@
 
           ykeys: ['count','daily_sales'],
 
-          labels: ['User','Daily sales'],
+          labels: ['Clients','Daily sales'],
 
           resize: true,
 

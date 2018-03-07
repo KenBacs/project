@@ -498,7 +498,7 @@
 
           ykeys: ['users','sales'],
 
-          labels: ['Users','Sales'],
+          labels: ['Clients','Sales'],
 
           resize: true,
 

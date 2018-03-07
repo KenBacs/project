@@ -17,7 +17,7 @@ if($_POST["view2"] != '')
            INNER JOIN schedules 
            ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id
            INNER JOIN services
-           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done')
+           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done','Ready to Claim')
            ORDER BY schedule_id DESC LIMIT 5";
  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
  $output = '';
@@ -33,9 +33,9 @@ if($_POST["view2"] != '')
        $output .= '
        <li>
         <a href="#">  
-         <strong>'.$row["shop_name"].'</strong> <small>your item is already repaired or altered</small><br />
-         <small>with a service of </small><strong>'.$row["service_name"].'.</strong><br />
-         <small>Thank you for choosing us!</small><br />
+         <strong>'.$row["shop_name"].'</strong> <small>You already have bill of the services you rendered.</small><br />
+         <small>with a service of </small><strong>'.$row["service_name"].'.</strong><small>You can pay online or cash.</small><br />
+         <small>Thank you!</small><br />
          <small>'.$row["done_date"].' '.date("g:i a", strtotime($row["done_time"])).'</small>
         </a>
        </li>
@@ -49,6 +49,17 @@ if($_POST["view2"] != '')
          <strong>'.$row["shop_name"].'</strong> <small>'.$row['status'].' your schedule</small><br />
          <small>with a service of </small><strong>'.$row["service_name"].'</strong><br />
          <small>'.$row["accept_date"].' '.date("g:i a", strtotime($row["accept_time"])).'</small>
+        </a>
+       </li>
+       <li class="divider"></li>
+       ';
+    } elseif ($row['status'] == "Ready to Claim") {
+         $output .= '
+       <li>
+        <a href="#">  
+         <strong>'.$row["shop_name"].': </strong> <small>Your item is <strong>Ready To Be Claim</strong></small><br />
+         <small>with a service of </small><strong>'.$row["service_name"].'</strong><br />
+         <small>'.$row["rtc_date"].' '.date("g:i a", strtotime($row["rtc_time"])).'</small>
         </a>
        </li>
        <li class="divider"></li>
@@ -81,7 +92,7 @@ if($_POST["view2"] != '')
            INNER JOIN schedules 
            ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id and schedules.user_notify = 0
            INNER JOIN services
-           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done')
+           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done', 'Ready to Claim')
            ORDER BY schedule_id  ";
  $result_1 = mysqli_query($connection, $query_1) or die(mysqli_error($connection));
  $count = mysqli_num_rows($result_1);

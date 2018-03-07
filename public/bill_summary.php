@@ -124,7 +124,7 @@
     $change = $cash_given - $amount_due;
     $method = 'Cash';
     $date = date('Y-m-d H:i:s');
-    $status = 'Ready to Claim';
+    $status = 'Paid';
 
     if (!empty($cash_given)) {
       if ($cash_given > 0) {
