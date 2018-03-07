@@ -284,7 +284,7 @@
       <div class=" content container">
       
        <h1><?php echo $shop_name; ?> <small>Schedules Report</small></h1>
-      <blockquote class="text-center">Number Of Users Scheduled Daily</blockquote>
+      <blockquote class="text-center">Number Of Clients Scheduled Daily</blockquote>
 
       <div class="row">
         <div class="col-sm-12">

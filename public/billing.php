@@ -36,6 +36,8 @@
    
   }
 
+
+
   if (isset($_GET['bill'])) {
     $schedule_id = $_GET['bill'];
     $rec = mysqli_query($connection,"SELECT * from schedules, users WHERE schedules.user_id = users.user_id AND schedules.schedule_id = $schedule_id ");
@@ -150,8 +152,32 @@
     }
 */
 
+      //initial job_order 
+
+      $initial_job_order = mysqli_query($connection, "SELECT * FROM initial_job_orders WHERE schedule_id = $schedule_id") or die(mysqli_error($connection));
+      $init_job_order_result = mysqli_num_rows($initial_job_order);
+
+      if ($init_job_order_result < 1) {
+           $query = "SELECT * FROM schedules, services WHERE schedules.service_id = services.service_id and schedules.schedule_id = $schedule_id";
+      $rec2 = mysqli_query($connection,$query) or die(mysqli_error($connection));
+      $record2 = mysqli_fetch_array($rec2);
+      $schedule_id_initial= mysql_prep($record2['schedule_id']);
+      $service_initial = mysql_prep($record2['service_id']);
+      $service_cost_initial = mysql_prep($record2['service_cost']);
+      $quantity_initial = 1;
+      mysqli_query($connection,"INSERT INTO job_orders (schedule_id, service_id, quantity) VALUES ($schedule_id_initial, $service_initial, $quantity_initial)") or die(mysqli_error($connection));
+
+      mysqli_query($connection,"INSERT INTO initial_job_orders (schedule_id, service_id, init_quantity) VALUES ($schedule_id_initial, $service_initial, $quantity_initial)") or die(mysqli_error($connection));
+
+      }
+
+    
+  
+
+
   // Retrieve job orders of a particular schedule
    $results = mysqli_query($connection, "SELECT job_orders.job_order_id as job_order_id, job_orders.quantity as quantity ,services.service_name as service_name,services.service_cost as service_cost, (service_cost * quantity) as sub_total FROM job_orders,services WHERE job_orders.schedule_id = $schedule_id AND services.service_id = job_orders.service_id");
+
 
    //Retrive service of a particular shop
    $service_results = mysqli_query($connection, "SELECT * FROM services WHERE shop_id = $shop_id  AND service_status = 1") or die(mysqli_error($connection));
@@ -164,6 +190,9 @@
          = $schedule_id ";
          mysqli_query($connection,$query) or die(mysqli_error($connection));
      } 
+
+
+
 ?>
 
 <!doctype html>

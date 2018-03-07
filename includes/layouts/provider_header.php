@@ -32,7 +32,7 @@
                     <ul class="dropdown-menu">
                   
                    <li><a href="shop_locations.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Add Locations</a></li>
-                  <li><a href="remove_markers.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Delete Locations</a></li>
+                  <li><a href="remove_markers.php?myshop=<?php echo $shop_id;?>"><span class="glyphicon glyphicon-map-marker"></span> Update and Delete Locations</a></li>
               
                 </ul>
 

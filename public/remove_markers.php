@@ -88,24 +88,12 @@
             </div>
             
 
-        <table class="bg-danger" >
-          <tr > 
-              <th ><h2><span class="glyphicon glyphicon-warning-sign" style="margin-left: 20px;"></span></h2></th>
-            
-              <th width="100%"> <p style="margin: 20px;"><strong> Warning! This is a one time delete. If you click <kbd>Delete Markers</kbd> , all locations will be deleted.</strong> </p></th>
-          </tr>
-         
-         </table>
-          <br/>
-          <div class="clearfix"></div>
-
+ 
          <ul class="bg-info">
 
-         <li ><p >To remove <span class="glyphicon glyphicon-remove"></span>all locations just click <strong>Delete Markers.</strong></p></li>
+         <li ><p >To update <span class="glyphicon glyphicon-refresh"></span> just click the <strong>marker</strong> <span class="glyphicon glyphicon-map-marker"></span>  of the location of you shop and fill the form and click <strong> Update.</strong></p></li>
 
-          <li><p>To hide <span class="glyphicon glyphicon-eye-close"></span> all locations just click <strong>Hide Markers</strong></p></li>
-
-          <li ><p >To show <span class="glyphicon glyphicon-eye-open"></span> all locations just click <strong>Show All Markers.</strong></p></li>
+          <li><p >To remove <span class="glyphicon glyphicon-remove"></span> just click the <strong>marker</strong> <span class="glyphicon glyphicon-map-marker"></span> of the location of you shop and click <strong> Delete.</strong></p></li>
 
        
         
@@ -184,9 +172,9 @@
            // Add Marker Function
       function addMarker(props){
           var contentString = '';
-          document.getElementById('shop').value = props.id;
+         /* document.getElementById('shop').value = props.id;
            document.getElementById('name').value = props.name;
-          document.getElementById('address').value = props.address;
+          document.getElementById('address').value = props.address;*/
         
 
         var marker = new google.maps.Marker({
@@ -195,7 +183,7 @@
         });
 
          var infowindow = new google.maps.InfoWindow({
-          content: document.getElementById('form')
+          content: props.name
             
         });
 

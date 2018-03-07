@@ -412,7 +412,7 @@
     }
 
 //Retrieve service
-    $service_results = mysqli_query($connection, "SELECT * FROM services") or die(mysqli_error($connection));
+    $service_results = mysqli_query($connection, "SELECT * FROM services GROUP BY service_name") or die(mysqli_error($connection));
 
 // Retrieve all shops
   $shop_all = mysqli_query($connection, "SELECT * FROM shops ");
@@ -452,7 +452,7 @@
       <div class=" content container">
       
        <h1>Schedule<small> Report</small></h1>
-      <blockquote class="text-center">Number Of Users Scheduled Daily</blockquote>
+      <blockquote class="text-center">Number Of Clients Scheduled Daily</blockquote>
 
       <div class="row">
         <div class="col-sm-12">
