@@ -1,6 +1,10 @@
-configuration for the fixpertr project:
+Configuration for the fixpertr project:
 
-For Twilio:
+For Twilio response(inbound) to client:
+download ngrok(free web hosting)
+
+go to cmd:
+
 ngrok -port 80
 
 
@@ -20,3 +24,12 @@ C:\wamp64\bin\apache\apache2.4.27\conf\extra\httpd-vhosts.conf
     Require local <---------------changed to -> all granted
   </Directory>
 </VirtualHost>
+
+
+For SSL error, setup this:
+
+download cacert.pem
+
+add this to php.ini in wamp
+curl.cainfo = "(url to cacert.pem)"
+

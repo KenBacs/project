@@ -73,6 +73,37 @@
       
     }
 
+    if (isset($_GET['receive'])) {
+      $schedule_id = $_GET['receive'];
+      $date = date('Y-m-d H:i:s');
+
+      $status = 'Item Received';
+      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
+      
+    }
+
+
+    if (isset($_GET['notyet'])) {
+      $schedule_id = $_GET['notyet'];
+      $date = date('Y-m-d H:i:s');
+
+      $status = 'Accepted';
+      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
+      
+    }
+
+    if (isset($_GET['notyetready'])) {
+      $schedule_id = $_GET['notyetready'];
+      $date = date('Y-m-d H:i:s');
+
+      $status = 'Done Billing';
+      $query = "UPDATE schedules SET status = '$status' WHERE schedule_id = $schedule_id ";
+      $rec = mysqli_query($connection, $query) or die(mysqli_error($connection));   
+      
+    }
+
      if (isset($_GET['unclaim'])) {
       $schedule_id = $_GET['unclaim'];
 
@@ -178,8 +209,7 @@
                 <option value="Pending">Pending</option>
                 <option value="Accepted">Accepted</option>
                 <option value="Declined">Declined</option>
-                <option value="Done">Done</option>
-                <option value="Paid">Paid</option>
+                <option value="Done Billing">Done Billing</option>
                 <option value="Ready to Claim">Ready to Claim</option>
                  <option value="Claimed">Claimed</option>
 
@@ -244,7 +274,7 @@
 
 
 
-                  <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined'&& $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed'  && $row['status'] != 'Paid')  : ?>
+                  <?php if($row['status'] != 'Cancelled' && $row['status'] !='Accepted' && $row['status'] != 'Declined'&& $row['status'] != 'Done Billing' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed'  && $row['status'] != 'Paid' && $row['status'] != 'Item Received')  : ?>
                          <a href="send_message.php?myshop=<?php echo $shop_id;?>&accept=<?php echo $row['schedule_id'];?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-ok"></span> Accept</a>
 
                        <a href="#"  class="btn btn-danger" role="button" title="<strong>Why?</strong>" data-toggle="popover" data-placement="top" data-content='                       
@@ -269,16 +299,55 @@
                       data-html="true"><span class="glyphicon glyphicon-remove"></span> Decline</a>
                   <?php elseif($row['status'] == 'Accepted') : ?>
                       
+                    
+                     <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&receive=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart"></span> Item receive</a>
+
+                  <?php elseif($row['status'] == 'Item Received') : ?>
+
                      <a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"></span> Create Bill</a>
 
-                  <?php elseif($row['status'] == 'Done') : ?>
+                       <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&notyet=<?php echo $row['schedule_id']?>"  class="btn btn-warning" role="button"> Oops! Not yet received!</a>
+
+
+                  <?php elseif($row['status'] == 'Done Billing') : ?>
+
+                       <?php 
+                          $query = mysqli_query($connection, "SELECT * FROM payments WHERE schedule_id = $row[schedule_id]");
+                         $query_check = mysqli_num_rows($query);
+
+                         if($query_check < 1) : ?>
+
                      <a href="billing.php?myshop=<?php echo $shop_id?>&bill=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-refresh"></span> Update Bill</a>
                       <a href="bill_summary.php?myshop=<?php echo $shop_id?>&cash=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-coins"></span> Cash Payment</a>
+                      <a href="send_message.php?myshop=<?php echo $shop_id?>&readytoclaim=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button" style="margin-top: 5px; margin-bottom: 5px;"><span class="glyphicon glyphicon-thumbs-up"></span> Ready to Claim </a>
+                       <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info disabled" role="button"><span class="glyphicon glyphicon-eye-open"></span> Not yet paid</a>
+
+                        <?php else: ?>
+                             <a href="send_message.php?myshop=<?php echo $shop_id?>&readytoclaim=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button" style="margin-top: 5px; margin-bottom: 5px;"><span class="glyphicon glyphicon-thumbs-up"></span> Ready to Claim </a>
+                                <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Transaction</a>
+                        <?php endif ?>  
+
+
                   <?php elseif($row['status'] == 'Ready to Claim') : ?>
-                    <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&claim=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button"><span class="glyphicon glyphicon-check"></span> Claim</a>
+                    
 
+                    <?php 
+                      $query = mysqli_query($connection, "SELECT * FROM payments WHERE schedule_id ='".$row['schedule_id']."'");
+                      $paid_results = mysqli_num_rows($query); ?>
 
-                    <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Transaction</a>
+                     <?php if($paid_results < 1) : ?>
+                      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&claim=<?php echo $row['schedule_id']?>"  class="btn btn-success disabled" role="button"><span class="glyphicon glyphicon-check"></span> Claim</a>
+                     <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info disabled" role="button" ><span class="glyphicon glyphicon-eye-close "></span> Not yet paid</a>
+                      <a href="bill_summary.php?myshop=<?php echo $shop_id?>&cash=<?php echo $row['schedule_id']?>"  class="btn btn-primary" role="button"><span class="glyphicon glyphicon-coins"></span> Cash Payment</a>
+                      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&notyetready=<?php echo $row['schedule_id'];?>"  class="btn btn-warning " role="button" style="margin-top: 5px; margin-bottom: 5px;"><span class="glyphicon glyphicon-remove"></span> Not yet ready</a>
+                    <?php else: ?>
+                       <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&claim=<?php echo $row['schedule_id']?>"  class="btn btn-success" role="button"><span class="glyphicon glyphicon-check"></span> Claim</a>
+                     <a href="bill_summary.php?myshop=<?php echo $shop_id?>&view=<?php echo $row['schedule_id']?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span> View Transaction</a>
+                      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>&notyetready=<?php echo $row['schedule_id'];?>"  class="btn btn-warning " role="button" style="margin-top: 5px; margin-bottom: 5px;"><span class="glyphicon glyphicon-remove"></span> Not yet ready</a>
+                    <?php endif ?>
+ 
+
+                 
                     
                    <?php elseif($row['status'] == 'Claimed') : ?>
 

@@ -27,7 +27,7 @@
 
 
    // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']."");
+  $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_id DESC");
 
  
   // Total bill
@@ -40,19 +40,19 @@
          $selectStatus = $_POST['selectStatus'];
 
       // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ");
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ");
 
       if (!empty($selectStatus)) {
          // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ") or die(mysqli_error($connection));
       } 
       if (!empty($date_start) && !empty($date_end)) {
            // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_id BETWEEN '$date_start' AND '$date_end' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ") or die(mysqli_error($connection));
       } 
 
       if (!empty($date_start) && !empty($date_end) && !empty($selectStatus)) {
-         $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_date BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
+         $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_id BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ") or die(mysqli_error($connection));
       }
 
     }
@@ -166,17 +166,52 @@
                       <td><?php echo $row['status']; ?></td>
                     
 
-                  <?php if($row['status'] != 'Cancelled' && $row['status'] != 'Accepted' && $row['status'] != 'Declined' && $row['status'] != 'Done' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed'):  ?>
+                  <?php if($row['status'] != 'Cancelled' && $row['status'] != 'Accepted' && $row['status'] != 'Declined' && $row['status'] != 'Done Billing' && $row['status'] != 'Ready to Claim' && $row['status'] != 'Claimed'):  ?>
                       <td >
                       <a href="my_schedules.php?cancel=<?php echo $row['schedule_id']; ?>"  class="btn btn-danger" role="button"><span class="glyphicon glyphicon-remove"></span> Cancel Schedule</a>
                       </td>
-                  <?php elseif ($row['status'] == 'Done'):  ?>
-          
+                  <?php elseif ($row['status'] == 'Done Billing'):  ?>
+                        <?php 
+                          $query = mysqli_query($connection, "SELECT * FROM payments WHERE schedule_id = $row[schedule_id]");
+                         $query_check = mysqli_num_rows($query);
+
+                         if($query_check < 1) : ?>
                       <td>
                             <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button">Pay Bill</a>
                       </td>
 
-                  <?php elseif ($row['status'] == 'Ready to Claim' || $row['status'] == 'Claimed' ) :  ?>
+                        <?php else :?>
+                             <td>
+                            <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>&view=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span>  View Invoice</a>
+                      </td>
+
+
+                      <?php endif ?>
+
+
+                  
+
+                 <?php   elseif ($row['status'] == 'Ready to Claim') :  ?>
+
+                          <?php
+
+
+                         $query2 = mysqli_query($connection, "SELECT * FROM payments WHERE schedule_id = $row[schedule_id]");
+                         $query_check2 = mysqli_num_rows($query2);
+                          
+                           if($query_check2 < 1) : ?>
+
+                                <td>
+                                      <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button">Pay Bill</a>
+                                </td>
+                          
+                          <?php else : ?>
+                      <td>
+                            <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>&view=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span>  View Invoice</a>
+                      </td>
+
+                      <?php endif ?>
+                  <?php elseif ($row['status'] == 'Claimed' ) :  ?>
           
                       <td>
                             <a href="user_bill_summary.php?myshop=<?php echo $row['shop_id'];?>&bill=<?php echo $row['schedule_id'];?>&view=<?php echo $row['schedule_id'];?>"  class="btn btn-info" role="button"><span class="glyphicon glyphicon-eye-open"></span>  View Invoice</a>

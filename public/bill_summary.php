@@ -43,6 +43,7 @@
     $rec = mysqli_query($connection,"SELECT * from schedules, users WHERE schedules.user_id = users.user_id AND schedules.schedule_id = $schedule_id ");
     $record = mysqli_fetch_array($rec);
     $schedule_id = $record ['schedule_id'];
+    $schedule_status = $record ['status'];
     $user_uid = $record['user_uid'];
     $user_id = $record['user_id'];
     $schedule_date = $record['schedule_date'];
@@ -68,6 +69,7 @@
     $rec = mysqli_query($connection,"SELECT * from schedules, users WHERE schedules.user_id = users.user_id AND schedules.schedule_id = $schedule_id ");
     $record = mysqli_fetch_array($rec);
     $schedule_id = $record ['schedule_id'];
+    $schedule_status = $record ['status'];
     $user_uid = $record['user_uid'];
     $user_id = $record['user_id'];
     $schedule_date = $record['schedule_date'];
@@ -124,7 +126,12 @@
     $change = $cash_given - $amount_due;
     $method = 'Cash';
     $date = date('Y-m-d H:i:s');
-    $status = 'Paid';
+    if ($schedule_status == 'Done Billing') {
+       $status = 'Done Billing';
+    } else {
+       $status = 'Ready to Claim';
+    }
+   
 
     if (!empty($cash_given)) {
       if ($cash_given > 0) {
@@ -204,7 +211,7 @@
       <div class="row">
         <div class="col-sm-4">
 
-           <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>        
+           <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-warning btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Client Schedules</a>        
         </div>
       </div>
       <div class="row">
@@ -357,7 +364,7 @@
 
     <?php if(isset($_GET['view'])) : ?>
     <div class="content container">
-      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Shop Schedules</a>
+      <a href="shop_schedules.php?myshop=<?php echo $shop_id?>"  class="btn btn-warning btn-lg" role="button"><span class="glyphicon glyphicon-backward"></span> Back to Client Schedules</a>
       <h1>Transaction</h1>
       <div class="row">
         <div class="col-sm-8">

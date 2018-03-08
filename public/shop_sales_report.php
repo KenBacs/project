@@ -264,7 +264,7 @@
        <div class="row">
          <div class="col-sm-12">
              
-              <h4><strong>Users: <?php echo $count; ?></strong></h4>
+              <h4><strong>Clients: <?php echo $count; ?></strong></h4>
               <h4><strong>Total Sales: P <?php if(!empty($total_sales)){echo $total_sales;} else { echo '0.00';} ?></strong></h4>
               <div class="table-responsive">
               <table class="table">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 05, 2018 at 08:44 PM
+-- Generation Time: Mar 07, 2018 at 10:05 AM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -53,6 +53,29 @@ INSERT INTO `admins` (`admin_id`, `admin_first`, `admin_last`, `admin_uid`, `adm
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `initial_job_orders`
+--
+
+DROP TABLE IF EXISTS `initial_job_orders`;
+CREATE TABLE IF NOT EXISTS `initial_job_orders` (
+  `init_job_order` int(11) NOT NULL AUTO_INCREMENT,
+  `schedule_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `init_quantity` int(11) NOT NULL,
+  PRIMARY KEY (`init_job_order`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `initial_job_orders`
+--
+
+INSERT INTO `initial_job_orders` (`init_job_order`, `schedule_id`, `service_id`, `init_quantity`) VALUES
+(1, 21, 124, 1),
+(3, 26, 123, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `job_orders`
 --
 
@@ -65,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `job_orders` (
   PRIMARY KEY (`job_order_id`),
   KEY `schedule_id` (`schedule_id`),
   KEY `job_orders_ibfk_2` (`service_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `job_orders`
@@ -81,9 +104,8 @@ INSERT INTO `job_orders` (`job_order_id`, `schedule_id`, `service_id`, `quantity
 (19, 18, 124, 1),
 (20, 12, 124, 10),
 (23, 17, 124, 1),
-(24, 21, 124, 1),
-(25, 21, 125, 1),
-(26, 20, 124, 1);
+(26, 20, 124, 1),
+(116, 26, 123, 2);
 
 -- --------------------------------------------------------
 
@@ -133,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `payment_time` time NOT NULL,
   PRIMARY KEY (`payment_id`),
   KEY `schedule_id` (`schedule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `payments`
@@ -144,7 +166,9 @@ INSERT INTO `payments` (`payment_id`, `schedule_id`, `cash_given`, `amount_paid`
 (2, 4, '300.00', '300.00', '0.00', 'PayPal', '2018-03-01', '21:26:19'),
 (3, 10, '100.00', '100.00', '0.00', 'Cash', '2018-03-05', '19:44:53'),
 (4, 6, '2000.00', '2000.00', '0.00', 'PayPal', '2018-03-06', '02:17:35'),
-(5, 20, '100.00', '100.00', '0.00', 'Cash', '2018-03-05', '04:35:30');
+(5, 20, '100.00', '100.00', '0.00', 'Cash', '2018-03-05', '04:35:30'),
+(6, 5, '350.00', '350.00', '0.00', 'PayPal', '2018-03-07', '13:25:11'),
+(7, 26, '2000.00', '2000.00', '0.00', 'Cash', '2018-03-07', '13:28:25');
 
 -- --------------------------------------------------------
 
@@ -176,34 +200,37 @@ CREATE TABLE IF NOT EXISTS `schedules` (
   `decline_message` varchar(256) DEFAULT 'None',
   `done_date` date DEFAULT NULL,
   `done_time` time DEFAULT NULL,
+  `rtc_date` date DEFAULT NULL,
+  `rtc_time` time DEFAULT NULL,
   PRIMARY KEY (`schedule_id`),
   KEY `service_id` (`service_id`),
   KEY `shop_id` (`shop_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `schedules`
 --
 
-INSERT INTO `schedules` (`schedule_id`, `user_id`, `service_id`, `shop_id`, `schedule_date`, `schedule_time`, `description`, `claim_date`, `claim_time`, `status`, `payment_status`, `user_notify`, `notify_status`, `date_sched_created`, `time_sched_created`, `accept_date`, `accept_time`, `decline_date`, `decline_time`, `decline_message`, `done_date`, `done_time`) VALUES
-(3, 17, 128, 43, '2018-03-01', '13:00:00', 'None', NULL, '00:00:00', 'Ready to Claim', 0, 1, 0, '2018-03-26', '15:24:15', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(4, 18, 124, 42, '2018-03-01', '16:00:00', 'None', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-02-26', '11:18:39', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(5, 17, 126, 43, '2018-03-02', '15:00:00', 'None', NULL, '00:00:00', 'Done', 0, 1, 0, '2018-02-27', '11:44:25', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(6, 18, 123, 44, '2018-03-02', '12:00:00', 'None', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-02-27', '12:02:52', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(7, 17, 126, 43, '2018-02-07', '15:00:00', 'None', NULL, '00:00:00', 'Accepted', 0, 1, 0, '2018-03-28', '04:28:42', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(8, 20, 124, 42, '2018-03-01', '13:59:00', 'None', NULL, '00:00:00', 'Pending', 0, 1, 1, '2018-02-28', '16:14:07', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(9, 18, 124, 42, '2018-03-02', '14:00:00', 'None', NULL, '00:00:00', 'Declined', 0, 1, 1, '2018-03-01', '09:00:00', NULL, NULL, '2018-03-04', '23:42:40', 'because of the holiday', NULL, NULL),
-(10, 21, 124, 42, '2018-03-02', '14:01:00', 'None', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-03-01', '10:00:00', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(11, 18, 125, 42, '2018-03-04', '12:59:00', 'None', NULL, '00:00:00', 'Declined', 0, 1, 1, '2018-03-01', '10:30:00', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(12, 20, 125, 42, '2018-03-04', '15:00:00', 'None', NULL, '00:00:00', 'Done', 0, 1, 1, '2018-03-03', '00:00:00', '2018-03-03', '19:07:33', '2018-03-03', '19:04:07', 'None', '2018-03-03', '19:08:11'),
-(17, 18, 124, 42, '2018-03-12', '13:00:00', 'None', NULL, '00:00:00', 'Accepted', 0, 1, 1, '2018-03-03', '14:22:02', '2018-03-03', '19:03:36', NULL, NULL, 'None', NULL, NULL),
-(18, 20, 124, 42, '2018-03-04', '13:00:00', 'None', NULL, NULL, 'Declined', 0, 1, 1, '2018-03-03', '19:25:10', '2018-03-03', '19:39:22', '2018-03-05', '19:22:29', 'because we are fully booked', NULL, NULL),
-(19, 17, 125, 42, '2018-03-07', '10:59:00', 'Blazer', NULL, NULL, 'Pending', 0, 1, 1, '2018-03-05', '09:00:14', NULL, NULL, NULL, NULL, 'None', NULL, NULL),
-(20, 20, 125, 42, '2018-03-05', '21:00:00', 'Gusto nako usbon ang zipper sakong bag please lang tarong', NULL, NULL, 'Ready to Claim', 1, 1, 1, '2018-03-05', '19:59:33', '2018-03-05', '20:00:37', NULL, NULL, 'None', '2018-03-06', '03:48:33'),
-(21, 23, 124, 42, '2018-03-06', '10:01:00', '', NULL, NULL, 'Accepted', 0, 1, 1, '2018-03-05', '20:02:07', '2018-03-05', '20:02:34', NULL, NULL, 'None', NULL, NULL),
-(22, 17, 129, 43, '2018-03-06', '12:00:00', '', NULL, NULL, 'Declined', 0, 1, 0, '2018-03-05', '22:09:08', '2018-03-05', '22:10:20', '2018-03-05', '22:15:56', 'it\'s my birthday', NULL, NULL),
-(23, 21, 130, 47, '2018-03-12', '13:00:00', '', NULL, NULL, 'Accepted', 0, 1, 1, '2018-03-05', '23:09:51', '2018-03-05', '23:11:16', NULL, NULL, 'None', NULL, NULL);
+INSERT INTO `schedules` (`schedule_id`, `user_id`, `service_id`, `shop_id`, `schedule_date`, `schedule_time`, `description`, `claim_date`, `claim_time`, `status`, `payment_status`, `user_notify`, `notify_status`, `date_sched_created`, `time_sched_created`, `accept_date`, `accept_time`, `decline_date`, `decline_time`, `decline_message`, `done_date`, `done_time`, `rtc_date`, `rtc_time`) VALUES
+(3, 17, 128, 43, '2018-03-01', '13:00:00', 'None', NULL, '00:00:00', 'Ready to Claim', 0, 1, 1, '2018-03-26', '15:24:15', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(4, 18, 124, 42, '2018-03-01', '16:00:00', 'None', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-02-26', '11:18:39', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(5, 17, 126, 43, '2018-03-02', '15:00:00', 'None', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-02-27', '11:44:25', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(6, 18, 123, 44, '2018-03-02', '12:00:00', 'None', NULL, '00:00:00', 'Paid', 1, 1, 1, '2018-02-27', '12:02:52', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(7, 17, 126, 43, '2018-02-07', '15:00:00', 'None', NULL, '00:00:00', 'Accepted', 0, 1, 1, '2018-03-28', '04:28:42', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(8, 20, 124, 42, '2018-03-01', '13:59:00', 'None', NULL, '00:00:00', 'Pending', 0, 1, 1, '2018-02-28', '16:14:07', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(9, 18, 124, 42, '2018-03-02', '14:00:00', 'None', NULL, '00:00:00', 'Declined', 0, 1, 1, '2018-03-01', '09:00:00', NULL, NULL, '2018-03-04', '23:42:40', 'because of the holiday', NULL, NULL, NULL, NULL),
+(10, 21, 124, 42, '2018-03-02', '14:01:00', 'None', NULL, '00:00:00', 'Ready to Claim', 1, 1, 1, '2018-03-01', '10:00:00', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(11, 18, 125, 42, '2018-03-04', '12:59:00', 'None', NULL, '00:00:00', 'Declined', 0, 1, 1, '2018-03-01', '10:30:00', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(12, 20, 125, 42, '2018-03-04', '15:00:00', 'None', NULL, '00:00:00', 'Done', 0, 1, 1, '2018-03-03', '00:00:00', '2018-03-03', '19:07:33', '2018-03-03', '19:04:07', 'None', '2018-03-03', '19:08:11', NULL, NULL),
+(17, 18, 124, 42, '2018-03-12', '13:00:00', 'None', NULL, '00:00:00', 'Accepted', 0, 1, 1, '2018-03-03', '14:22:02', '2018-03-03', '19:03:36', NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(18, 20, 124, 42, '2018-03-04', '13:00:00', 'None', NULL, NULL, 'Declined', 0, 1, 1, '2018-03-03', '19:25:10', '2018-03-03', '19:39:22', '2018-03-05', '19:22:29', 'because we are fully booked', NULL, NULL, NULL, NULL),
+(19, 17, 125, 42, '2018-03-07', '10:59:00', 'Blazer', NULL, NULL, 'Cancelled', 0, 1, 1, '2018-03-05', '09:00:14', NULL, NULL, NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(20, 20, 125, 42, '2018-03-05', '21:00:00', 'Gusto nako usbon ang zipper sakong bag please lang tarong', NULL, NULL, 'Ready to Claim', 1, 1, 1, '2018-03-05', '19:59:33', '2018-03-05', '20:00:37', NULL, NULL, 'None', '2018-03-06', '03:48:33', NULL, NULL),
+(21, 23, 124, 42, '2018-03-06', '10:01:00', '', NULL, NULL, 'Accepted', 0, 1, 1, '2018-03-05', '20:02:07', '2018-03-05', '20:02:34', NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(22, 17, 129, 43, '2018-03-06', '12:00:00', '', NULL, NULL, 'Declined', 0, 1, 1, '2018-03-05', '22:09:08', '2018-03-05', '22:10:20', '2018-03-05', '22:15:56', 'it\'s my birthday', NULL, NULL, NULL, NULL),
+(23, 21, 130, 47, '2018-03-12', '13:00:00', '', NULL, NULL, 'Accepted', 0, 1, 1, '2018-03-05', '23:09:51', '2018-03-05', '23:11:16', NULL, NULL, 'None', NULL, NULL, NULL, NULL),
+(26, 21, 123, 44, '2018-03-19', '12:59:00', '', '2018-03-07', '14:34:49', 'Claimed', 1, 1, 1, '2018-03-07', '11:58:53', '2018-03-07', '11:59:26', NULL, NULL, 'None', '2018-03-07', '12:19:47', '2018-03-07', '13:54:29');
 
 -- --------------------------------------------------------
 
@@ -290,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `shop_categories` (
   `category_desc` text NOT NULL,
   `category_status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`shop_cat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `shop_categories`
@@ -303,7 +330,8 @@ INSERT INTO `shop_categories` (`shop_cat_id`, `shop_category`, `category_desc`, 
 (8, 'Appliances and Electronics', 'test', 0),
 (9, 'Watch', 'test', 1),
 (10, 'Shoes', 'test', 1),
-(11, 'Cellphone and Smartphones', 'test', 1);
+(11, 'Cellphone and Smartphones', 'test', 1),
+(12, 'Others', 'test', 1);
 
 -- --------------------------------------------------------
 
@@ -324,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   PRIMARY KEY (`subscription_id`),
   KEY `user_id` (`user_id`),
   KEY `sub_type_id` (`sub_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subscriptions`
@@ -333,10 +361,13 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
 INSERT INTO `subscriptions` (`subscription_id`, `user_id`, `sub_type_id`, `method`, `subscribe_date`, `subscribe_time`, `subscription_status`, `seen_subscribe`) VALUES
 (18, 18, 6, 'Trial', '2018-02-27', '17:49:33', 1, 1),
 (19, 21, 6, 'Trial', '2018-03-01', '21:17:42', 1, 1),
-(63, 17, 6, 'Trial', '2018-03-06', '01:50:08', 1, 0),
-(64, 17, 5, 'None', '2018-03-06', '01:52:16', 1, 0),
-(65, 17, 5, 'None', '2018-03-06', '01:54:05', 1, 0),
-(66, 17, 1, 'PayPal', '2018-03-06', '01:55:16', 1, 0);
+(63, 17, 6, 'Trial', '2018-03-06', '01:50:08', 1, 1),
+(64, 17, 5, 'None', '2018-03-06', '01:52:16', 1, 1),
+(65, 17, 5, 'None', '2018-03-06', '01:54:05', 1, 1),
+(66, 17, 1, 'PayPal', '2018-03-06', '01:55:16', 1, 1),
+(67, 17, 5, 'None', '2018-03-06', '08:00:58', 1, 1),
+(68, 18, 1, 'PayPal', '2018-03-06', '08:05:53', 1, 1),
+(69, 17, 2, 'PayPal', '2018-03-06', '08:08:38', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -398,8 +429,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_first`, `user_last`, `user_image`, `user_gender`, `user_address`, `user_email`, `user_mobile`, `user_uid`, `user_pwd`, `user_type`, `date_registered`, `time_registered`, `user_seen`, `user_timestamp`, `sub_status`, `user_status`) VALUES
-(17, 'Natalie', 'Portman', '5a952cc7c489b3.84716282.jpg', 'Female', 'Jerusalem', 'natalie@gmail.com', '+639277445743', 'natalie1', '123', 'Service Provider', '2018-02-27', '00:00:00', 0, '2018-03-05 17:55:16', 1, 1),
-(18, 'Victoria', 'Justice', '5a952cb2dead87.94267001.jpg', 'Female', 'test', 'victoria@gmail.com', '+639277445743', 'victoria2', '123', 'Service Provider', '2018-02-27', '00:00:00', 0, '2018-02-27 09:49:33', 1, 1),
+(17, 'Natalie', 'Portman', '5a952cc7c489b3.84716282.jpg', 'Female', 'Jerusalem', 'natalie@gmail.com', '+639277445743', 'natalie1', '123', 'Service Provider', '2018-02-27', '00:00:00', 0, '2018-03-06 00:08:38', 1, 1),
+(18, 'Victoria', 'Justice', '5a952cb2dead87.94267001.jpg', 'Female', 'test', 'victoria@gmail.com', '+639277445743', 'victoria2', '123', 'Service Provider', '2018-02-27', '00:00:00', 0, '2018-03-06 00:05:53', 1, 1),
 (20, 'Vivien', 'Torrizo', '5a9d304ec35837.56388673.jpg', 'Female', 'Cebu City', 'vien@gmail.com', '+639231503525', 'vien', '123', 'User', '2018-02-28', '00:00:00', 0, NULL, 0, 1),
 (21, 'Kenneth', 'Bacayo', '5a97fe1d649910.80718961.jpg', 'Male', 'Cebu City', 'ken@gmail.com', '+639325982965', 'ken2017', '123', 'Service Provider', '2018-03-01', '00:00:00', 0, '2018-03-01 13:17:42', 1, 1),
 (23, 'Normie', 'Cagandahan', '5a9d30605508a1.99633986.jpg', 'Female', 'Happy Valley Cebu', 'normie113@gmail.com', '+639438174923', 'normie', '123', 'User', '2018-03-02', '00:00:00', 0, NULL, 0, 1),

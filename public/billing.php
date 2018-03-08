@@ -393,7 +393,7 @@
                         </th>
                       <th width="25%">
                                            
-                            <h1><a href="send_message.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>" data-toggle="tooltip" class="btn btn-success btn-lg btn-block " role="button" title="Add Service Rendered"><span class="glyphicon glyphicon-check"></span> Done</a></h1>
+                            <h1><a href="send_message.php?myshop=<?php echo $shop_id?>&bill=<?php echo $schedule_id?>&done=<?php echo $schedule_id?>" data-toggle="tooltip" class="btn btn-success btn-lg btn-block " role="button" title="Add Service Rendered"><span class="glyphicon glyphicon-check"></span> Done Billing</a></h1>
                    
                         
                       </th>

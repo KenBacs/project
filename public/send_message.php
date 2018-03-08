@@ -40,7 +40,7 @@ if (isset($_GET['accept'])) {
 
 
 
-	$client = new Client($sid, $token);
+/*	$client = new Client($sid, $token);
 
 
 	$client->messages->create(
@@ -50,7 +50,7 @@ if (isset($_GET['accept'])) {
 	 'body' => "$shop_name : Hello, $username ! Your schedule is accepted with a service of $service_name "
 	 )
 	);
-
+*/
 
 	redirect_to('shop_schedules.php?myshop='.$shop_id);
 }
@@ -74,7 +74,7 @@ if (isset($_GET['readytoclaim'])) {
 
 
 
-	$client = new Client($sid, $token);
+	/*$client = new Client($sid, $token);
 
 
 	$client->messages->create(
@@ -84,7 +84,7 @@ if (isset($_GET['readytoclaim'])) {
 	 'body' => "$shop_name : Hello, $username ! Your item is ready to be claim with a service of $service_name "
 	 )
 	);
-
+*/
 
 	redirect_to('shop_schedules.php?myshop='.$shop_id);
 }
@@ -92,7 +92,7 @@ if (isset($_GET['readytoclaim'])) {
    if (isset($_GET['done'])) {
       $schedule_id = $_GET['done'];
 
-      $status = 'Done';
+      $status = 'Done Billing';
       $query = "UPDATE schedules SET status = '$status', done_date = '$date_now', done_time = NOW() WHERE schedule_id = $schedule_id ";
       $rec = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
 
@@ -104,7 +104,7 @@ if (isset($_GET['readytoclaim'])) {
 
 
 
-	$client = new Client($sid, $token);
+	/*$client = new Client($sid, $token);
 
 
 	$client->messages->create(
@@ -114,7 +114,7 @@ if (isset($_GET['readytoclaim'])) {
 	 'body' => "$shop_name : Hello, $username ! You already have bill of the services you rendered. You can pay online or cash. Thank you!"
 	 )
 	);
-
+*/
 
 
 
@@ -138,7 +138,7 @@ if (isset($_GET['readytoclaim'])) {
 	$user_mobile = $record['user_mobile'];
 
 
-
+/*
 	$client = new Client($sid, $token);
 
 
@@ -149,7 +149,7 @@ if (isset($_GET['readytoclaim'])) {
 	 'body' => "$shop_name : Hello, $username. Your schedule is declined with a service of $service_name. Reason: $comment"
 	 )
 	);
-
+*/
 
 
 

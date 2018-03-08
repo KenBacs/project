@@ -17,7 +17,7 @@ if($_POST["view2"] != '')
            INNER JOIN schedules 
            ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id
            INNER JOIN services
-           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done','Ready to Claim')
+           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done Billing','Ready to Claim')
            ORDER BY schedule_id DESC LIMIT 5";
  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
  $output = '';
@@ -28,7 +28,7 @@ if($_POST["view2"] != '')
   {
     /*date("g:i a", strtotime($record['time_start']))*/
   
-    if ($row['status'] == "Done") {
+    if ($row['status'] == "Done Billing") {
 
        $output .= '
        <li>
@@ -90,9 +90,9 @@ if($_POST["view2"] != '')
  
  $query_1 ="SELECT * FROM shops 
            INNER JOIN schedules 
-           ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id and schedules.user_notify = 0
+           ON  shops.shop_id = schedules.shop_id AND schedules.user_id = $user_id AND schedules.user_notify = 0
            INNER JOIN services
-           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done', 'Ready to Claim')
+           ON services.service_id = schedules.service_id AND schedules.status IN('Accepted','Declined','Done  Billing', 'Ready to Claim')
            ORDER BY schedule_id  ";
  $result_1 = mysqli_query($connection, $query_1) or die(mysqli_error($connection));
  $count = mysqli_num_rows($result_1);

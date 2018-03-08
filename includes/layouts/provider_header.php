@@ -19,7 +19,7 @@
         <ul class="nav navbar-nav"> 
         <li>
         <form class="navbar-form">
-           <a  href="my_shops.php" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-backward"> </span> Back to My Shop</a>
+           <a  href="my_shops.php" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-backward"> </span> Back to My Shops</a>
         </form>
          
         </li>
