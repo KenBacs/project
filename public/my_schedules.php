@@ -27,7 +27,7 @@
 
 
    // Retrieve records
-  $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_id DESC");
+  $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = ".$_SESSION['u_id']." ORDER BY schedule_date DESC");
 
  
   // Total bill
@@ -40,19 +40,19 @@
          $selectStatus = $_POST['selectStatus'];
 
       // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ");
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_date DESC ");
 
       if (!empty($selectStatus)) {
          // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ") or die(mysqli_error($connection));
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
       } 
       if (!empty($date_start) && !empty($date_end)) {
            // Retrieve records
-      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_id BETWEEN '$date_start' AND '$date_end' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ") or die(mysqli_error($connection));
+      $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_id BETWEEN '$date_start' AND '$date_end' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
       } 
 
       if (!empty($date_start) && !empty($date_end) && !empty($selectStatus)) {
-         $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_id BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_id DESC ") or die(mysqli_error($connection));
+         $results = mysqli_query($connection, "SELECT * FROM schedules, services, shops WHERE schedules.schedule_id BETWEEN '$date_start' AND '$date_end' AND schedules.status = '$selectStatus' AND schedules.shop_id = shops.shop_id AND schedules.service_id = services.service_id AND schedules.user_id = {$_SESSION['u_id']} ORDER BY schedule_date DESC ") or die(mysqli_error($connection));
       }
 
     }
@@ -113,10 +113,10 @@
 
                 <option value="">Select Status</option>
                 <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
                 <option value="Accepted">Accepted</option>
                 <option value="Declined">Declined</option>
-                <option value="Done">Done</option>
-                <option value="Paid">Paid</option>
+                <option value="Done Billing">Done Billing</option>
                 <option value="Ready to Claim">Ready to Claim</option>
                  <option value="Claimed">Claimed</option>
 

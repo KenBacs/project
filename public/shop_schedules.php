@@ -207,6 +207,7 @@
 
                 <option value="">Select Status</option>
                 <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
                 <option value="Accepted">Accepted</option>
                 <option value="Declined">Declined</option>
                 <option value="Done Billing">Done Billing</option>
